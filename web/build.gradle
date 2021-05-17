@@ -30,7 +30,7 @@ clean {
     delete file("${projectDir}/dist")
     delete file("${projectDir}/static")
     delete file("${projectDir}/out-tsc")
-    delete file("${projectDir}/node_modules")
+//    delete file("${projectDir}/node_modules")
 }
 
 repositories {

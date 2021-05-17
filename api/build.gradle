@@ -33,6 +33,7 @@ bootRun {
 
 dependencies {
     implementation project(':data')
+    implementation project(':web')
 
     implementation pokerLibs.springBootWeb
     implementation pokerLibs.sprintBootSecurity
@@ -89,6 +90,12 @@ sourceSets {
         ]
         include '**/db/changelog/**'
     }
+//    web.resources {
+//        srcDirs += [
+//                "${project(':web').projectDir}/static"
+//        ]
+//        include '**/META-INF/resources/**'
+//    }
 //    exchange.resources {
 //        srcDirs += [
 //                "${project(':exchange').projectDir}/src/main/resources"
@@ -96,6 +103,7 @@ sourceSets {
 //        include '**/ssl/**'
 //    }
     main.resources.srcDirs += [
-            data.resources
+            data.resources,
+            web.resources
     ]
 }
