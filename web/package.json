@@ -1,6 +1,6 @@
 {
-  "name": "poker",
-  "version": "0.0.0",
+  "name": "poker-web",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,10 +14,18 @@
     "@angular/compiler": "~12.0.0",
     "@angular/core": "~12.0.0",
     "@angular/forms": "~12.0.0",
+    "@angular/localize": "^12.0.0",
     "@angular/platform-browser": "~12.0.0",
     "@angular/platform-browser-dynamic": "~12.0.0",
     "@angular/router": "~12.0.0",
-    "rxjs": "~6.6.0",
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@ng-bootstrap/ng-bootstrap": "^8.0.4",
+    "@ng-select/ng-select": "^4.0.4",
+    "bootstrap": "^4.5.3",
+    "jquery": "^3.5.1",
+    "moment": "^2.29.1",
+    "popper.js": "^1.16.1",
+    "rxjs": "^6.6.3",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
   },
@@ -26,6 +34,7 @@
     "@angular/cli": "~12.0.0",
     "@angular/compiler-cli": "~12.0.0",
     "@types/node": "^12.11.1",
+    "tslint": "~6.1.0",
     "typescript": "~4.2.3"
   }
 }
