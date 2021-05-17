@@ -1,19 +1,101 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     id 'java'
+    id 'war'
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version "$springDependencyManagerVersion"
+    id 'com.adarshr.test-logger' version "$adarshrTestVersion"
+    id "com.gorylenko.gradle-git-properties" version "2.2.4"
 }
 
-group 'com.bigbasti.poker'
-version '0.0.1'
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
 
-repositories {
-    mavenCentral()
+springBoot {
+    buildInfo ()
+}
+
+compileJava { options.encoding = charset }
+
+processResources {
+    dependsOn project.rootProject.getTasksByName('defineCurrentPokerProfile', false)
+    filter ReplaceTokens, tokens: [
+            pokerProfile: pokerProfile
+    ]
+}
+
+bootRun {
+
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation project(':data')
+
+    implementation pokerLibs.springBootWeb
+    implementation pokerLibs.sprintBootSecurity
+    implementation pokerLibs.springSecurityTest
+    implementation pokerLibs.springBootActuator
+    implementation pokerLibs.apacheCommons
+    implementation pokerLibs.apachePoi
+    implementation pokerLibs.apachePoiXml
+    implementation pokerLibs.jjwtApi
+    implementation pokerLibs.liquibaseCore
+    implementation pokerLibs.apacheHttpclient
+
+    runtimeOnly pokerLibs.jjwtImpl
+    runtimeOnly pokerLibs.jjwtJackson
+
+    providedRuntime pokerLibs.springBootTomcat
+
+    developmentOnly pokerLibs.springBootDevtools
+
+    testImplementation pokerLibs.junit4
+    testImplementation pokerLibs.h2
+    testImplementation(pokerLibs.springBootTest) {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+clean {
+    delete('out')
+    delete('build')
 }
 
 test {
-    useJUnitPlatform()
+    useJUnit()
+    maxHeapSize = "2g"
+}
+
+war {
+    enabled = true
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Build-Timestamp': buildTimestamp,
+                'Build-Jdk': buildJdk,
+                'Created-By': createdBy
+        )
+    }
+}
+
+sourceSets {
+    data.resources {
+        srcDirs += [
+                "${project(':data').projectDir}/src/main/resources"
+        ]
+        include '**/db/changelog/**'
+    }
+//    exchange.resources {
+//        srcDirs += [
+//                "${project(':exchange').projectDir}/src/main/resources"
+//        ]
+//        include '**/ssl/**'
+//    }
+    main.resources.srcDirs += [
+            data.resources
+    ]
 }
