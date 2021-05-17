@@ -1,19 +1,92 @@
 plugins {
     id 'java'
+    id 'org.liquibase.gradle' version "$liquibaseVersion"
 }
 
-group 'com.bigbasti.poker'
-version '0.0.1'
-
-repositories {
-    mavenCentral()
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 }
+
+compileJava { options.encoding = charset }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation pokerLibs.springContext
+    implementation pokerLibs.springBootDataJpa
+    implementation pokerLibs.hibernateEntitymanager
+    implementation pokerLibs.hibernateValidator
+    implementation pokerLibs.javaxValidationApi
+    implementation pokerLibs.javaxTransactionApi
+    implementation pokerLibs.jacksonAnnotations
+    implementation pokerLibs.jacksonDatabind
+    implementation pokerLibs.hikariCp
+    implementation pokerLibs.commonsIo
+    runtime pokerLibs.apacheXerces
+    implementation pokerLibs.jlibsXml
+    implementation pokerLibs.jlibsXsd
+
+    implementation pokerLibs.commonsIo
+    implementation pokerLibs.apacheCommons
+    implementation pokerLibs.googleGuava
+
+    compile pokerLibs.springBootDataJpa
+
+    testImplementation pokerLibs.junit4
+
+    liquibaseRuntime pokerLibs.liquibaseCore
+    liquibaseRuntime pokerLibs.jakartaXmlBindApi
 }
 
-test {
-    useJUnitPlatform()
+
+clean {
+    delete('out')
+}
+
+jar {
+    enabled = true
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Build-Timestamp': buildTimestamp,
+                'Build-Jdk': buildJdk,
+                'Created-By': createdBy
+        )
+    }
+}
+
+ext {
+    liquibase_url = ''
+    liquibase_username = ''
+    liquibase_password = ''
+    liquibase_context = ''
+    liquibase_changeLogParameters = []
+}
+
+
+processResources {
+    dependsOn project.rootProject.getTasksByName('defineCurrentPokerProfile', false)
+    if (pokerProfile == 'dev') {
+        liquibase_url = 'jdbc:oracle:thin:@localhost:1521:XE'
+        liquibase_username = 'poker'
+        liquibase_password = 'secret!pa$$'
+        liquibase_context = 'dev'
+        liquibase_changeLogParameters = [
+        ]
+    }
+}
+
+
+liquibase {
+    activities {
+        main {
+            changeLogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
+            url liquibase_url
+            username liquibase_username
+            password liquibase_password
+            contexts liquibase_context
+            changeLogParameters(liquibase_changeLogParameters)
+            logLevel liquibaseLogLevel
+        }
+    }
 }

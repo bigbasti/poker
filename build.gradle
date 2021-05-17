@@ -35,7 +35,7 @@ buildscript {
         liquibaseLogLevel = 'severe'
 
         // dependencies
-        zebraLibs = [
+        pokerLibs = [
                 'springBootWeb'                 : "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
                 'springWeb'                     : 'org.springframework:spring-web:5.3.3',
                 'sprintBootSecurity'            : "org.springframework.boot:spring-boot-starter-security:$springBootVersion",
