@@ -1,13 +1,52 @@
+import java.nio.file.Paths
+
 plugins {
-    id 'war'
+    id 'java'
+    id 'com.github.node-gradle.node' version "$nodeGradleVersion"
 }
 
-version 'unspecified'
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+
+
+node {
+    version = jsNodeVersion
+    npmVersion = jsNpmVersion
+    download = true
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['static']
+        }
+    }
+}
+
+clean {
+    delete('out')
+    delete file("${projectDir}/dist")
+    delete file("${projectDir}/static")
+    delete file("${projectDir}/out-tsc")
+    delete file("${projectDir}/node_modules")
+}
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation 'junit:junit:4.11'
+jar {
+    dependsOn "npm_run_build-${pokerProfile}"
+    enabled = true
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Build-Timestamp': buildTimestamp,
+                'Build-Jdk': buildJdk,
+                'Created-By': createdBy
+        )
+    }
 }

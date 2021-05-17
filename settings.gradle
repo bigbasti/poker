@@ -1,3 +1,5 @@
+rootProject.name = 'poker'
+
 include 'api'
 include 'web'
 include 'data'

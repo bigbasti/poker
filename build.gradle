@@ -1,0 +1,152 @@
+buildscript {
+    ext {
+        pokerVersion = '0.0.1'
+        pokerGroup = 'com.bigbasti.poker'
+
+        // Environment
+        charset = 'UTF-8'
+        gradlePath = new File(System.getProperty('user.dir'))
+        while (!gradlePath.getAbsolutePath().endsWith('poker') && gradlePath.getAbsolutePath().matches('.*poker.*')) {
+            gradlePath = gradlePath.getParentFile()
+        }   // If gradle starts from subproject, try to take gradlePath to root directory
+
+        // Java
+        javaVersion = JavaVersion.VERSION_11
+
+        // manifest attributes
+        buildTimestamp = new java.text.SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss.SSSZ").format(new Date())
+        buildJdk = "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})"
+        createdBy = "Gradle ${gradle.gradleVersion}"
+        pokerProfile = 'dev'
+
+        // plugin versions
+        springBootVersion = '2.2.8.RELEASE'
+        springDependencyManagerVersion = '1.0.9.RELEASE'
+        adarshrTestVersion = '2.0.0'
+        liquibaseVersion = '2.0.4'
+        nodeGradleVersion = '2.2.3'
+        owaspDependencycheckVersion = '5.3.2.1'
+
+        // Other Versions
+        jsNodeVersion = '10.20.1'
+        jsNpmVersion = '6.14.5'
+
+        // Loglevels
+        liquibaseLogLevel = 'severe'
+
+        // dependencies
+        zebraLibs = [
+                'springBootWeb'                 : "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
+                'springWeb'                     : 'org.springframework:spring-web:5.3.3',
+                'sprintBootSecurity'            : "org.springframework.boot:spring-boot-starter-security:$springBootVersion",
+                'springBootTomcat'              : "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion",
+                'springBootDevtools'            : "org.springframework.boot:spring-boot-devtools:$springBootVersion",
+                'springBootTest'                : "org.springframework.boot:spring-boot-starter-test:$springBootVersion",
+                'springBootDataJpa'             : "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion",
+                'springBootActuator'            : "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion",
+                'springBootQuartz'              : "org.springframework.boot:spring-boot-starter-quartz:$springBootVersion",
+                'springBootMail'                : "org.springframework.boot:spring-boot-starter-mail:$springBootVersion",
+
+                'springSecurityTest'            : 'org.springframework.security:spring-security-test:5.3.2.RELEASE',
+                'springContext'                 : 'org.springframework:spring-context:5.2.7.RELEASE',
+                'springOxm'                     : 'org.springframework:spring-oxm:5.2.7.RELEASE',
+
+                'springBatchCore'               : 'org.springframework.batch:spring-batch-core:4.2.1.RELEASE',
+                'springBatchInfrastructure'     : 'org.springframework.batch:spring-batch-infrastructure:4.2.1.RELEASE',
+                'springBatchTest'               : 'org.springframework.batch:spring-batch-test:4.2.1.RELEASE',
+
+                'hibernateCore'                 : 'org.hibernate:hibernate-core:5.3.10.Final',
+                'hibernateEntitymanager'        : 'org.hibernate:hibernate-entitymanager:5.3.10.Final',
+                'hibernateValidator'            : 'org.hibernate:hibernate-validator:6.0.18.Final',
+
+                'javaxValidationApi'            : 'javax.validation:validation-api:1.1.0.Final',
+                'javaxTransactionApi'           : 'javax.transaction:javax.transaction-api:1.2',
+                'javaxElApi'                    : 'javax.el:javax.el-api:3.0.0',
+                'javaxEl'                       : 'org.glassfish.web:javax.el:2.2.6',
+                'javaxAnnotationApi'            : 'javax.annotation:javax.annotation-api:1.3.2',
+
+                'jacksonAnnotations'            : 'com.fasterxml.jackson.core:jackson-annotations:2.9.5',
+                'jacksonDatabind'               : 'com.fasterxml.jackson.core:jackson-databind:2.9.5',
+                'jacksonDataTypeHibernate5'     : 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5',
+
+                'hikariCp'                      : 'com.zaxxer:HikariCP:3.3.0',
+                'h2'                            : 'com.h2database:h2:1.4.200',
+
+                'jjwtImpl'                      : 'io.jsonwebtoken:jjwt-impl:0.11.1',
+                'jjwtApi'                       : 'io.jsonwebtoken:jjwt-api:0.11.1',
+                'jjwtJackson'                   : 'io.jsonwebtoken:jjwt-jackson:0.11.1',
+
+                'commonsIo'                     : 'commons-io:commons-io:2.6',
+                'apacheCommons'                 : 'org.apache.commons:commons-lang3:3.10',
+                'apacheTika'                    : 'org.apache.tika:tika-core:1.24.1',
+                'googleGuava'                   : 'com.google.guava:guava:29.0-jre',
+                'apacheXerces'                  : 'xerces:xercesImpl:2.12.0',
+                'jlibsXml'                      : 'in.jlibs:jlibs-xml:2.2.3',
+                'jlibsXsd'                      : 'in.jlibs:jlibs-xsd:2.2.3',
+                'apachePoi'                     : 'org.apache.poi:poi:4.1.2',
+                'apachePoiXml'                  : 'org.apache.poi:poi-ooxml:4.1.2',
+                'apacheHttpclient'              : 'org.apache.httpcomponents:httpclient:4.5.6',
+
+                'slf4jApi'                      : 'org.slf4j:slf4j-api:1.7.30',
+                'unboundLdapSdk'                : 'com.unboundid:unboundid-ldapsdk:4.0.8',
+                'junit4'                        : 'junit:junit:4.12',
+
+                'springfoxSwagger2'             : 'io.springfox:springfox-swagger2:2.9.2',
+                'springfoxSwaggerUi'            : 'io.springfox:springfox-swagger-ui:2.9.2',
+                'springfoxSwaggerDataRest'      : 'io.springfox:springfox-data-rest:2.9.2',
+                'springfoxSwaggerBeanValidators': 'io.springfox:springfox-bean-validators:2.9.2',
+
+                'mockitoCore'                   : 'org.mockito:mockito-core:2.1.0',
+
+                'liquibaseCore'                 : 'org.liquibase:liquibase-core:3.8.9',
+
+                'jakartaXmlBindApi'             : 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.3',
+                'jaxbApi'                       : 'javax.xml.bind:jaxb-api:2.2.4',
+                'jaxbCore'                      : 'com.sun.xml.bind:jaxb-core:2.3.0.1',
+
+                'xstream'                       : 'com.thoughtworks.xstream:xstream:1.4.13',
+
+                'openCsv'                       : 'com.opencsv:opencsv:5.3',
+        ]
+    }
+}
+
+allprojects {
+    group = pokerGroup
+    version = pokerVersion
+}
+
+task defineCurrentPokerProfile {
+    String activeProfile = System.properties['poker.profile']    // read property from run command -poker.profile=...
+    if (!activeProfile?.trim()) {
+        activeProfile = 'dev'
+    }
+    pokerProfile = activeProfile
+    println "current poker profile: ${activeProfile}"
+}
+
+subprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+//        maven {
+//        }
+    }
+
+    configurations {
+        developmentOnly
+        runtimeClasspath {
+            extendsFrom developmentOnly
+        }
+    }
+
+    // Java Compile Encoding
+    tasks.withType(JavaCompile) {
+        options.encoding = charset
+    }
+
+    // Gradle Test Encoding
+    tasks.withType(Test) {
+        systemProperty "file.encoding", charset
+    }
+}
