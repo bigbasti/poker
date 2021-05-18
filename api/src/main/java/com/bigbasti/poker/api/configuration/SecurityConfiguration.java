@@ -40,11 +40,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     Environment env;
 
-    @Autowired
-    PokerUserDetailService pokerUserDetailService;
-    @Autowired
-    UserDetailsService userDetailsService;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -99,7 +94,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(pokerUserDetailService);
         auth.authenticationProvider(authProvider);
     }
 
