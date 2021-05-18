@@ -96,6 +96,8 @@ buildscript {
                 'springfoxSwaggerDataRest'      : 'io.springfox:springfox-data-rest:2.9.2',
                 'springfoxSwaggerBeanValidators': 'io.springfox:springfox-bean-validators:2.9.2',
 
+                'mysqlConnector'                :'mysql:mysql-connector-java:8.0.25',
+
                 'mockitoCore'                   : 'org.mockito:mockito-core:2.1.0',
 
                 'liquibaseCore'                 : 'org.liquibase:liquibase-core:3.8.9',

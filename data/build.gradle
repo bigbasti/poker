@@ -28,6 +28,7 @@ dependencies {
     implementation pokerLibs.commonsIo
     implementation pokerLibs.apacheCommons
     implementation pokerLibs.googleGuava
+    implementation pokerLibs.mysqlConnector
 
     compile pokerLibs.springBootDataJpa
 
@@ -67,9 +68,9 @@ ext {
 processResources {
     dependsOn project.rootProject.getTasksByName('defineCurrentPokerProfile', false)
     if (pokerProfile == 'dev') {
-        liquibase_url = 'jdbc:oracle:thin:@localhost:1521:XE'
-        liquibase_username = 'poker'
-        liquibase_password = 'secret!pa$$'
+        liquibase_url = 'jdbc:mysql://localhost:3306/poker?serverTimezone=UTC'
+        liquibase_username = 'POKER'
+        liquibase_password = 'Secret!PokerPa$$'
         liquibase_context = 'dev'
         liquibase_changeLogParameters = [
         ]
