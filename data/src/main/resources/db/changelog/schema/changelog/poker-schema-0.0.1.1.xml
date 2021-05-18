@@ -5,5 +5,19 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
                                        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd
                                        http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="zebra" id="0.0.1-User_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate user table</comment>
+        <sql>
+            CREATE TABLE `poker`.`users` (
+            `ID` INT NOT NULL AUTO_INCREMENT,
+            `EMAIL` VARCHAR(45) NOT NULL,
+            `NAME` VARCHAR(45) NOT NULL,
+            `ADMIN` TINYINT NOT NULL DEFAULT 0,
+            `PASS` VARCHAR(45) NOT NULL,
+            PRIMARY KEY (`ID`),
+            UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
+            UNIQUE INDEX `EMAIl_UNIQUE` (`EMAIL` ASC) VISIBLE);
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

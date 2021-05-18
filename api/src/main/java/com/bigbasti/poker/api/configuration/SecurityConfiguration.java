@@ -1,9 +1,6 @@
 package com.bigbasti.poker.api.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.telit.zebra.api.filter.JwtAuthenticationFilter;
-import de.telit.zebra.api.filter.JwtAuthorizationFilter;
-import de.telit.zebra.data.common.Permissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,8 +23,6 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static de.telit.zebra.data.common.Permissions.ADMINISTRATOR;
 
 @Configuration
 @EnableWebSecurity

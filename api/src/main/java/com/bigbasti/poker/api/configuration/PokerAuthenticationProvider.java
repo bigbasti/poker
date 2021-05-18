@@ -1,6 +1,7 @@
 package com.bigbasti.poker.api.configuration;
 
 import com.bigbasti.poker.data.entity.PokerUser;
+import com.bigbasti.poker.data.repository.UserRepository;
 import org.hibernate.validator.internal.util.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +12,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +57,7 @@ public class PokerAuthenticationProvider implements AuthenticationProvider {
 
         List<String> userGroups = new ArrayList<>();
         userGroups.add("USER");
-        if (user.isAdmin()) {
+        if (user.getAdmin()) {
             userGroups.add("ADMIN");
         }
         logger.debug("found user: {} with roles {}", user, userGroups);
@@ -71,7 +74,7 @@ public class PokerAuthenticationProvider implements AuthenticationProvider {
     void checkUserForLogin(PokerUser loggedInUser, String pswd) {
         // 1. check whether the provided pswd is correct
         String passwordHash = null;
-        passwordHash = HashGenerator.sha1(pswd);
+        passwordHash = sha1(pswd);
 
         if(!loggedInUser.getPass().equalsIgnoreCase(passwordHash)){
             logger.warn("unsuccessful login attempt for user {}", loggedInUser.getEmail());
@@ -82,5 +85,19 @@ public class PokerAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
+
+    public static String sha1(String input) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
+            byte[] result = messageDigest.digest(input.getBytes(Charset.forName(StandardCharsets.UTF_8.name())));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < result.length; i++) {
+                sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
+        }catch(Exception ex){
+            return "";
+        }
     }
 }
