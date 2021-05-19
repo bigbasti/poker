@@ -6,6 +6,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {PokerEnvironmentService} from "./services/environmant.service";
 import {PokerTextService} from "./services/text.service";
+import {PokerAuthService} from "./services/auth.service";
 
 
 
@@ -13,7 +14,8 @@ import {PokerTextService} from "./services/text.service";
   declarations: [],
   providers: [
       PokerEnvironmentService,
-      PokerTextService
+      PokerTextService,
+      PokerAuthService
   ],
   imports: [
     CommonModule,
