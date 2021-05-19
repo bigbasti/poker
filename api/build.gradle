@@ -33,7 +33,9 @@ bootRun {
 
 dependencies {
     implementation project(':data')
-    implementation project(':web')
+    if (pokerProfile == 'prod') {
+        implementation project(':web')
+    }
 
     implementation pokerLibs.springBootWeb
     implementation pokerLibs.sprintBootSecurity

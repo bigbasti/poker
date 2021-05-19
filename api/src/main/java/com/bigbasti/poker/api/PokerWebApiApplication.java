@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableCaching
 @SpringBootApplication
 @ComponentScan(basePackages = "com.bigbasti.poker")
-@EntityScan(basePackages = "com.bigbasti.poker.data.dao")
+@EntityScan(basePackages = "com.bigbasti.poker.data.entity")
 @EnableJpaRepositories(basePackages = {"com.bigbasti.poker.data.repository"})
 public class PokerWebApiApplication extends SpringBootServletInitializer {
 
