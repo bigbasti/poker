@@ -1,0 +1,12 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="zebra" id="0.0.1.1_create_admin_user" logicalFilePath="schema/changelog/poker-prod-0.0.1.1.xml">
+        <comment>create admin user</comment>
+        <sql>
+            INSERT INTO `poker`.`users` (`EMAIL`, `NAME`, `ADMIN`, `PASS`) VALUES ('bigbasti@outlook.com', 'Basti', '1', '34ec86e779ed0e12e1098fc5e54141409f73c5b2');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
