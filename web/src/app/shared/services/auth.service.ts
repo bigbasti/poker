@@ -83,7 +83,7 @@ export class PokerAuthService {
     const url = this.env.getApiEndpointRoot() + "/api/user/login";
     const headers: HttpHeaders = new HttpHeaders().set("content-type", "application/x-www-form-urlencoded");
     const params: FormData = new FormData();
-      params.append("username", credentials.username);
+      params.append("username", credentials.email);
       params.append("password", credentials.password);
     const options = {
       // headers: headers,
