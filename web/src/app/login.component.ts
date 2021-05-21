@@ -50,12 +50,13 @@ import {HttpErrorResponse} from "@angular/common/http";
                 <div class="col-md-4" *ngIf="auth.isAuthenticated()">
                     <h2>Willkommen {{auth.currentUser.name}}</h2>
                     <p>Sie verfügen über folgende Berechtigungen:</p>
+                    <ul *ngIf="auth.currentUser.permissions">
+                        <li *ngFor="let perm of auth.currentUser.permissions">{{perm}}</li>
+                    </ul>
                     <div class="alert alert-warning" role="alert" *ngIf="auth.currentUser.permissions.length <= 1">
                         Ihrem Konto wurden bisher keine Berechtigungen zugewiesen, dem entsprechend können Sie nur auf einen
-                        geringen Teil der
-                        RNVS Funktionalität zugreifen. Bitte kontaktieren Sie Ihren Administrator.
+                        geringen Teil der Funktionalität zugreifen. Bitte kontaktieren Sie Ihren Administrator.
                     </div>
-                    <div>     {{auth.currentUser | json}}</div>
                 </div>
             </div>
         </main>
