@@ -30,7 +30,7 @@ export class PokerAuthService {
    * @param reload if true, a full session reload is performed by the browser
    */
   logout(reload: boolean = true): void {
-    const url = this.env.getApiEndpointRoot() + "/api/user/logout";
+    const url = this.env.getApiEndpointRoot() + "/user/logout";
     const headers: HttpHeaders = new HttpHeaders().set("content-type", "application/x-www-form-urlencoded");
     const options = {
       headers: headers,
@@ -80,7 +80,7 @@ export class PokerAuthService {
    * @param {(authResult: any) => void} callback optional method for returning the server response
    */
   login(credentials: Credentials, returnToUrl: string = "/", callback?: (authResult: any) => void) {
-    const url = this.env.getApiEndpointRoot() + "/api/user/login";
+    const url = this.env.getApiEndpointRoot() + "/user/login";
     const headers: HttpHeaders = new HttpHeaders().set("content-type", "application/x-www-form-urlencoded");
     const params: FormData = new FormData();
       params.append("username", credentials.email);
@@ -121,11 +121,11 @@ export class PokerAuthService {
       permissions: []
     };
 
-    if (authRes.roles) {                                // user's roles
+    if (authRes.principal.authorities) {                                // user's roles
       newUser.permissions.push(Permission.Authenticated);   // Every logged in user has this role
       for (const p in Permission) {
-        for (let i = 0; i < authRes.roles.length; i++) {
-          if (Permission[p] === authRes.roles[i]) {
+        for (let i = 0; i < authRes.principal.authorities.length; i++) {
+          if (Permission[p] === authRes.principal.authorities[i]["authority"]) {
             newUser.permissions.push(Permission[p] as Permission);
           }
         }
@@ -144,7 +144,7 @@ export class PokerAuthService {
    * @param {(sessionUser: User) => void} callback optional callback to receive the new user intance
    */
   checkAuthenticationStatus(callback?: (sessionUser: PokerUser) => void) {
-    const url = this.env.getApiEndpointRoot() + "/api/user/me";
+    const url = this.env.getApiEndpointRoot() + "/user/me";
     const options = { withCredentials: true     /* important for XSRF*/};
 
     this.http.get(url, options).subscribe(success => {
@@ -168,7 +168,7 @@ export class PokerAuthService {
    * @returns {Promise<any>}
    */
   initAuth(): Promise<any> {
-    const url = this.env.getApiEndpointRoot() + "/api/user/me";
+    const url = this.env.getApiEndpointRoot() + "/user/me";
     const options = { withCredentials: true     /* important for XSRF*/};
 
     return this.http.get(url, options).pipe(

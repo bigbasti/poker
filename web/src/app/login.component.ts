@@ -11,7 +11,7 @@ import {HttpErrorResponse} from "@angular/common/http";
         <main role="main" class="container">
             <div class="row">
                 <div class="col-md-8" *ngIf="auth.isAuthenticated()">
-                    <h1>Zu Applikation wechseln</h1>
+                    <h1>Hi du!</h1>
                 </div>
                 <div class="col-md-6" *ngIf="!auth.isAuthenticated()">
                     <div class="jumbotron">
@@ -40,10 +40,8 @@ import {HttpErrorResponse} from "@angular/common/http";
                                                        [type]="'password'"
                                                        formControlName="password"
                                                        [control]="loginForm.controls.password"></poker-reactive-input-group>
-                            <p class="text-right">* Pflichtfelder</p>
                             <p class="text-center">
                                 <button type="submit" id="submit-login" class="btn btn-primary" [disabled]="!loginForm.valid || requestInProgress">Anmelden</button>
-                                <a role="button" id="button-forgot-password" [routerLink]="['/home/forgotpassword']" class="btn btn-link">Passwort vergessen?</a>
                             </p>
                         </fieldset>
                     </form>
@@ -57,6 +55,7 @@ import {HttpErrorResponse} from "@angular/common/http";
                         geringen Teil der
                         RNVS Funktionalität zugreifen. Bitte kontaktieren Sie Ihren Administrator.
                     </div>
+                    <div>     {{auth.currentUser | json}}</div>
                 </div>
             </div>
         </main>
