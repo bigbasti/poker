@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {environment} from "../../../environments/environment";
 
 @Injectable()
 export class PokerEnvironmentService {
@@ -25,5 +26,9 @@ export class PokerEnvironmentService {
             port = 443;
         }
         return `${window.location.protocol}//${host}:${port}/api`;
+    }
+
+    isProduction(): boolean {
+        return environment.production;
     }
 }
