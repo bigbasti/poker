@@ -17,13 +17,13 @@ node {
     download = true
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs = ['static']
-        }
-    }
-}
+//sourceSets {
+//    main {
+//        resources {
+//            srcDirs = ['static']
+//        }
+//    }
+//}
 
 clean {
     delete('out')
