@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build --configuration=production --output-path static/META-INF/resources --base-href /",
     "build-dev": "ng build --configuration=development --output-path static/META-INF/resources --base-href /",
-    "build-prod": "ng build --configuration=production --output-path static/META-INF/resources --base-href /",
+    "build-prod": "ng build --configuration=production --output-path src/main/resources/META-INF/resources --base-href /",
     "watch": "ng build --watch --configuration development"
   },
   "private": true,
