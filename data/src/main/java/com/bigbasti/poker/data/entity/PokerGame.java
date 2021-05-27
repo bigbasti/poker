@@ -37,10 +37,8 @@ public class PokerGame implements Serializable {
     private String creator;
     @Basic(optional = false)
     @Column(name = "CREATED")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime created;
     @Column(name = "FINISHED")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime finished;
     @Basic(optional = false)
     @Column(name = "STATE")
