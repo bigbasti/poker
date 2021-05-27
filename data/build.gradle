@@ -69,7 +69,7 @@ processResources {
     dependsOn project.rootProject.getTasksByName('defineCurrentPokerProfile', false)
     if (pokerProfile == 'dev') {
         liquibase_url = 'jdbc:mysql://localhost:3306/poker?serverTimezone=UTC'
-        liquibase_username = 'POKER'
+        liquibase_username = 'poker'
         liquibase_password = 'Secret!PokerPa$$'
         liquibase_context = 'dev'
         liquibase_changeLogParameters = [
