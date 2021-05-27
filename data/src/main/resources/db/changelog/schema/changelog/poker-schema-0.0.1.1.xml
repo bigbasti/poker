@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
                                        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd
                                        http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
-    <changeSet author="zebra" id="0.0.1-User_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+    <changeSet author="basti" id="0.0.1-User_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
         <comment>Crate user table</comment>
         <sql>
             CREATE TABLE `poker`.`users` (
@@ -17,6 +17,38 @@
             PRIMARY KEY (`ID`),
             UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
             UNIQUE INDEX `EMAIl_UNIQUE` (`EMAIL` ASC) VISIBLE);
+        </sql>
+    </changeSet>
+
+    <changeSet author="basti" id="0.0.1-games_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate user table</comment>
+        <sql>
+            CREATE TABLE `poker`.`games` (
+            `ID` INT NOT NULL AUTO_INCREMENT,
+            `NAME` VARCHAR(45) NOT NULL,
+            `CREATOR` VARCHAR(45) NOT NULL,
+            `CREATED` DATETIME NOT NULL,
+            `FINISHED` DATETIME NULL,
+            `STATE` VARCHAR(45) NOT NULL DEFAULT 'LOBBY',
+            `PLAYER1` VARCHAR(45) NOT NULL,
+            `PLAYER2` VARCHAR(45) NOT NULL,
+            `PLAYER3` VARCHAR(45) NULL,
+            `PLAYER4` VARCHAR(45) NULL,
+            `PLAYER5` VARCHAR(45) NULL,
+            `PLAYER6` VARCHAR(45) NULL,
+            `PLAYER7` VARCHAR(45) NULL,
+            `PLAYER8` VARCHAR(45) NULL,
+            `SMALL_BLIND` INT NOT NULL,
+            `BIG_BLIND` INT NOT NULL,
+            `INTERVALL_TIME` INT NULL,
+            `INTERVALL_ROUNDS` INT NULL,
+            `STARTING_MONEY` INT NULL,
+            `IDLE_TIME` INT NOT NULL,
+            `WINNER` VARCHAR(45) NULL,
+            `GAME_TIME` INT NULL,
+            `GAME_ROUNDS` INT NULL,
+            PRIMARY KEY (`ID`),
+            UNIQUE INDEX `NAME_UNIQUE` (`NAME` ASC) VISIBLE);
         </sql>
     </changeSet>
 

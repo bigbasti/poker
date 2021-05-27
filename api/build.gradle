@@ -85,6 +85,10 @@ war {
     }
 }
 
+task copyWebResources(type: Copy) {
+    from "static/META-INF/resources" into "${buildDir}/resources/main/ssl"
+}
+
 sourceSets {
     data.resources {
         srcDirs += [
@@ -92,18 +96,12 @@ sourceSets {
         ]
         include '**/db/changelog/**'
     }
-//    web.resources {
-//        srcDirs += [
-//                "${project(':web').projectDir}/static"
-//        ]
-//        include '**/META-INF/resources/**'
-//    }
-//    exchange.resources {
-//        srcDirs += [
-//                "${project(':exchange').projectDir}/src/main/resources"
-//        ]
-//        include '**/ssl/**'
-//    }
+    web.resources {
+        srcDirs += [
+                "${project(':web').projectDir}/static"
+        ]
+        include '**/META-INF/resources/**'
+    }
     main.resources.srcDirs += [
             data.resources,
             web.resources
