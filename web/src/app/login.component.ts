@@ -11,7 +11,7 @@ import {HttpErrorResponse} from "@angular/common/http";
         <main role="main" class="container">
             <div class="row">
                 <div class="col-md-8" *ngIf="auth.isAuthenticated()">
-                    <h1>Hi du!</h1>
+                    <a class="btn btn-primary" routerLink="/lobbies">Offene Lobbys anzeigen</a>
                 </div>
                 <div class="col-md-6" *ngIf="!auth.isAuthenticated()">
                     <div class="jumbotron">

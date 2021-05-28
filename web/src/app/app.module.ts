@@ -1,13 +1,14 @@
 import {APP_INITIALIZER, LOCALE_ID, NgModule} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import localeDE from "@angular/common/locales/de";
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {RouterModule} from "@angular/router";
 import {appRoutes} from "./app.routes";
 import {registerLocaleData} from "@angular/common";
 import {PokerSharedModule} from "./shared/shared.module";
 import {PokerLoginComponent} from "./login.component";
 import {PokerAuthService} from "./shared/services/auth.service";
+import {LobbyModule} from "./lobby/lobby.module";
 
 registerLocaleData(localeDE);
 
@@ -28,6 +29,7 @@ export function init_auth(auth: PokerAuthService) {
   imports: [
     BrowserModule,
     PokerSharedModule,
+    LobbyModule,
     RouterModule.forRoot(appRoutes, {onSameUrlNavigation: "reload"})
   ],
   providers: [
