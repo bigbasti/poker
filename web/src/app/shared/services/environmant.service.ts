@@ -14,7 +14,7 @@ export class PokerEnvironmentService {
     /**
      * try to "guess" he backend api's url by looking at the current location
      */
-    determineBackendUrl(): string {
+    private determineBackendUrl(): string {
         let port = 8181;
         let host = window.location.hostname;
         if (window.location.hostname === "localhost") {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {PokerLobbyOverviewComponent} from "./lobby-overview/lobby-overview.component";
 import {RouterModule} from "@angular/router";
 import {lobbyRoutes} from "./lobby.routes";
+import {PokerLobbyService} from "./shared/lobby.service";
 
 
 
@@ -12,10 +13,10 @@ import {lobbyRoutes} from "./lobby.routes";
   ],
   imports: [
     CommonModule,
-      RouterModule.forChild(lobbyRoutes)
+    RouterModule.forChild(lobbyRoutes)
   ],
   providers: [
-
+    PokerLobbyService
   ],
   exports: [
     PokerLobbyOverviewComponent

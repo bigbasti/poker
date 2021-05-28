@@ -12,6 +12,7 @@ import {HttpErrorResponse} from "@angular/common/http";
             <div class="row">
                 <div class="col-md-8" *ngIf="auth.isAuthenticated()">
                     <a class="btn btn-primary" routerLink="/lobbies">Offene Lobbys anzeigen</a>
+                    <poker-lobby-overview></poker-lobby-overview>
                 </div>
                 <div class="col-md-6" *ngIf="!auth.isAuthenticated()">
                     <div class="jumbotron">

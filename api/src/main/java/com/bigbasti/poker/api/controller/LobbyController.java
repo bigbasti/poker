@@ -26,7 +26,7 @@ public class LobbyController extends BaseController {
         this.lobbyRepository = lobbyRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public @ResponseBody
     ResponseEntity getAllLobbys() {
         List<PokerLobby> lobbys = lobbyRepository.findAll();

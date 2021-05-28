@@ -1,18 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import {PokerLobbyService} from "../shared/lobby.service";
 
 @Component({
   selector: 'poker-lobby-overview',
   template: `
-    <p>
-      lobby-overview works!
-    </p>
+    <ul *ngIf="allLobbys$ | async as allLobbys">
+      <li *ngFor="let lobby of allLobbys">{{lobby.name}}</li>
+    </ul>
   `,
   styles: [
   ]
 })
 export class PokerLobbyOverviewComponent implements OnInit {
 
-  constructor() { }
+  allLobbys$ = this.lobbyService.getAllLobbies$;
+
+  constructor(
+      private lobbyService: PokerLobbyService
+  ) { }
 
   ngOnInit(): void {
   }
