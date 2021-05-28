@@ -20,8 +20,112 @@
         </sql>
     </changeSet>
 
+    <changeSet author="basti" id="0.0.1-lobbies_table_create"
+               logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate lobby table</comment>
+        <sql>
+            CREATE TABLE `poker`.`lobbies` (
+            `ID` INT NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(45) NOT NULL,
+            `money` INT NOT NULL DEFAULT 500,
+            `small_blind` INT NOT NULL DEFAULT 5,
+            `big_blind` INT NOT NULL DEFAULT 10,
+            `interval_rounds` INT NULL,
+            `interval_time` INT NULL DEFAULT 20,
+            `idle_time` INT NOT NULL,
+            `player1` INT NULL,
+            `player2` INT NULL,
+            `player3` INT NULL,
+            `player4` INT NULL,
+            `player5` INT NULL,
+            `player6` INT NULL,
+            `player7` INT NULL,
+            `player8` INT NULL,
+            `creator` INT NOT NULL,
+            PRIMARY KEY (`ID`),
+            INDEX `index2` (`ID` ASC),
+            INDEX `creator_users_idx` (`creator` ASC),
+            INDEX `p1_user_idx` (`player1` ASC),
+            INDEX `p2_user_idx` (`player2` ASC),
+            INDEX `p3_user_idx` (`player3` ASC),
+            INDEX `p4_user_idx` (`player4` ASC),
+            INDEX `p5_user_idx` (`player5` ASC),
+            INDEX `p6_user_idx` (`player6` ASC),
+            INDEX `p7_user_idx` (`player7` ASC),
+            INDEX `p8_user_idx` (`player8` ASC),
+            CONSTRAINT `creator_users`
+            FOREIGN KEY (`creator`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p1_user`
+            FOREIGN KEY (`player1`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p2_user`
+            FOREIGN KEY (`player2`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p3_user`
+            FOREIGN KEY (`player3`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p4_user`
+            FOREIGN KEY (`player4`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p5_user`
+            FOREIGN KEY (`player5`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p6_user`
+            FOREIGN KEY (`player6`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p7_user`
+            FOREIGN KEY (`player7`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `p8_user`
+            FOREIGN KEY (`player8`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE);
+        </sql>
+    </changeSet>
+
+    <changeSet author="basti" id="0.0.1-players_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate players table</comment>
+        <sql>
+            CREATE TABLE `poker`.`players` (
+            `ID` INT NOT NULL AUTO_INCREMENT,
+            `user` INT NOT NULL,
+            `game` INT NOT NULL,
+            `money` INT NOT NULL,
+            `card1` VARCHAR(45) NULL,
+            `card2` VARCHAR(45) NULL,
+            PRIMARY KEY (`ID`),
+            INDEX `index2` (`ID` ASC),
+            INDEX `player_user_idx` (`user` ASC),
+            INDEX `player_game_idx` (`game` ASC),
+            CONSTRAINT `player_user`
+            FOREIGN KEY (`user`)
+            REFERENCES `poker`.`users` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE);
+        </sql>
+    </changeSet>
+
+
     <changeSet author="basti" id="0.0.1-games_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
-        <comment>Crate user table</comment>
+        <comment>Crate games table</comment>
         <sql>
             CREATE TABLE `poker`.`games` (
             `ID` INT NOT NULL AUTO_INCREMENT,
@@ -29,7 +133,6 @@
             `CREATOR` VARCHAR(45) NOT NULL,
             `CREATED` DATETIME NOT NULL,
             `FINISHED` DATETIME NULL,
-            `STATE` VARCHAR(45) NOT NULL DEFAULT 'LOBBY',
             `PLAYER1` VARCHAR(45) NOT NULL,
             `PLAYER2` VARCHAR(45) NOT NULL,
             `PLAYER3` VARCHAR(45) NULL,
@@ -49,6 +152,80 @@
             `GAME_ROUNDS` INT NULL,
             PRIMARY KEY (`ID`),
             UNIQUE INDEX `NAME_UNIQUE` (`NAME` ASC));
+
+            ALTER TABLE `poker`.`games`
+            CHANGE COLUMN `CREATOR` `CREATOR` INT NOT NULL ,
+            CHANGE COLUMN `PLAYER1` `PLAYER1` INT NOT NULL ,
+            CHANGE COLUMN `PLAYER2` `PLAYER2` INT NOT NULL ,
+            CHANGE COLUMN `PLAYER3` `PLAYER3` INT NULL DEFAULT NULL ,
+            CHANGE COLUMN `PLAYER4` `PLAYER4` INT NULL DEFAULT NULL ,
+            CHANGE COLUMN `PLAYER5` `PLAYER5` INT NULL DEFAULT NULL ,
+            CHANGE COLUMN `PLAYER6` `PLAYER6` INT NULL DEFAULT NULL ,
+            CHANGE COLUMN `PLAYER7` `PLAYER7` INT NULL DEFAULT NULL ,
+            CHANGE COLUMN `PLAYER8` `PLAYER8` INT NULL DEFAULT NULL ,
+            CHANGE COLUMN `WINNER` `WINNER` INT NULL DEFAULT NULL ,
+            ADD INDEX `creator_player_idx` (`CREATOR` ASC),
+            ADD INDEX `p1_player_idx` (`PLAYER1` ASC),
+            ADD INDEX `p2_player_idx` (`PLAYER2` ASC),
+            ADD INDEX `p3_player_idx` (`PLAYER3` ASC),
+            ADD INDEX `p4_player_idx` (`PLAYER4` ASC),
+            ADD INDEX `p5_player_idx` (`PLAYER5` ASC),
+            ADD INDEX `p6_player_idx` (`PLAYER6` ASC),
+            ADD INDEX `p7_player_idx` (`PLAYER7` ASC),
+            ADD INDEX `p8_player_idx` (`PLAYER8` ASC),
+            ADD INDEX `winner_player_idx` (`WINNER` ASC);
+            ;
+            ALTER TABLE `poker`.`games`
+            ADD CONSTRAINT `creator_player`
+            FOREIGN KEY (`CREATOR`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p1_player`
+            FOREIGN KEY (`PLAYER1`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p2_player`
+            FOREIGN KEY (`PLAYER2`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p3_player`
+            FOREIGN KEY (`PLAYER3`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p4_player`
+            FOREIGN KEY (`PLAYER4`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p5_player`
+            FOREIGN KEY (`PLAYER5`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p6_player`
+            FOREIGN KEY (`PLAYER6`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p7_player`
+            FOREIGN KEY (`PLAYER7`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `p8_player`
+            FOREIGN KEY (`PLAYER8`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            ADD CONSTRAINT `winner_player`
+            FOREIGN KEY (`WINNER`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION;
         </sql>
     </changeSet>
 
