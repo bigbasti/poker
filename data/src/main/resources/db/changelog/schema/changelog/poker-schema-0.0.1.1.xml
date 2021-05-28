@@ -20,8 +20,7 @@
         </sql>
     </changeSet>
 
-    <changeSet author="basti" id="0.0.1-lobbies_table_create"
-               logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+    <changeSet author="basti" id="0.0.1-lobbies_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
         <comment>Crate lobby table</comment>
         <sql>
             CREATE TABLE `poker`.`lobbies` (
@@ -262,6 +261,39 @@
             ON UPDATE NO ACTION,
             CONSTRAINT `dealer_player`
             FOREIGN KEY (`dealer`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION);
+        </sql>
+    </changeSet>
+
+    <changeSet author="basti" id="0.0.1-turns_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate turns table</comment>
+        <sql>
+            CREATE TABLE `poker`.`turns` (
+            `ID` INT NOT NULL AUTO_INCREMENT,
+            `round` INT NOT NULL,
+            `type` VARCHAR(45) NOT NULL,
+            `player_turn` INT NOT NULL,
+            `finished` TINYINT NOT NULL,
+            `p1_bet` VARCHAR(45) NULL,
+            `p2_bet` VARCHAR(45) NULL,
+            `p3_bet` VARCHAR(45) NULL,
+            `p4_bet` VARCHAR(45) NULL,
+            `p5_bet` VARCHAR(45) NULL,
+            `p6_bet` VARCHAR(45) NULL,
+            `p7_bet` VARCHAR(45) NULL,
+            `p8_bet` VARCHAR(45) NULL,
+            PRIMARY KEY (`ID`),
+            INDEX `turn_round_idx` (`round` ASC),
+            INDEX `pturn_player_idx` (`player_turn` ASC),
+            CONSTRAINT `turn_round`
+            FOREIGN KEY (`round`)
+            REFERENCES `poker`.`rounds` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `pturn_player`
+            FOREIGN KEY (`player_turn`)
             REFERENCES `poker`.`players` (`ID`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION);
