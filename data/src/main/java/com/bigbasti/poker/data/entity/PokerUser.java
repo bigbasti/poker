@@ -24,11 +24,11 @@ public class PokerUser implements Serializable {
     @Column(name = "NAME")
     private String name;
     @Basic(optional = false)
+    @Column(name = "ADMIN")
+    private short admin;
+    @Basic(optional = false)
     @Column(name = "PASS")
     private String pass;
-    @Basic(optional = false)
-    @Column(name = "ADMIN")
-    private Boolean admin;
 
     public PokerUser() {
     }
@@ -37,12 +37,12 @@ public class PokerUser implements Serializable {
         this.id = id;
     }
 
-    public PokerUser(Integer id, String email, String name, String pass, Boolean admin) {
+    public PokerUser(Integer id, String email, String name, short admin, String pass) {
         this.id = id;
         this.email = email;
         this.name = name;
-        this.pass = pass;
         this.admin = admin;
+        this.pass = pass;
     }
 
     public Integer getId() {
@@ -69,20 +69,20 @@ public class PokerUser implements Serializable {
         this.name = name;
     }
 
+    public short getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(short admin) {
+        this.admin = admin;
+    }
+
     public String getPass() {
         return pass;
     }
 
     public void setPass(String pass) {
         this.pass = pass;
-    }
-
-    public Boolean getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Boolean admin) {
-        this.admin = admin;
     }
 
     @Override
@@ -93,12 +93,26 @@ public class PokerUser implements Serializable {
     }
 
     @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof PokerUser)) {
+            return false;
+        }
+        PokerUser other = (PokerUser) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "PokerUser{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", admin=" + admin +
+                ", pass='" + pass + '\'' +
                 '}';
     }
 }

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(name = "PokerGame.findAll", query = "SELECT p FROM PokerGame p")})
 public class PokerGame implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,34 +21,10 @@ public class PokerGame implements Serializable {
     @Column(name = "NAME")
     private String name;
     @Basic(optional = false)
-    @Column(name = "CREATOR")
-    private String creator;
-    @Basic(optional = false)
     @Column(name = "CREATED")
     private LocalDateTime created;
     @Column(name = "FINISHED")
     private LocalDateTime finished;
-    @Basic(optional = false)
-    @Column(name = "STATE")
-    private String state;
-    @Basic(optional = false)
-    @Column(name = "PLAYER1")
-    private String player1;
-    @Basic(optional = false)
-    @Column(name = "PLAYER2")
-    private String player2;
-    @Column(name = "PLAYER3")
-    private String player3;
-    @Column(name = "PLAYER4")
-    private String player4;
-    @Column(name = "PLAYER5")
-    private String player5;
-    @Column(name = "PLAYER6")
-    private String player6;
-    @Column(name = "PLAYER7")
-    private String player7;
-    @Column(name = "PLAYER8")
-    private String player8;
     @Basic(optional = false)
     @Column(name = "SMALL_BLIND")
     private int smallBlind;
@@ -65,12 +40,40 @@ public class PokerGame implements Serializable {
     @Basic(optional = false)
     @Column(name = "IDLE_TIME")
     private int idleTime;
-    @Column(name = "WINNER")
-    private String winner;
     @Column(name = "GAME_TIME")
     private Integer gameTime;
     @Column(name = "GAME_ROUNDS")
     private Integer gameRounds;
+    @JoinColumn(name = "CREATOR", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private PokerPlayer creator;
+    @JoinColumn(name = "PLAYER1", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private PokerPlayer player1;
+    @JoinColumn(name = "PLAYER2", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private PokerPlayer player2;
+    @JoinColumn(name = "PLAYER3", referencedColumnName = "ID")
+    @ManyToOne
+    private PokerPlayer player3;
+    @JoinColumn(name = "PLAYER4", referencedColumnName = "ID")
+    @ManyToOne
+    private PokerPlayer player4;
+    @JoinColumn(name = "PLAYER5", referencedColumnName = "ID")
+    @ManyToOne
+    private PokerPlayer player5;
+    @JoinColumn(name = "PLAYER6", referencedColumnName = "ID")
+    @ManyToOne
+    private PokerPlayer player6;
+    @JoinColumn(name = "PLAYER7", referencedColumnName = "ID")
+    @ManyToOne
+    private PokerPlayer player7;
+    @JoinColumn(name = "PLAYER8", referencedColumnName = "ID")
+    @ManyToOne
+    private PokerPlayer player8;
+    @JoinColumn(name = "WINNER", referencedColumnName = "ID")
+    @ManyToOne
+    private PokerPlayer winner;
 
     public PokerGame() {
     }
@@ -79,14 +82,10 @@ public class PokerGame implements Serializable {
         this.id = id;
     }
 
-    public PokerGame(Integer id, String name, String creator, LocalDateTime created, String state, String player1, String player2, int smallBlind, int bigBlind, int idleTime) {
+    public PokerGame(Integer id, String name, LocalDateTime created, int smallBlind, int bigBlind, int idleTime) {
         this.id = id;
         this.name = name;
-        this.creator = creator;
         this.created = created;
-        this.state = state;
-        this.player1 = player1;
-        this.player2 = player2;
         this.smallBlind = smallBlind;
         this.bigBlind = bigBlind;
         this.idleTime = idleTime;
@@ -108,14 +107,6 @@ public class PokerGame implements Serializable {
         this.name = name;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
     public LocalDateTime getCreated() {
         return created;
     }
@@ -130,78 +121,6 @@ public class PokerGame implements Serializable {
 
     public void setFinished(LocalDateTime finished) {
         this.finished = finished;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getPlayer1() {
-        return player1;
-    }
-
-    public void setPlayer1(String player1) {
-        this.player1 = player1;
-    }
-
-    public String getPlayer2() {
-        return player2;
-    }
-
-    public void setPlayer2(String player2) {
-        this.player2 = player2;
-    }
-
-    public String getPlayer3() {
-        return player3;
-    }
-
-    public void setPlayer3(String player3) {
-        this.player3 = player3;
-    }
-
-    public String getPlayer4() {
-        return player4;
-    }
-
-    public void setPlayer4(String player4) {
-        this.player4 = player4;
-    }
-
-    public String getPlayer5() {
-        return player5;
-    }
-
-    public void setPlayer5(String player5) {
-        this.player5 = player5;
-    }
-
-    public String getPlayer6() {
-        return player6;
-    }
-
-    public void setPlayer6(String player6) {
-        this.player6 = player6;
-    }
-
-    public String getPlayer7() {
-        return player7;
-    }
-
-    public void setPlayer7(String player7) {
-        this.player7 = player7;
-    }
-
-    public String getPlayer8() {
-        return player8;
-    }
-
-    public void setPlayer8(String player8) {
-        this.player8 = player8;
     }
 
     public int getSmallBlind() {
@@ -252,14 +171,6 @@ public class PokerGame implements Serializable {
         this.idleTime = idleTime;
     }
 
-    public String getWinner() {
-        return winner;
-    }
-
-    public void setWinner(String winner) {
-        this.winner = winner;
-    }
-
     public Integer getGameTime() {
         return gameTime;
     }
@@ -274,6 +185,86 @@ public class PokerGame implements Serializable {
 
     public void setGameRounds(Integer gameRounds) {
         this.gameRounds = gameRounds;
+    }
+
+    public PokerPlayer getCreator() {
+        return creator;
+    }
+
+    public void setCreator(PokerPlayer creator) {
+        this.creator = creator;
+    }
+
+    public PokerPlayer getPlayer1() {
+        return player1;
+    }
+
+    public void setPlayer1(PokerPlayer player1) {
+        this.player1 = player1;
+    }
+
+    public PokerPlayer getPlayer2() {
+        return player2;
+    }
+
+    public void setPlayer2(PokerPlayer player2) {
+        this.player2 = player2;
+    }
+
+    public PokerPlayer getPlayer3() {
+        return player3;
+    }
+
+    public void setPlayer3(PokerPlayer player3) {
+        this.player3 = player3;
+    }
+
+    public PokerPlayer getPlayer4() {
+        return player4;
+    }
+
+    public void setPlayer4(PokerPlayer player4) {
+        this.player4 = player4;
+    }
+
+    public PokerPlayer getPlayer5() {
+        return player5;
+    }
+
+    public void setPlayer5(PokerPlayer player5) {
+        this.player5 = player5;
+    }
+
+    public PokerPlayer getPlayer6() {
+        return player6;
+    }
+
+    public void setPlayer6(PokerPlayer player6) {
+        this.player6 = player6;
+    }
+
+    public PokerPlayer getPlayer7() {
+        return player7;
+    }
+
+    public void setPlayer7(PokerPlayer player7) {
+        this.player7 = player7;
+    }
+
+    public PokerPlayer getPlayer8() {
+        return player8;
+    }
+
+    public void setPlayer8(PokerPlayer player8) {
+        this.player8 = player8;
+    }
+
+    public PokerPlayer getWinner() {
+        return winner;
+    }
+
+    public void setWinner(PokerPlayer winner) {
+        this.winner = winner;
     }
 
     @Override
@@ -301,27 +292,26 @@ public class PokerGame implements Serializable {
         return "PokerGame{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", creator='" + creator + '\'' +
                 ", created=" + created +
                 ", finished=" + finished +
-                ", state='" + state + '\'' +
-                ", player1='" + player1 + '\'' +
-                ", player2='" + player2 + '\'' +
-                ", player3='" + player3 + '\'' +
-                ", player4='" + player4 + '\'' +
-                ", player5='" + player5 + '\'' +
-                ", player6='" + player6 + '\'' +
-                ", player7='" + player7 + '\'' +
-                ", player8='" + player8 + '\'' +
                 ", smallBlind=" + smallBlind +
                 ", bigBlind=" + bigBlind +
                 ", intervallTime=" + intervallTime +
                 ", intervallRounds=" + intervallRounds +
                 ", startingMoney=" + startingMoney +
                 ", idleTime=" + idleTime +
-                ", winner='" + winner + '\'' +
                 ", gameTime=" + gameTime +
                 ", gameRounds=" + gameRounds +
+                ", creator=" + creator +
+                ", player1=" + player1 +
+                ", player2=" + player2 +
+                ", player3=" + player3 +
+                ", player4=" + player4 +
+                ", player5=" + player5 +
+                ", player6=" + player6 +
+                ", player7=" + player7 +
+                ", player8=" + player8 +
+                ", winner=" + winner +
                 '}';
     }
 }
