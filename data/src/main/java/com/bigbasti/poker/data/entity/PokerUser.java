@@ -25,7 +25,7 @@ public class PokerUser implements Serializable {
     private String name;
     @Basic(optional = false)
     @Column(name = "ADMIN")
-    private short admin;
+    private boolean admin;
     @Basic(optional = false)
     @Column(name = "PASS")
     private String pass;
@@ -37,7 +37,7 @@ public class PokerUser implements Serializable {
         this.id = id;
     }
 
-    public PokerUser(Integer id, String email, String name, short admin, String pass) {
+    public PokerUser(Integer id, String email, String name, boolean admin, String pass) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -69,11 +69,11 @@ public class PokerUser implements Serializable {
         this.name = name;
     }
 
-    public short getAdmin() {
+    public boolean getAdmin() {
         return admin;
     }
 
-    public void setAdmin(short admin) {
+    public void setAdmin(boolean admin) {
         this.admin = admin;
     }
 
