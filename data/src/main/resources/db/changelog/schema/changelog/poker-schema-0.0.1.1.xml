@@ -229,4 +229,43 @@
         </sql>
     </changeSet>
 
+    <changeSet author="basti" id="0.0.1-rounds_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate rounds table</comment>
+        <sql>
+            CREATE TABLE `poker`.`rounds` (
+            `ID` INT NOT NULL AUTO_INCREMENT,
+            `game` INT NOT NULL,
+            `number` INT NOT NULL DEFAULT 1,
+            `deck` VARCHAR(1024) NOT NULL,
+            `open_cards` VARCHAR(45) NULL,
+            `pots` VARCHAR(1024) NULL,
+            `removed_cards` VARCHAR(1024) NULL,
+            `p1_cards` VARCHAR(45) NULL,
+            `p2_cards` VARCHAR(45) NULL,
+            `p3_cards` VARCHAR(45) NULL,
+            `p4_cards` VARCHAR(45) NULL,
+            `p5_cards` VARCHAR(45) NULL,
+            `p6_cards` VARCHAR(45) NULL,
+            `p7_cards` VARCHAR(45) NULL,
+            `p8_cards` VARCHAR(45) NULL,
+            `current_rurn` INT NULL,
+            `dealer` INT NOT NULL,
+            `big_blind` INT NOT NULL,
+            `small_blind` INT NOT NULL,
+            PRIMARY KEY (`ID`),
+            INDEX `round_game_idx` (`game` ASC),
+            INDEX `dealer_player_idx` (`dealer` ASC),
+            CONSTRAINT `round_game`
+            FOREIGN KEY (`game`)
+            REFERENCES `poker`.`games` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `dealer_player`
+            FOREIGN KEY (`dealer`)
+            REFERENCES `poker`.`players` (`ID`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
