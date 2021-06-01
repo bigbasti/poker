@@ -13,6 +13,8 @@ import {StoreModule} from "@ngrx/store";
 import {StoreDevtools, StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {environment} from "../environments/environment";
 import {EffectsModule} from "@ngrx/effects";
+import {appReducer} from "./state/app.reducer";
+import {AppEffects} from "./state/app.effects";
 
 registerLocaleData(localeDE);
 
@@ -34,9 +36,9 @@ export function init_auth(auth: PokerAuthService) {
     BrowserModule,
     PokerSharedModule,
     LobbyModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot({"app": appReducer}, {}),
     StoreDevtoolsModule.instrument({name: "Poker DevTools", maxAge: 25, logOnly: environment.production}),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AppEffects]),
     RouterModule.forRoot(appRoutes, {onSameUrlNavigation: "reload"}),
   ],
   providers: [

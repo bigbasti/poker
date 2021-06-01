@@ -1,10 +1,11 @@
 
-import {map} from "rxjs/operators";
+import {catchError, map, tap} from "rxjs/operators";
 import {Injectable, Injector} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Credentials, Permission, PokerUser} from "../model/user.model";
 import {Router} from "@angular/router";
 import {PokerEnvironmentService} from "./environmant.service";
+import {EMPTY, Observable, of} from "rxjs";
 
 @Injectable()
 export class PokerAuthService {
@@ -90,17 +91,20 @@ export class PokerAuthService {
       withCredentials: true     // important for XSRF
     };
 
-    this.http.post(url, params, options)               // send login request to server
-      .subscribe(authResult => {                           // if login was successfull
-        this.checkAuthenticationStatus(user => {        // request a full user object (with roles)
-          console.log("Login successful!");
-          if (callback) {callback(user); }                      // if callback was registered invoke it
-          this.router.navigate([returnToUrl]);
-        });
-      }, (error: HttpErrorResponse) => {
-        console.log("Error while logging in: ", error);
-        if (callback) {callback(error); }
-      });
+    return this.http.post(url, params, options).pipe(          // send login request to server
+      // tap(authResult => {                           // if login was successfull
+      //   this.checkAuthenticationStatus(user => {        // request a full user object (with roles)
+      //     console.log("Login successful!");
+      //     if (callback) {callback(user); }                      // if callback was registered invoke it
+      //     this.router.navigate([returnToUrl]);
+      //   });
+      // }),
+      //   catchError((error) => {
+      //   console.log("Error while logging in: ", error);
+      //   if (callback) {callback(error); }
+      //   return EMPTY;
+      // })
+    )
   }
 
   /**
@@ -111,7 +115,7 @@ export class PokerAuthService {
    * @param authRes object returned by /api/user/me call
    * @returns {User} front end user instance
    */
-  private createUserInstance(authRes: any): PokerUser {
+  public createUserInstance(authRes: any): Observable<PokerUser> {
     const newUser: PokerUser = {
       id: authRes.principal.principal.id,
       email: authRes.principal.principal.email,
@@ -133,7 +137,7 @@ export class PokerAuthService {
     }
     // map string based permissions to enum values
 
-    return newUser;
+    return of(newUser);
   }
 
   /**
@@ -147,16 +151,17 @@ export class PokerAuthService {
     const url = this.env.getApiEndpointRoot() + "/user/me";
     const options = { withCredentials: true     /* important for XSRF*/};
 
-    this.http.get(url, options).subscribe(success => {
-      // console.log("updates auth:", success);
-      this.currentUser = this.createUserInstance(success);
-      if (callback) {callback(this.currentUser); }
-    }, error => {
-      if (this.router.url.indexOf("help") < 0) {
-        // redirect only if a secured page was requested
-        this.router.navigate(["/home"]);
-      }
-    });
+    return this.http.get(url, options);
+    // .subscribe(success => {
+    //   // console.log("updates auth:", success);
+    //   this.currentUser = this.createUserInstance(success);
+    //   if (callback) {callback(this.currentUser); }
+    // }, error => {
+    //   if (this.router.url.indexOf("help") < 0) {
+    //     // redirect only if a secured page was requested
+    //     this.router.navigate(["/home"]);
+    //   }
+    // });
   }
 
   /**
@@ -174,7 +179,7 @@ export class PokerAuthService {
     return this.http.get(url, options).pipe(
       map((res: any) => res)).toPromise()
       .then(data => {
-        this.currentUser = this.createUserInstance(data);
+        // this.currentUser = this.createUserInstance(data);
         return data;
       }).catch(error => {
         if (this.router.url.indexOf("help") < 0) {

@@ -31,11 +31,6 @@ export const getAvailableLobbiesError = createSelector(
 
 export const lobbyReducer = createReducer<LobbyState>(
     initialState,
-    on(LobbyActions.loadAvailableLobbies, (state): LobbyState => {
-        return {
-            ...state
-        }
-    }),
     on(LobbyActions.loadAvailableLobbiesSuccess, (state, action) => {
         return {
             ...state,

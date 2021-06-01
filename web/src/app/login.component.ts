@@ -4,23 +4,27 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Credentials} from "./shared/model/user.model";
 import {HttpErrorResponse} from "@angular/common/http";
+import {Store} from "@ngrx/store";
+import {PokerState} from "./state/app.state";
+import {getLoginError, getUser, getUserDetailsError} from "./state/app.reducer";
+import * as AppActions from "./state/app.actions";
 
 @Component({
     selector: "poker-login",
     template: `
         <main role="main" class="container">
             <div class="row">
-                <div class="col-md-8" *ngIf="auth.isAuthenticated()">
+                <div class="col-md-8" *ngIf="currentUser$ | async as user">
                     <a class="btn btn-primary" routerLink="/lobbies">Offene Lobbys anzeigen</a>
                     <poker-lobby-overview></poker-lobby-overview>
                 </div>
-                <div class="col-md-6" *ngIf="!auth.isAuthenticated()">
+                <div class="col-md-6" *ngIf="!(currentUser$ | async) as user">
                     <div class="jumbotron">
                         <h1>BigBasti's Crazy Poker 🤪</h1>
                         <p class="lead">Give me your money!!!!</p>
                     </div>
                 </div>
-                <div class="col-md-3" *ngIf="!auth.isAuthenticated()">
+                <div class="col-md-3" *ngIf="!(currentUser$ | async) as user">
                     <h2>Login</h2>
                     <form (ngSubmit)="performLogin(loginForm.value)" [formGroup]="loginForm">
                         <fieldset>
@@ -48,13 +52,13 @@ import {HttpErrorResponse} from "@angular/common/http";
                     </form>
                 </div>
 
-                <div class="col-md-4" *ngIf="auth.isAuthenticated()">
-                    <h2>Willkommen {{auth.currentUser.name}}</h2>
+                <div class="col-md-4" *ngIf="currentUser$ | async as user">
+                    <h2>Willkommen {{user.name}}</h2>
                     <p>Sie verfügen über folgende Berechtigungen:</p>
-                    <ul *ngIf="auth.currentUser.permissions">
-                        <li *ngFor="let perm of auth.currentUser.permissions">{{perm}}</li>
+                    <ul *ngIf="user.permissions">
+                        <li *ngFor="let perm of user.permissions">{{perm}}</li>
                     </ul>
-                    <div class="alert alert-warning" role="alert" *ngIf="auth.currentUser.permissions.length <= 1">
+                    <div class="alert alert-warning" role="alert" *ngIf="user.permissions.length <= 1">
                         Ihrem Konto wurden bisher keine Berechtigungen zugewiesen, dem entsprechend können Sie nur auf einen
                         geringen Teil der Funktionalität zugreifen. Bitte kontaktieren Sie Ihren Administrator.
                     </div>
@@ -67,6 +71,10 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class PokerLoginComponent implements OnInit {
 
+    credentialsError$ = this.store.select(getLoginError);
+    userDetailsError$ = this.store.select(getUserDetailsError);
+    currentUser$ = this.store.select(getUser);
+
     public loginForm: FormGroup;
     public registerForm: FormGroup;
     public requestInProgress: boolean;
@@ -75,7 +83,8 @@ export class PokerLoginComponent implements OnInit {
         public auth: PokerAuthService,
         private route: ActivatedRoute,
         private router: Router,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private store: Store<PokerState>
     ) {}
 
     ngOnInit(): void {
@@ -96,16 +105,7 @@ export class PokerLoginComponent implements OnInit {
         this.requestInProgress = true;
         this.loginForm.controls.password.setValue("");
         this.loginForm.controls.password.markAsPristine();
-        this.auth.login(credentials, null, result => {
-            this.requestInProgress = false;
-
-            if (result.error) {
-
-            }
-            if (result instanceof HttpErrorResponse) {
-                // something went wrong on the server - maybe something with the database?
-            }
-        });
+        this.store.dispatch(AppActions.loginUser({credentials}));
     }
 
 }
