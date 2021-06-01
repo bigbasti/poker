@@ -10,6 +10,8 @@ import {PokerLoginComponent} from "./login.component";
 import {PokerAuthService} from "./shared/services/auth.service";
 import {LobbyModule} from "./lobby/lobby.module";
 import {StoreModule} from "@ngrx/store";
+import {StoreDevtools, StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {environment} from "../environments/environment";
 
 registerLocaleData(localeDE);
 
@@ -32,6 +34,7 @@ export function init_auth(auth: PokerAuthService) {
     PokerSharedModule,
     LobbyModule,
     StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({name: "Poker DevTools", maxAge: 25, logOnly: environment.production}),
     RouterModule.forRoot(appRoutes, {onSameUrlNavigation: "reload"}),
   ],
   providers: [
