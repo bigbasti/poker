@@ -4,4 +4,4 @@ import {PokerLobby} from "../shared/lobby.model";
 
 export const loadAvailableLobbies = createAction("[Lobby] load available Lobbies");
 export const loadAvailableLobbiesSuccess = createAction("[lobby] load available lobbies success", props<{lobbies: PokerLobby[]}>());
-export const loadAvailableLobbiesFailure = createAction("[lobby] load available lobbies failed", props<{error: string}>());
+export const loadAvailableLobbiesFailure = createAction("[lobby] load available lobbies failed", props<{error: any}>());

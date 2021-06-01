@@ -2,7 +2,8 @@ import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {PokerLobbyService} from "../shared/lobby.service";
 import * as LobbyActions from "./lobby.actions"
-import {map, mergeMap} from "rxjs/operators";
+import {catchError, map, mergeMap} from "rxjs/operators";
+import {of} from "rxjs";
 
 @Injectable()
 export class LobbyEffects {
@@ -16,7 +17,8 @@ export class LobbyEffects {
         return this.actions$.pipe(
             ofType(LobbyActions.loadAvailableLobbies),
             mergeMap(() => this.lobbyService.getAllLobbies$.pipe(
-                map(lobbies => LobbyActions.loadAvailableLobbiesSuccess({lobbies}))
+                map(lobbies => LobbyActions.loadAvailableLobbiesSuccess({lobbies})),
+                catchError(error => of(LobbyActions.loadAvailableLobbiesFailure({error})))
             ))
         )
     });
