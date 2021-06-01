@@ -4,6 +4,7 @@ import {PokerLobbyOverviewComponent} from "./lobby-overview/lobby-overview.compo
 import {RouterModule} from "@angular/router";
 import {lobbyRoutes} from "./lobby.routes";
 import {PokerLobbyService} from "./shared/lobby.service";
+import {PokerSharedModule} from "../shared/shared.module";
 
 
 
@@ -13,6 +14,7 @@ import {PokerLobbyService} from "./shared/lobby.service";
   ],
   imports: [
     CommonModule,
+    PokerSharedModule,
     RouterModule.forChild(lobbyRoutes)
   ],
   providers: [
