@@ -5,6 +5,10 @@ import {RouterModule} from "@angular/router";
 import {lobbyRoutes} from "./lobby.routes";
 import {PokerLobbyService} from "./shared/lobby.service";
 import {PokerSharedModule} from "../shared/shared.module";
+import {StoreModule} from "@ngrx/store";
+import {lobbyReducer} from "./state/lobby.reducer";
+import {EffectsModule} from "@ngrx/effects";
+import {LobbyEffects} from "./state/lobby.effects";
 
 
 
@@ -15,6 +19,8 @@ import {PokerSharedModule} from "../shared/shared.module";
   imports: [
     CommonModule,
     PokerSharedModule,
+    StoreModule.forFeature("lobby", lobbyReducer),
+    EffectsModule.forFeature([LobbyEffects]),
     RouterModule.forChild(lobbyRoutes)
   ],
   providers: [

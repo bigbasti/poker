@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {PokerEnvironmentService} from "../../shared/services/environmant.service";
+import {PokerLobby} from "./lobby.model";
 
 @Injectable()
 export class PokerLobbyService {
@@ -11,5 +12,5 @@ export class PokerLobbyService {
     ) {
     }
 
-    getAllLobbies$ = this.http.get(`${this.env.getApiEndpointRoot()}/lobby`, {withCredentials: true});
+    getAllLobbies$ = this.http.get<PokerLobby[]>(`${this.env.getApiEndpointRoot()}/lobby`, {withCredentials: true});
 }
