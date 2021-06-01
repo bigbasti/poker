@@ -9,6 +9,7 @@ import {PokerSharedModule} from "./shared/shared.module";
 import {PokerLoginComponent} from "./login.component";
 import {PokerAuthService} from "./shared/services/auth.service";
 import {LobbyModule} from "./lobby/lobby.module";
+import {StoreModule} from "@ngrx/store";
 
 registerLocaleData(localeDE);
 
@@ -30,7 +31,8 @@ export function init_auth(auth: PokerAuthService) {
     BrowserModule,
     PokerSharedModule,
     LobbyModule,
-    RouterModule.forRoot(appRoutes, {onSameUrlNavigation: "reload"})
+    StoreModule.forRoot({}, {}),
+    RouterModule.forRoot(appRoutes, {onSameUrlNavigation: "reload"}),
   ],
   providers: [
     {provide: LOCALE_ID, useValue: "de"},
