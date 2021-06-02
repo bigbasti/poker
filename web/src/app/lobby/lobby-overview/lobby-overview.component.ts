@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PokerLobbyService} from "../shared/lobby.service";
 import {Store} from "@ngrx/store";
-import {takeUntil, tap} from "rxjs/operators";
+import {map, takeUntil, tap} from "rxjs/operators";
 import * as LobbyActions from "../state/lobby.actions"
 import {getAvailableLobbies, getAvailableLobbiesError, getCurrentLobby, PokerState} from "../state/lobby.reducer";
 import {PokerLobby} from "../shared/lobby.model";
-import {Subject} from "rxjs";
+import {combineLatest, Subject} from "rxjs";
 import {Router} from "@angular/router";
+import {getUser} from "../../state/app.reducer";
 
 @Component({
   selector: 'poker-lobby-overview',
@@ -43,12 +44,19 @@ export class PokerLobbyOverviewComponent implements OnInit, OnDestroy {
   // allLobbys$ = this.lobbyService.getAllLobbies$;
   onDestroy$ = new Subject();
 
+  currentUser$ = this.store.select(getUser);
   currentLobby$ = this.store.select(getCurrentLobby).pipe(
       tap(lobby => console.log("current lobby", lobby)),
       tap(lobby => lobby ? this.router.navigate(["lobby", lobby.id]) : ""),
       takeUntil(this.onDestroy$)
   ).subscribe();
-  availableLobbies$ = this.store.select(getAvailableLobbies);
+  availableLobbies$ = combineLatest([this.store.select(getAvailableLobbies), this.currentUser$]).pipe(
+      tap(([lobbies, user]) => {
+        const inLobby = lobbies.map(lobby => lobby).find(lobby => lobby.player1?.id === user.id || lobby.player2?.id === user.id || lobby.player3?.id === user.id || lobby.player4?.id === user.id || lobby.player5?.id === user.id || lobby.player6?.id === user.id || lobby.player7?.id === user.id || lobby.player8?.id === user.id);
+        if (inLobby) { this.router.navigate(["lobby", inLobby.id]);}
+      }),
+      map(([lobbies, user]) => lobbies)
+  );
   availableLobbiesError$ = this.store.select(getAvailableLobbiesError).pipe(
       tap(err => console.error(err))
   );

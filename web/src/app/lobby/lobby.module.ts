@@ -9,12 +9,14 @@ import {StoreModule} from "@ngrx/store";
 import {lobbyReducer} from "./state/lobby.reducer";
 import {EffectsModule} from "@ngrx/effects";
 import {LobbyEffects} from "./state/lobby.effects";
+import { PokerLobbyComponent } from "./lobby/lobby.component";
 
 
 
 @NgModule({
   declarations: [
-      PokerLobbyOverviewComponent
+      PokerLobbyOverviewComponent,
+      PokerLobbyComponent
   ],
   imports: [
     CommonModule,
