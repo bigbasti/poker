@@ -9,12 +9,14 @@ import {PokerSharedModule} from "./shared/shared.module";
 import {PokerLoginComponent} from "./login.component";
 import {PokerAuthService} from "./shared/services/auth.service";
 import {LobbyModule} from "./lobby/lobby.module";
-import {StoreModule} from "@ngrx/store";
+import {Store, StoreModule} from "@ngrx/store";
 import {StoreDevtools, StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {environment} from "../environments/environment";
 import {EffectsModule} from "@ngrx/effects";
 import {appReducer} from "./state/app.reducer";
 import {AppEffects} from "./state/app.effects";
+import {PokerState} from "./state/app.state";
+import {loadUserDetails} from "./state/app.actions";
 
 registerLocaleData(localeDE);
 
@@ -23,8 +25,8 @@ registerLocaleData(localeDE);
  * @param {ZebraAuthService} auth
  * @returns {() => Promise<any>}
  */
-export function init_auth(auth: PokerAuthService) {
-  return () => auth.initAuth();
+export function init_auth(auth: Store<PokerState>) {
+  return () => auth.dispatch(loadUserDetails());
 }
 
 @NgModule({
@@ -43,7 +45,7 @@ export function init_auth(auth: PokerAuthService) {
   ],
   providers: [
     {provide: LOCALE_ID, useValue: "de"},
-    {provide: APP_INITIALIZER, useFactory: init_auth, deps: [PokerAuthService], multi: true}
+    {provide: APP_INITIALIZER, useFactory: init_auth, deps: [Store], multi: true}
   ],
   bootstrap: [AppComponent]
 })

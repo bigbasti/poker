@@ -15,7 +15,6 @@ import * as AppActions from "./state/app.actions";
         <main role="main" class="container">
             <div class="row">
                 <div class="col-md-8" *ngIf="currentUser$ | async as user">
-                    <a class="btn btn-primary" routerLink="/lobbies">Offene Lobbys anzeigen</a>
                     <poker-lobby-overview></poker-lobby-overview>
                 </div>
                 <div class="col-md-6" *ngIf="!(currentUser$ | async) as user">
@@ -53,7 +52,7 @@ import * as AppActions from "./state/app.actions";
                 </div>
 
                 <div class="col-md-4" *ngIf="currentUser$ | async as user">
-                    <h2>Willkommen {{user.name}}</h2>
+                    <h2>👋 Hi {{user.name}}</h2>
                     <p>Sie verfügen über folgende Berechtigungen:</p>
                     <ul *ngIf="user.permissions">
                         <li *ngFor="let perm of user.permissions">{{perm}}</li>
