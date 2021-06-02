@@ -4,6 +4,7 @@ import {PokerLobbyService} from "../shared/lobby.service";
 import * as LobbyActions from "./lobby.actions"
 import {catchError, map, mergeMap} from "rxjs/operators";
 import {of} from "rxjs";
+import {PokerLobby} from "../shared/lobby.model";
 
 @Injectable()
 export class LobbyEffects {
@@ -19,6 +20,16 @@ export class LobbyEffects {
             mergeMap(() => this.lobbyService.getAllLobbies$.pipe(
                 map(lobbies => LobbyActions.loadAvailableLobbiesSuccess({lobbies})),
                 catchError(error => of(LobbyActions.loadAvailableLobbiesFailure({error})))
+            ))
+        )
+    });
+
+    joinLobby$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(LobbyActions.joinPokerLobby),
+            mergeMap((action) => this.lobbyService.joinPokerLobby(action.lobby).pipe(
+                map(lobby => LobbyActions.joinPokerLobbySuccess({lobby})),
+                catchError(error => of(LobbyActions.joinPokerLobbyFailure({error})))
             ))
         )
     });

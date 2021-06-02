@@ -13,4 +13,5 @@ export class PokerLobbyService {
     }
 
     getAllLobbies$ = this.http.get<PokerLobby[]>(`${this.env.getApiEndpointRoot()}/lobby`, {withCredentials: true});
+    joinPokerLobby = (lobby: PokerLobby) => this.http.get<PokerLobby>(`${this.env.getApiEndpointRoot()}/lobby/${lobby.id}/join`, {withCredentials: true});
 }

@@ -9,12 +9,14 @@ export interface PokerState extends AppState.PokerState {
 
 export interface LobbyState {
     availableLobbies: PokerLobby[],
-    availableLobbiesLoadingError: string
+    availableLobbiesLoadingError: string,
+    currentLobby: PokerLobby
 }
 
-const initialState = {
+const initialState: LobbyState = {
     availableLobbies: [],
-    availableLobbiesLoadingError: null
+    availableLobbiesLoadingError: null,
+    currentLobby: null
 }
 
 const getLobbyState = createFeatureSelector<LobbyState>("lobby");
@@ -27,6 +29,10 @@ export const getAvailableLobbies = createSelector(
 export const getAvailableLobbiesError = createSelector(
     getLobbyState,
     state => state.availableLobbiesLoadingError
+)
+export const getCurrentLobby = createSelector(
+    getLobbyState,
+    state => state.currentLobby
 )
 
 export const lobbyReducer = createReducer<LobbyState>(
@@ -43,6 +49,12 @@ export const lobbyReducer = createReducer<LobbyState>(
             ...state,
             availableLobbies: [],
             availableLobbiesLoadingError: action.error
+        }
+    }),
+    on(LobbyActions.joinPokerLobbySuccess, (state, action) => {
+        return {
+            ...state,
+            currentLobby: action.lobby
         }
     })
 );

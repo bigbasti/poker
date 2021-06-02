@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PokerLobbyService} from "../shared/lobby.service";
 import {Store} from "@ngrx/store";
-import {map, tap} from "rxjs/operators";
+import {takeUntil, tap} from "rxjs/operators";
 import * as LobbyActions from "../state/lobby.actions"
-import {getAvailableLobbies, getAvailableLobbiesError, PokerState} from "../state/lobby.reducer";
-import {Observable} from "rxjs";
+import {getAvailableLobbies, getAvailableLobbiesError, getCurrentLobby, PokerState} from "../state/lobby.reducer";
 import {PokerLobby} from "../shared/lobby.model";
+import {Subject} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'poker-lobby-overview',
@@ -29,7 +30,7 @@ import {PokerLobby} from "../shared/lobby.model";
         <td>{{calculateOccupation(lobby)}} / 8</td>
         <td>{{lobby.smallBlind}} / {{lobby.bigBlind}}</td>
         <td>{{lobby.money}}</td>
-        <td><button class="btn btn-primary btn-sm">Beitreten</button></td>
+        <td><button class="btn btn-primary btn-sm" (click)="enterLobby(lobby)">Beitreten</button></td>
       </tr>
       </tbody>
     </table>
@@ -37,10 +38,16 @@ import {PokerLobby} from "../shared/lobby.model";
   styles: [
   ]
 })
-export class PokerLobbyOverviewComponent implements OnInit {
+export class PokerLobbyOverviewComponent implements OnInit, OnDestroy {
 
   // allLobbys$ = this.lobbyService.getAllLobbies$;
+  onDestroy$ = new Subject();
 
+  currentLobby$ = this.store.select(getCurrentLobby).pipe(
+      tap(lobby => console.log("current lobby", lobby)),
+      tap(lobby => lobby ? this.router.navigate(["lobby", lobby.id]) : ""),
+      takeUntil(this.onDestroy$)
+  ).subscribe();
   availableLobbies$ = this.store.select(getAvailableLobbies);
   availableLobbiesError$ = this.store.select(getAvailableLobbiesError).pipe(
       tap(err => console.error(err))
@@ -48,8 +55,13 @@ export class PokerLobbyOverviewComponent implements OnInit {
 
   constructor(
       private lobbyService: PokerLobbyService,
-      private store: Store<PokerState>
+      private store: Store<PokerState>,
+      private router: Router
   ) { }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next(null);
+  }
 
   ngOnInit(): void {
     this.store.dispatch(LobbyActions.loadAvailableLobbies());
@@ -63,4 +75,7 @@ export class PokerLobbyOverviewComponent implements OnInit {
     return occupied;
   }
 
+  enterLobby(lobby: PokerLobby) {
+    this.store.dispatch(LobbyActions.joinPokerLobby({lobby}));
+  }
 }

@@ -230,6 +230,52 @@ public class PokerLobby implements Serializable {
         this.player8 = player8;
     }
 
+    public void addPlayer(PokerUser user) {
+        if (
+            player1.getEmail().equals(user.getEmail()) ||
+            player2.getEmail().equals(user.getEmail()) ||
+            player3.getEmail().equals(user.getEmail()) ||
+            player4.getEmail().equals(user.getEmail()) ||
+            player5.getEmail().equals(user.getEmail()) ||
+            player6.getEmail().equals(user.getEmail()) ||
+            player7.getEmail().equals(user.getEmail()) ||
+            player8.getEmail().equals(user.getEmail())
+        ) { return; }
+
+        if (player1 == null) {
+            player1 = user;
+            return;
+        }
+        if (player2 == null) {
+            player2 = user;
+            return;
+        }
+        if (player3 == null) {
+            player3 = user;
+            return;
+        }
+        if (player4 == null) {
+            player4 = user;
+            return;
+        }
+        if (player5 == null) {
+            player5 = user;
+            return;
+        }
+        if (player6 == null) {
+            player6 = user;
+            return;
+        }
+        if (player7 == null) {
+            player7 = user;
+            return;
+        }
+        if (player8 == null) {
+            player8 = user;
+            return;
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

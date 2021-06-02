@@ -8,11 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/api/lobby")
@@ -33,5 +37,16 @@ public class LobbyController extends BaseController {
         if (lobbys == null) {lobbys = new ArrayList<>();}
         logger.debug("returning all lobbies {}", lobbys.size());
         return ResponseEntity.ok(lobbys);
+    }
+
+    @GetMapping("/{id}/join")
+    public @ResponseBody
+    ResponseEntity joinLobby(@PathVariable @NotNull Integer id) {
+        logger.debug("user {} joins lobby {}", getCurrentUser().getEmail(), id);
+        PokerLobby pokerLobby = lobbyRepository.findById(id).orElseThrow(() -> new RuntimeException("uknown id privided to join " + id));
+        pokerLobby.addPlayer(getCurrentUser());
+        lobbyRepository.save(pokerLobby);
+        logger.debug("successfully joined lobby");
+        return ResponseEntity.ok(pokerLobby);
     }
 }

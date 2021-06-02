@@ -28,24 +28,26 @@ import * as AppActions from "./state/app.actions";
                     <form (ngSubmit)="performLogin(loginForm.value)" [formGroup]="loginForm">
                         <fieldset>
                             <poker-reactive-input-group [class]="'small-group'"
-                                                       [altLabel]="'Ihre E-Mailadresse'"
-                                                       [label]="'E-Mail'"
-                                                       [title]="'Ihre E-Mailadresse'"
-                                                       [name]="'email'"
-                                                       [required]="true"
-                                                       [type]="'text'"
-                                                       formControlName="email"
-                                                       [control]="loginForm.controls.email"></poker-reactive-input-group>
+                                                        [altLabel]="'Ihre E-Mailadresse'"
+                                                        [label]="'E-Mail'"
+                                                        [title]="'Ihre E-Mailadresse'"
+                                                        [name]="'email'"
+                                                        [required]="true"
+                                                        [type]="'text'"
+                                                        formControlName="email"
+                                                        [control]="loginForm.controls.email"></poker-reactive-input-group>
                             <poker-reactive-input-group [class]="'small-group'"
-                                                       [altLabel]="'Ihr Passwort'"
-                                                       [label]="'Passwort'"
-                                                       [name]="'password'"
-                                                       [required]="true"
-                                                       [type]="'password'"
-                                                       formControlName="password"
-                                                       [control]="loginForm.controls.password"></poker-reactive-input-group>
+                                                        [altLabel]="'Ihr Passwort'"
+                                                        [label]="'Passwort'"
+                                                        [name]="'password'"
+                                                        [required]="true"
+                                                        [type]="'password'"
+                                                        formControlName="password"
+                                                        [control]="loginForm.controls.password"></poker-reactive-input-group>
                             <p class="text-center">
-                                <button type="submit" id="submit-login" class="btn btn-primary" [disabled]="!loginForm.valid || requestInProgress">Anmelden</button>
+                                <button type="submit" id="submit-login" class="btn btn-primary"
+                                        [disabled]="!loginForm.valid || requestInProgress">Anmelden
+                                </button>
                             </p>
                         </fieldset>
                     </form>
@@ -64,9 +66,9 @@ import * as AppActions from "./state/app.actions";
                 </div>
             </div>
         </main>
-  `,
+    `,
     styles: [`
-  `]
+    `]
 })
 export class PokerLoginComponent implements OnInit {
 
@@ -84,7 +86,8 @@ export class PokerLoginComponent implements OnInit {
         private router: Router,
         private fb: FormBuilder,
         private store: Store<PokerState>
-    ) {}
+    ) {
+    }
 
     ngOnInit(): void {
         // create form model for login
