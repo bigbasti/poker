@@ -1,5 +1,7 @@
 package com.bigbasti.poker.data.entity;
 
+import com.bigbasti.poker.data.types.GameType;
+
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -36,7 +38,7 @@ public class PokerLobby implements Serializable {
     private String name;
     @Basic(optional = false)
     @Column(name = "type")
-    private String type;
+    private GameType type;
     @Basic(optional = false)
     @Column(name = "money")
     private int money;
@@ -88,7 +90,7 @@ public class PokerLobby implements Serializable {
         this.id = id;
     }
 
-    public PokerLobby(Integer id, String name, String type, int money, int smallBlind, int bigBlind, int idleTime) {
+    public PokerLobby(Integer id, String name, GameType type, int money, int smallBlind, int bigBlind, int idleTime) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -114,11 +116,11 @@ public class PokerLobby implements Serializable {
         this.name = name;
     }
 
-    public String getType() {
+    public GameType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(GameType type) {
         this.type = type;
     }
 

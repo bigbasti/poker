@@ -26,7 +26,7 @@
             CREATE TABLE `lobbies` (
             `ID` int NOT NULL AUTO_INCREMENT,
             `name` varchar(45) NOT NULL,
-            `type` varchar(45) NOT NULL DEFAULT 'full',
+            `type` varchar(45) NOT NULL DEFAULT 'FULL',
             `money` int NOT NULL DEFAULT '500',
             `small_blind` int NOT NULL DEFAULT '5',
             `big_blind` int NOT NULL DEFAULT '10',
@@ -108,7 +108,7 @@
             `WINNER` int DEFAULT NULL,
             `GAME_TIME` int DEFAULT NULL,
             `GAME_ROUNDS` int DEFAULT NULL,
-            `type` varchar(45) NOT NULL DEFAULT 'full',
+            `type` varchar(45) NOT NULL DEFAULT 'FULL',
             PRIMARY KEY (`ID`),
             UNIQUE KEY `NAME_UNIQUE` (`NAME`),
             KEY `creator_player_idx` (`CREATOR`),
