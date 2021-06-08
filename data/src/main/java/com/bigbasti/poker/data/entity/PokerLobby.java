@@ -238,13 +238,13 @@ public class PokerLobby implements Serializable {
     public void addPlayer(PokerUser user) {
         if (
             player1.getEmail().equals(user.getEmail()) ||
-            player2.getEmail().equals(user.getEmail()) ||
-            player3.getEmail().equals(user.getEmail()) ||
-            player4.getEmail().equals(user.getEmail()) ||
-            player5.getEmail().equals(user.getEmail()) ||
-            player6.getEmail().equals(user.getEmail()) ||
-            player7.getEmail().equals(user.getEmail()) ||
-            player8.getEmail().equals(user.getEmail())
+            player2 != null && player2.getEmail().equals(user.getEmail()) ||
+            player3 != null && player3.getEmail().equals(user.getEmail()) ||
+            player4 != null && player4.getEmail().equals(user.getEmail()) ||
+            player5 != null && player5.getEmail().equals(user.getEmail()) ||
+            player6 != null && player6.getEmail().equals(user.getEmail()) ||
+            player7 != null && player7.getEmail().equals(user.getEmail()) ||
+            player8 != null && player8.getEmail().equals(user.getEmail())
         ) { return; }
 
         if (player1 == null) {
@@ -315,13 +315,13 @@ public class PokerLobby implements Serializable {
                 ", idleTime=" + idleTime +
                 ", creator=" + creator.getEmail() +
                 ", player1=" + player1.getEmail() +
-                ", player2=" + player2.getEmail() +
-                ", player3=" + player3.getEmail() +
-                ", player4=" + player4.getEmail() +
-                ", player5=" + player5.getEmail() +
-                ", player6=" + player6.getEmail() +
-                ", player7=" + player7.getEmail() +
-                ", player8=" + player8.getEmail() +
+                ", player2=" + player2 +
+                ", player3=" + player3 +
+                ", player4=" + player4 +
+                ", player5=" + player5 +
+                ", player6=" + player6 +
+                ", player7=" + player7 +
+                ", player8=" + player8 +
                 '}';
     }
 }
