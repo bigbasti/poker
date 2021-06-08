@@ -35,6 +35,9 @@ public class PokerLobby implements Serializable {
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
+    @Column(name = "type")
+    private String type;
+    @Basic(optional = false)
     @Column(name = "money")
     private int money;
     @Basic(optional = false)
@@ -85,9 +88,10 @@ public class PokerLobby implements Serializable {
         this.id = id;
     }
 
-    public PokerLobby(Integer id, String name, int money, int smallBlind, int bigBlind, int idleTime) {
+    public PokerLobby(Integer id, String name, String type, int money, int smallBlind, int bigBlind, int idleTime) {
         this.id = id;
         this.name = name;
+        this.type = type;
         this.money = money;
         this.smallBlind = smallBlind;
         this.bigBlind = bigBlind;
@@ -108,6 +112,14 @@ public class PokerLobby implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getMoney() {
@@ -301,21 +313,22 @@ public class PokerLobby implements Serializable {
         return "PokerLobby{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
                 ", money=" + money +
                 ", smallBlind=" + smallBlind +
                 ", bigBlind=" + bigBlind +
                 ", intervalRounds=" + intervalRounds +
                 ", intervalTime=" + intervalTime +
                 ", idleTime=" + idleTime +
-                ", creator=" + creator +
-                ", player1=" + player1 +
-                ", player2=" + player2 +
-                ", player3=" + player3 +
-                ", player4=" + player4 +
-                ", player5=" + player5 +
-                ", player6=" + player6 +
-                ", player7=" + player7 +
-                ", player8=" + player8 +
+                ", creator=" + creator.getEmail() +
+                ", player1=" + player1.getEmail() +
+                ", player2=" + player2.getEmail() +
+                ", player3=" + player3.getEmail() +
+                ", player4=" + player4.getEmail() +
+                ", player5=" + player5.getEmail() +
+                ", player6=" + player6.getEmail() +
+                ", player7=" + player7.getEmail() +
+                ", player8=" + player8.getEmail() +
                 '}';
     }
 }
