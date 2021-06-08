@@ -108,13 +108,14 @@
             `WINNER` int DEFAULT NULL,
             `GAME_TIME` int DEFAULT NULL,
             `GAME_ROUNDS` int DEFAULT NULL,
+            `type` varchar(45) NOT NULL DEFAULT 'full',
             PRIMARY KEY (`ID`),
             UNIQUE KEY `NAME_UNIQUE` (`NAME`),
             KEY `creator_player_idx` (`CREATOR`),
             KEY `winner_player_idx` (`WINNER`),
             CONSTRAINT `creator_player` FOREIGN KEY (`CREATOR`) REFERENCES `players` (`ID`),
             CONSTRAINT `winner_player` FOREIGN KEY (`WINNER`) REFERENCES `players` (`ID`)
-            );
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
         </sql>
     </changeSet>
 

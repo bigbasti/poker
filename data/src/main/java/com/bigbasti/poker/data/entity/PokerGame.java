@@ -2,7 +2,6 @@ package com.bigbasti.poker.data.entity;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -22,6 +21,9 @@ public class PokerGame implements Serializable {
     @Basic(optional = false)
     @Column(name = "NAME")
     private String name;
+    @Basic(optional = false)
+    @Column(name = "type")
+    private String type;
     @Basic(optional = false)
     @Column(name = "CREATED")
     private LocalDateTime created;
@@ -65,9 +67,10 @@ public class PokerGame implements Serializable {
         this.id = id;
     }
 
-    public PokerGame(Integer id, String name, LocalDateTime created, int smallBlind, int bigBlind, int idleTime, Collection<PokerPlayer> players) {
+    public PokerGame(Integer id, String name, String type, LocalDateTime created, int smallBlind, int bigBlind, int idleTime, Collection<PokerPlayer> players) {
         this.id = id;
         this.name = name;
+        this.type = type;
         this.created = created;
         this.smallBlind = smallBlind;
         this.bigBlind = bigBlind;
@@ -89,6 +92,14 @@ public class PokerGame implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public LocalDateTime getCreated() {
@@ -220,6 +231,7 @@ public class PokerGame implements Serializable {
         return "PokerGame{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", type=" + type +
                 ", created=" + created +
                 ", finished=" + finished +
                 ", smallBlind=" + smallBlind +
@@ -230,8 +242,8 @@ public class PokerGame implements Serializable {
                 ", idleTime=" + idleTime +
                 ", gameTime=" + gameTime +
                 ", gameRounds=" + gameRounds +
-                ", creator=" + creator +
-                ", winner=" + winner +
+                ", creator=" + creator.getUser() +
+                ", winner=" + winner.getUser() +
                 ", players=" + players.size() +
                 '}';
     }
