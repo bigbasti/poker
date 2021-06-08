@@ -25,6 +25,7 @@ public class PokerGame implements Serializable {
     private String name;
     @Basic(optional = false)
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private GameType type;
     @Basic(optional = false)
     @Column(name = "CREATED")
