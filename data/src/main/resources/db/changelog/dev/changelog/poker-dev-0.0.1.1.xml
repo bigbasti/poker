@@ -9,18 +9,18 @@
         </sql>
     </changeSet>
     <changeSet author="zebra" id="0.0.1.1_create_test1_user" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">
-        <comment>create admin user</comment>
+        <comment>create test user</comment>
         <sql>
             INSERT INTO `poker`.`users` (`EMAIL`, `NAME`, `ADMIN`, `PASS`) VALUES ('test@test.com', 'Tester', '0', 'e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4');
         </sql>
     </changeSet>
-    <changeSet author="zebra" id="0.0.1.1_create_admin_user" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">
+    <changeSet author="zebra" id="0.0.1.1_create_lobby_cards" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">
         <comment>create lobby cards</comment>
         <sql>
             INSERT INTO `poker`.`lobbies` (`name`, `type`, `money`, `small_blind`, `big_blind`, `interval_rounds`, `interval_time`, `idle_time`, `player1`, `player2`, `creator`) VALUES ('Profigame', 'CARDS', '500', '5', '10', '10', '20', '60', '1', '2', '1');
         </sql>
     </changeSet>
-    <changeSet author="zebra" id="0.0.1.1_create_admin_user" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">
+    <changeSet author="zebra" id="0.0.1.1_create_lobby_full" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">
         <comment>create lobby full</comment>
         <sql>
             INSERT INTO `poker`.`lobbies` (`name`, `type`, `money`, `small_blind`, `big_blind`, `interval_rounds`, `interval_time`, `idle_time`, `player1`, `player2`, `creator`) VALUES ('Full Game Lobby', 'FULL', '1000', '10', '20', '10', '20', '60', '1', '2', '1');
