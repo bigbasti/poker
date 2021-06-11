@@ -15,19 +15,26 @@ import * as LobbyActions from "../state/lobby.actions"
       <div class="row">
         <div class="col-md-3" >
           <h3>Spieler</h3>
-          <ul>
-            <li *ngIf="lobby.player1">{{lobby.player1.name}}</li>
-            <li *ngIf="lobby.player2">{{lobby.player2.name}}</li>
-            <li *ngIf="lobby.player3">{{lobby.player3.name}}</li>
-            <li *ngIf="lobby.player4">{{lobby.player4.name}}</li>
-            <li *ngIf="lobby.player5">{{lobby.player5.name}}</li>
-            <li *ngIf="lobby.player6">{{lobby.player6.name}}</li>
-            <li *ngIf="lobby.player7">{{lobby.player7.name}}</li>
-            <li *ngIf="lobby.player8">{{lobby.player8.name}}</li>
+          <ul style="list-style: none; font-size: x-large;">
+            <li *ngIf="lobby.player1"><span title="Lobbyadmin">👑</span> {{lobby.player1.name}}</li>
+            <li *ngIf="lobby.player2">👨 {{lobby.player2.name}}</li>
+            <li *ngIf="lobby.player3">👨 {{lobby.player3.name}}</li>
+            <li *ngIf="lobby.player4">👨 {{lobby.player4.name}}</li>
+            <li *ngIf="lobby.player5">👨 {{lobby.player5.name}}</li>
+            <li *ngIf="lobby.player6">👨 {{lobby.player6.name}}</li>
+            <li *ngIf="lobby.player7">👨 {{lobby.player7.name}}</li>
+            <li *ngIf="lobby.player8">👨 {{lobby.player8.name}}</li>
           </ul>
         </div>
         <div class="col-md-9">
             <h3>Konfiguration</h3>
+          <div class="row" style="font-size: x-large;">
+            <table cellpadding="5">
+              <tr><td>🃏 Spieltyp</td><td  style="width: 100px;">{{lobby.type}}</td><td>💰 Startgeld</td><td>{{lobby.money}}</td></tr>
+              <tr><td>💸 Blinds</td><td>{{lobby.smallBlind}} / {{lobby.bigBlind}}</td><td>😴 Max. Inaktivität</td><td>{{lobby.idleTime}}</td></tr>
+              <tr><td>🔂 Rundenerhöhung</td><td>{{lobby.intervalRounds}}</td><td>⏰ Zeiterhöhung</td><td>{{lobby.intervalTime}}</td></tr>
+            </table>
+          </div>
         </div>
 <!--        <div class="col-md-3" *ngIf="!(currentUser$ | async) as user">-->
 <!--          <h2>Login</h2>-->

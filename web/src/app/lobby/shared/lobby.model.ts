@@ -4,6 +4,7 @@ export interface PokerLobby {
     id: number;
     name: string;
     money: number;
+    type: string;
     smallBlind: number;
     bigBlind: number;
     intervalRounds: number;
