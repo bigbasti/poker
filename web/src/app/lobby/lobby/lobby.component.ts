@@ -70,12 +70,7 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject();
 
   currentLobby$ = this.store.select(getCurrentLobby);
-  lobbyId$ = this.route.params.pipe(
-      tap(params => console.log("lobby id:", params.id)),
-      map(params => params.id),
-      takeUntil(this.onDestroy$)
-  )
-  ;
+
 
   constructor(
       private lobbyService: PokerLobbyService,
@@ -89,6 +84,7 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(LobbyActions.loadCurrentLobby());
   }
 
 }

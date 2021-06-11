@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,5 +49,19 @@ public class LobbyController extends BaseController {
         lobbyRepository.save(pokerLobby);
         logger.debug("successfully joined lobby");
         return ResponseEntity.ok(pokerLobby);
+    }
+
+    @GetMapping("/current")
+    public @ResponseBody
+    ResponseEntity getCurrentLobby() {
+        logger.debug("loading current lobby for user {}", getCurrentUser().getEmail());
+        List<PokerLobby> pokerLobbies = lobbyRepository.getCurrentPokerLobby(getCurrentUser().getId()).orElseThrow(() -> new InvalidParameterException("could not find a lobby for the user"));
+        if (pokerLobbies.size() > 1) {
+            logger.error("found more than one lobby for user {}", getCurrentUser().getEmail());
+            // todo: only the most recent lobby must be valid, delete the old ones
+        }
+        PokerLobby target = pokerLobbies.get(0);
+        logger.debug("successfully found lobby for user {} (lobby: {)}", getCurrentUser().getEmail(), target.getName());
+        return ResponseEntity.ok(target);
     }
 }
