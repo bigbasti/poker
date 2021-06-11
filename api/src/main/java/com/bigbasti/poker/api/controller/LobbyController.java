@@ -55,13 +55,13 @@ public class LobbyController extends BaseController {
     public @ResponseBody
     ResponseEntity getCurrentLobby() {
         logger.debug("loading current lobby for user {}", getCurrentUser().getEmail());
-        List<PokerLobby> pokerLobbies = lobbyRepository.getCurrentPokerLobby(getCurrentUser().getId()).orElseThrow(() -> new InvalidParameterException("could not find a lobby for the user"));
+        List<PokerLobby> pokerLobbies = lobbyRepository.getCurrentPokerLobby(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a lobby for the user"));
         if (pokerLobbies.size() > 1) {
             logger.error("found more than one lobby for user {}", getCurrentUser().getEmail());
             // todo: only the most recent lobby must be valid, delete the old ones
         }
         PokerLobby target = pokerLobbies.get(0);
-        logger.debug("successfully found lobby for user {} (lobby: {)}", getCurrentUser().getEmail(), target.getName());
+        logger.debug("successfully found lobby for user {} (lobby: {})", getCurrentUser().getEmail(), target.getName());
         return ResponseEntity.ok(target);
     }
 }
