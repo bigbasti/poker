@@ -2,14 +2,16 @@ import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {PokerLobbyService} from "../shared/lobby.service";
 import * as LobbyActions from "./lobby.actions"
-import {catchError, map, mergeMap} from "rxjs/operators";
+import {catchError, map, mergeMap, tap} from "rxjs/operators";
 import {of} from "rxjs";
 import {PokerLobby} from "../shared/lobby.model";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class LobbyEffects {
     constructor(
         private actions$: Actions,
+        private router: Router,
         private lobbyService: PokerLobbyService
     ) {
     }
@@ -44,6 +46,12 @@ export class LobbyEffects {
         )
     });
 
+    joinLobbySuccessRedirect$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LobbyActions.joinPokerLobbySuccess),
+            tap(() => this.router.navigate(["lobby"]))
+        ), {dispatch: false});
+
     leaveCurrentLobby$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(LobbyActions.leavePokerLobby),
@@ -53,4 +61,10 @@ export class LobbyEffects {
             ))
         )
     });
+
+    leaveLobbySuccessRedirect$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LobbyActions.leavePokerLobbySuccess),
+            tap(() => this.router.navigate([""]))
+        ), {dispatch: false});
 }
