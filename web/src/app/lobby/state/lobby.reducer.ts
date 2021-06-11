@@ -56,5 +56,11 @@ export const lobbyReducer = createReducer<LobbyState>(
             ...state,
             currentLobby: action.lobby
         }
+    }),
+    on(LobbyActions.leavePokerLobbySuccess, (state, action) => {
+        return {
+            ...state,
+            currentLobby: null
+        }
     })
 );

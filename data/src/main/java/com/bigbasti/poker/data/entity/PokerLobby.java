@@ -3,6 +3,7 @@ package com.bigbasti.poker.data.entity;
 import com.bigbasti.poker.data.types.GameType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -279,6 +280,28 @@ public class PokerLobby implements Serializable {
             player8 = user;
             return;
         }
+    }
+
+    public void removeUser(PokerUser user) {
+        ArrayList<PokerUser> users = new ArrayList<>();
+        users.add(player1);
+        users.add(player2);
+        users.add(player3);
+        users.add(player4);
+        users.add(player5);
+        users.add(player6);
+        users.add(player7);
+        users.add(player8);
+        users.remove(user);
+        users.add(null);
+        player1 = users.get(0) == null ? null : users.get(0);
+        player2 = users.get(1) == null ? null : users.get(1);
+        player3 = users.get(2) == null ? null : users.get(2);
+        player4 = users.get(3) == null ? null : users.get(3);
+        player5 = users.get(4) == null ? null : users.get(4);
+        player6 = users.get(5) == null ? null : users.get(5);
+        player7 = users.get(6) == null ? null : users.get(6);
+        player8 = users.get(7) == null ? null : users.get(7);
     }
 
     @Override

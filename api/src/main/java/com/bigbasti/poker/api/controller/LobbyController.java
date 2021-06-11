@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -62,6 +59,31 @@ public class LobbyController extends BaseController {
         }
         PokerLobby target = pokerLobbies.get(0);
         logger.debug("successfully found lobby for user {} (lobby: {})", getCurrentUser().getEmail(), target.getName());
+        return ResponseEntity.ok(target);
+    }
+
+    @PostMapping("/leave")
+    public @ResponseBody
+    ResponseEntity leaveCurrentLobby() {
+        logger.debug("leaving current lobby for user {}", getCurrentUser().getEmail());
+        List<PokerLobby> pokerLobbies = lobbyRepository.getCurrentPokerLobby(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a lobby for the user"));
+        if (pokerLobbies.size() > 1) {
+            logger.error("found more than one lobby for user {}", getCurrentUser().getEmail());
+            // todo: only the most recent lobby must be valid, delete the old ones
+        }
+        PokerLobby target = pokerLobbies.get(0);
+        if (target.getCreator().getId() == getCurrentUser().getId()) {
+            // user is creator, if he leaves lobby mus be destroyed
+            logger.debug("user is admin of lobby, lobby is deleted");
+            lobbyRepository.delete(target);
+            lobbyRepository.flush();
+        } else {
+            // user is not creator -> just remove him
+            target.removeUser(getCurrentUser());
+            lobbyRepository.saveAndFlush(target);
+
+        }
+        logger.debug("successfully removed user {}  from lobby: {}", getCurrentUser().getEmail(), target.getName());
         return ResponseEntity.ok(target);
     }
 }

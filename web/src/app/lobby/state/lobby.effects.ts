@@ -43,4 +43,14 @@ export class LobbyEffects {
             ))
         )
     });
+
+    leaveCurrentLobby$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(LobbyActions.leavePokerLobby),
+            mergeMap((action) => this.lobbyService.leaveCurrentLobby.pipe(
+                map(lobby => LobbyActions.leavePokerLobbySuccess()),
+                catchError(error => of(LobbyActions.leavePokerLobbyFailure({error})))
+            ))
+        )
+    });
 }

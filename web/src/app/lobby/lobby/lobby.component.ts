@@ -6,6 +6,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {map, takeUntil, tap} from "rxjs/operators";
 import {Subject} from "rxjs";
 import * as LobbyActions from "../state/lobby.actions"
+import {getUser} from "../../state/app.reducer";
+import {PokerLobby} from "../shared/lobby.model";
 
 @Component({
   selector: "poker-lobby",
@@ -26,8 +28,8 @@ import * as LobbyActions from "../state/lobby.actions"
             <li *ngIf="lobby.player8">👨 {{lobby.player8.name}}</li>
           </ul>
         </div>
-        <div class="col-md-9">
-            <h3>Konfiguration</h3>
+        <div class="col-md-9" *ngIf="lobby.creator.id !== (currentUser$ | async).id">
+          <h3>Konfiguration</h3>
           <div class="row" style="font-size: x-large;">
             <table cellpadding="5">
               <tr><td>🃏 Spieltyp</td><td  style="width: 100px;">{{lobby.type}}</td><td>💰 Startgeld</td><td>{{lobby.money}}</td></tr>
@@ -36,6 +38,17 @@ import * as LobbyActions from "../state/lobby.actions"
             </table>
           </div>
         </div>
+        <div class="col-md-9" *ngIf="lobby.creator.id === (currentUser$ | async).id">
+          <h3>Konfiguration</h3>
+          <div class="row" style="font-size: x-large;">
+            <table cellpadding="5">
+              <tr><td>🃏 Spieltyp</td><td  style="width: 100px;">{{lobby.type}}</td><td>💰 Startgeld</td><td>{{lobby.money}}</td></tr>
+              <tr><td>💸 Blinds</td><td>{{lobby.smallBlind}} / {{lobby.bigBlind}}</td><td>😴 Max. Inaktivität</td><td>{{lobby.idleTime}}</td></tr>
+              <tr><td>🔂 Rundenerhöhung</td><td>{{lobby.intervalRounds}}</td><td>⏰ Zeiterhöhung</td><td>{{lobby.intervalTime}}</td></tr>
+            </table>
+          </div>
+        </div>
+        <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby verlassen</button>
 <!--        <div class="col-md-3" *ngIf="!(currentUser$ | async) as user">-->
 <!--          <h2>Login</h2>-->
 <!--          <form (ngSubmit)="performLogin(loginForm.value)" [formGroup]="loginForm">-->
@@ -76,7 +89,13 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
 
   onDestroy$ = new Subject();
 
-  currentLobby$ = this.store.select(getCurrentLobby);
+  currentLobby$ = this.store.select(getCurrentLobby).pipe(
+      tap((lobby) => console.log("loading current lobby from lobby detail", lobby)),
+      tap(lobby => {
+        // if (lobby === null) {this.router.navigate([""]);}
+      })
+  );
+  currentUser$ = this.store.select(getUser);
 
 
   constructor(
@@ -94,4 +113,7 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
     this.store.dispatch(LobbyActions.loadCurrentLobby());
   }
 
+  leaveLobby() {
+    this.store.dispatch(LobbyActions.leavePokerLobby());
+  }
 }

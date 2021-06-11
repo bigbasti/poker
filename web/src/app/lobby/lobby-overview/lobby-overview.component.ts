@@ -51,6 +51,7 @@ export class PokerLobbyOverviewComponent implements OnInit, OnDestroy {
       takeUntil(this.onDestroy$)
   ).subscribe();
   availableLobbies$ = combineLatest([this.store.select(getAvailableLobbies), this.currentUser$]).pipe(
+      tap(() => console.log("loading all lobbies from overview")),
       tap(([lobbies, user]) => {
         const inLobby = lobbies.map(lobby => lobby).find(lobby => lobby.player1?.id === user.id || lobby.player2?.id === user.id || lobby.player3?.id === user.id || lobby.player4?.id === user.id || lobby.player5?.id === user.id || lobby.player6?.id === user.id || lobby.player7?.id === user.id || lobby.player8?.id === user.id);
         if (inLobby) { this.router.navigate(["lobby"]);}
