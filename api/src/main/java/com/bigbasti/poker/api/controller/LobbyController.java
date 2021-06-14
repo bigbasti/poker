@@ -51,9 +51,7 @@ public class LobbyController extends BaseController {
     public @ResponseBody
     ResponseEntity joinLobby(@PathVariable @NotNull Integer id) {
         logger.debug("user {} joins lobby {}", getCurrentUser().getEmail(), id);
-        PokerLobby pokerLobby = lobbyRepository.findById(id).orElseThrow(() -> new RuntimeException("uknown id privided to join " + id));
-        pokerLobby.addPlayer(getCurrentUser());
-        lobbyRepository.save(pokerLobby);
+        PokerLobby pokerLobby = lobbyService.joinLobby(id, getCurrentUser());
         logger.debug("successfully joined lobby");
         return ResponseEntity.ok(pokerLobby);
     }
@@ -76,23 +74,7 @@ public class LobbyController extends BaseController {
     public @ResponseBody
     ResponseEntity leaveCurrentLobby() {
         logger.debug("leaving current lobby for user {}", getCurrentUser().getEmail());
-        List<PokerLobby> pokerLobbies = lobbyRepository.getCurrentPokerLobby(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a lobby for the user"));
-        if (pokerLobbies.size() > 1) {
-            logger.error("found more than one lobby for user {}", getCurrentUser().getEmail());
-            // todo: only the most recent lobby must be valid, delete the old ones
-        }
-        PokerLobby target = pokerLobbies.get(0);
-        if (target.getCreator().getId() == getCurrentUser().getId()) {
-            // user is creator, if he leaves lobby mus be destroyed
-            logger.debug("user is admin of lobby, lobby is deleted");
-            lobbyRepository.delete(target);
-            lobbyRepository.flush();
-        } else {
-            // user is not creator -> just remove him
-            target.removeUser(getCurrentUser());
-            lobbyRepository.saveAndFlush(target);
-
-        }
+        PokerLobby target = lobbyService.leaveLobby(getCurrentUser());
         logger.debug("successfully removed user {}  from lobby: {}", getCurrentUser().getEmail(), target.getName());
         return ResponseEntity.ok(target);
     }
