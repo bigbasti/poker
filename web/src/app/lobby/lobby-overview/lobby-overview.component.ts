@@ -35,6 +35,7 @@ import {getUser} from "../../state/app.reducer";
       </tr>
       </tbody>
     </table>
+    <button class="btn btn-outline-dark btn-sm" (click)="createLobby()">Lobby erstellen</button>
   `,
   styles: [
   ]
@@ -81,5 +82,9 @@ export class PokerLobbyOverviewComponent implements OnInit, OnDestroy {
 
   enterLobby(lobby: PokerLobby) {
     this.store.dispatch(LobbyActions.joinPokerLobby({lobby}));
+  }
+
+  createLobby() {
+    this.router.navigate(["lobby/create"])
   }
 }
