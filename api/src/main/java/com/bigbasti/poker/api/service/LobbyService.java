@@ -61,4 +61,21 @@ public class LobbyService {
         pokerLobby.addPlayer(currentUser);
         return lobbyRepository.save(pokerLobby);
     }
+
+    public PokerLobby updateLobby(@NotNull PokerLobby lobby, PokerUser currentUser){
+        PokerLobby pokerLobby = lobbyRepository.findById(lobby.getId()).orElseThrow(() -> new RuntimeException("uknown id privided to update " + lobby.getId()));
+        if (!pokerLobby.getCreator().getId().equals(currentUser.getId())) {
+            throw new InvalidParameterException("This lobby (" + lobby.getId() + ") does not belong to the user who wants to modify it (" + currentUser.getEmail() + ")");
+        }
+
+        pokerLobby.setType(lobby.getType());
+        pokerLobby.setMoney(lobby.getMoney());
+        pokerLobby.setSmallBlind(lobby.getSmallBlind());
+        pokerLobby.setBigBlind(lobby.getBigBlind());
+        pokerLobby.setIntervalTime(lobby.getIntervalTime());
+        pokerLobby.setIntervalRounds(lobby.getIntervalRounds());
+        pokerLobby.setIdleTime(lobby.getIdleTime());
+
+        return lobbyRepository.saveAndFlush(pokerLobby);
+    }
 }

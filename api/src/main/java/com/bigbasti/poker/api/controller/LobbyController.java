@@ -56,6 +56,16 @@ public class LobbyController extends BaseController {
         return ResponseEntity.ok(pokerLobby);
     }
 
+    @PostMapping("/{id}")
+    public @ResponseBody
+    ResponseEntity updateLobby(@PathVariable @NotNull Integer id, @RequestBody PokerLobby lobby) {
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        logger.debug("updating lobby {}", id);
+        return ResponseEntity.ok(lobbyService.updateLobby(lobby, getCurrentUser()));
+    }
+
     @GetMapping("/current")
     public @ResponseBody
     ResponseEntity getCurrentLobby() {

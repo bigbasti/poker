@@ -3,8 +3,8 @@ import {getCurrentLobby, PokerState} from "../state/lobby.reducer";
 import {PokerLobbyService} from "../shared/lobby.service";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute, Router} from "@angular/router";
-import {map, takeUntil, tap} from "rxjs/operators";
-import {combineLatest, Subject} from "rxjs";
+import {catchError, map, switchMap, takeUntil, tap} from "rxjs/operators";
+import {combineLatest, EMPTY, Subject} from "rxjs";
 import * as LobbyActions from "../state/lobby.actions"
 import {getUser} from "../../state/app.reducer";
 import {PokerLobby} from "../shared/lobby.model";
@@ -130,7 +130,6 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
         <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby{{(isLobbyAdmin$ | async) ? " löschen und " : " "}}verlassen</button>
       </div>
     </main>
-    {{this.lobbyForm.getRawValue() | json}}
   `,
   styles: [`
     .small-label {
@@ -197,6 +196,23 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
       intervalRounds: new FormControl(10, [Validators.required, Validators.min(0), Validators.max(100)]),
       intervalTime: new FormControl(10, [Validators.required, Validators.min(0), Validators.max(60)])
     });
+
+    combineLatest([this.lobbyForm.valueChanges, this.currentLobby$]).pipe(
+        map(([form, lobby]) => ({
+            ...form,
+            id: lobby ? lobby.id: null,
+            type: form.type.id
+          })),
+        tap(form => console.log("updated", form)),
+        switchMap(form => this.lobbyService.updateLobby(form).pipe(
+            tap(lobby => console.log("successfully updated lobby")),
+            catchError(err => {
+              console.error("failed to update lobby", err);
+              return null;
+            })
+        )),
+        takeUntil(this.onDestroy$)
+    ).subscribe();
   }
 
   leaveLobby() {
