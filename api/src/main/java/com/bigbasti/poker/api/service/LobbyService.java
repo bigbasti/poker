@@ -28,6 +28,8 @@ public class LobbyService {
 
     public PokerLobby createLobby(String name, PokerUser currentUser) {
         PokerLobby lobby = new PokerLobby(null, name, GameType.FULL, 5000, 2, 10, 60);
+        lobby.setIntervalRounds(0);
+        lobby.setIntervalTime(0);
         lobby.setPlayer1(currentUser);
         lobby.setCreator(currentUser);
         lobbyRepository.saveAndFlush(lobby);

@@ -41,20 +41,20 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
         </div>
         <div class="col-md-9" *ngIf="(isLobbyAdmin$ | async)">
           <h3>Konfiguration</h3>
-          <div class="row" style="font-size: x-large;">
+          <div class="row">
             <form [formGroup]="lobbyForm">
             <table cellpadding="5">
               <tr>
                 <td colspan="2">
-                <poker-reactive-input-group [class]="'small-group'"
-                                            [altLabel]="'🃏 Spieltyp'"
-                                            [label]="'🃏 Spieltyp'"
-                                            [title]="'🃏 Spieltyp'"
-                                            [name]="'type'"
-                                            [required]="true"
-                                            [type]="'text'"
-                                            formControlName="type"
-                                            [control]="lobbyForm.controls.type"></poker-reactive-input-group>
+                  <label class="small-label" for="type">🃏 Spieltyp</label>
+                  <ng-select labelForId="type"
+                             [items]="types"
+                             [multiple]="false"
+                             [clearable]="false"
+                             [closeOnSelect]="true"
+                             bindLabel="text"
+                             formControlName="type">
+                  </ng-select>
                 </td>
                 <td>
                 <poker-reactive-input-group [class]="'small-group'"
@@ -63,7 +63,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
                                             [title]="'💰 Startgeld'"
                                             [name]="'money'"
                                             [required]="true"
-                                            [type]="'text'"
+                                            [type]="'number'"
                                             formControlName="money"
                                             [control]="lobbyForm.controls.money"></poker-reactive-input-group>
                 </td>
@@ -76,7 +76,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
                                             [title]="'💸 Small Blind'"
                                             [name]="'smallBlind'"
                                             [required]="true"
-                                            [type]="'text'"
+                                            [type]="'number'"
                                             formControlName="smallBlind"
                                             [control]="lobbyForm.controls.smallBlind"></poker-reactive-input-group>
                 </td><td>
@@ -86,7 +86,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
                                             [title]="'💸 Big Blind'"
                                             [name]="'bigBlind'"
                                             [required]="true"
-                                            [type]="'text'"
+                                            [type]="'number'"
                                             formControlName="bigBlind"
                                             [control]="lobbyForm.controls.bigBlind"></poker-reactive-input-group>
               </td>
@@ -97,7 +97,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
                                             [title]="'😴 Max. Inaktivität'"
                                             [name]="'idleTime'"
                                             [required]="true"
-                                            [type]="'text'"
+                                            [type]="'number'"
                                             formControlName="idleTime"
                                             [control]="lobbyForm.controls.idleTime"></poker-reactive-input-group>
               </td>
@@ -109,7 +109,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
                                             [title]="'Blinderhöhung alle __ Runden (0 = keine Rundenerhöhung)'"
                                             [name]="'intervalRounds'"
                                             [required]="true"
-                                            [type]="'text'"
+                                            [type]="'number'"
                                             formControlName="intervalRounds"
                                             [control]="lobbyForm.controls.intervalRounds"></poker-reactive-input-group>
               </td><td>
@@ -119,7 +119,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
                                             [title]="'Blinderhöhung alle __ Minuten (0 = keine Zeiterhöhung)'"
                                             [name]="'intervalTime'"
                                             [required]="true"
-                                            [type]="'text'"
+                                            [type]="'number'"
                                             formControlName="intervalTime"
                                             [control]="lobbyForm.controls.intervalTime"></poker-reactive-input-group>
               </td></tr>
@@ -127,39 +127,27 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
             </form>
           </div>
         </div>
-        <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby verlassen</button>
-<!--        <div class="col-md-3" *ngIf="!(currentUser$ | async) as user">-->
-<!--          <h2>Login</h2>-->
-<!--          <form (ngSubmit)="performLogin(loginForm.value)" [formGroup]="loginForm">-->
-<!--            <fieldset>-->
-
-<!--              <poker-reactive-input-group [class]="'small-group'"-->
-<!--                                          [altLabel]="'Ihr Passwort'"-->
-<!--                                          [label]="'Passwort'"-->
-<!--                                          [name]="'password'"-->
-<!--                                          [required]="true"-->
-<!--                                          [type]="'password'"-->
-<!--                                          formControlName="password"-->
-<!--                                          [control]="loginForm.controls.password"></poker-reactive-input-group>-->
-<!--              <p class="text-center">-->
-<!--                <button type="submit" id="submit-login" class="btn btn-primary"-->
-<!--                        [disabled]="!loginForm.valid || requestInProgress">Anmelden-->
-<!--                </button>-->
-<!--              </p>-->
-<!--            </fieldset>-->
-<!--          </form>-->
-<!--        </div>-->
-
+        <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby{{(isLobbyAdmin$ | async) ? " löschen und " : " "}}verlassen</button>
       </div>
     </main>
+    {{this.lobbyForm.getRawValue() | json}}
   `,
-  styles: [
-  ]
+  styles: [`
+    .small-label {
+      font-size: 15px;
+      margin-bottom: 3px;
+    }
+  `]
 })
 export class PokerLobbyComponent implements OnInit, OnDestroy {
 
   public lobbyForm: FormGroup;
   public requestInProgress: boolean;
+
+  public types = [
+    {id: "FULL", text: "Spiel mit Karten und Chips"},
+    {id: "CARDS", text: "Nur Karten"}
+  ];
 
   onDestroy$ = new Subject();
 
@@ -167,6 +155,14 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
       tap((lobby) => console.log("loading current lobby from lobby detail", lobby)),
       tap(lobby => {
         // if (lobby === null) {this.router.navigate([""]);}
+      }),
+      map(lobby => {
+        if (lobby) {
+          return {
+            ...lobby,
+            type: this.types.find(t => t.id === lobby.type)
+          }
+        } return null;
       }),
       tap(lobby => this.lobbyForm.patchValue(lobby))
   );
@@ -193,13 +189,13 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
     this.store.dispatch(LobbyActions.loadCurrentLobby());
 
     this.lobbyForm = this.fb.group({
-      type: new FormControl("", [Validators.required, Validators.maxLength(45), Validators.minLength(5)]),
+      type: new FormControl(this.types[0], [Validators.required, Validators.maxLength(45), Validators.minLength(5)]),
       money: new FormControl(5000, [Validators.required, Validators.min(100), Validators.max(10000000)]),
       smallBlind: new FormControl(5, [Validators.required, Validators.min(1), Validators.max(100000)]),
       bigBlind: new FormControl(10, [Validators.required, Validators.min(5), Validators.max(200000)]),
       idleTime: new FormControl(60, [Validators.required, Validators.min(15), Validators.max(600)]),
-      intervalRounds: new FormControl(10, [Validators.required, Validators.max(100)]),
-      intervalTime: new FormControl(10, [Validators.required, Validators.max(60)])
+      intervalRounds: new FormControl(10, [Validators.required, Validators.min(0), Validators.max(100)]),
+      intervalTime: new FormControl(10, [Validators.required, Validators.min(0), Validators.max(60)])
     });
   }
 

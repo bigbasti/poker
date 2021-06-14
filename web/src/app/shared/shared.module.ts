@@ -36,6 +36,7 @@ import {PokerReactiveInputGroupComponent} from "./controls/reactive-input-group.
         NoSanitizePipe,
         FormsModule,
         ReactiveFormsModule,
+        NgSelectModule,
         PokerReactiveInputGroupComponent
     ]
 })
