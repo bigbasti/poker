@@ -46,6 +46,13 @@ export class LobbyEffects {
         )
     });
 
+    loadCurrentLobbyFailureRedirect$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LobbyActions.joinPokerLobbyFailure),
+            tap((action) => console.log("cold not load current lobby:", action.error)),
+            tap(() => this.router.navigate([""]))
+        ), {dispatch: false});
+
     joinLobbySuccessRedirect$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LobbyActions.joinPokerLobbySuccess),
