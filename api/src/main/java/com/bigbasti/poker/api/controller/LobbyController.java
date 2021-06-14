@@ -1,5 +1,6 @@
 package com.bigbasti.poker.api.controller;
 
+import com.bigbasti.poker.api.service.LobbyService;
 import com.bigbasti.poker.data.entity.PokerLobby;
 import com.bigbasti.poker.data.repository.LobbyRepository;
 import org.slf4j.Logger;
@@ -10,11 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/api/lobby")
@@ -22,10 +21,12 @@ public class LobbyController extends BaseController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     final LobbyRepository lobbyRepository;
+    final LobbyService lobbyService;
 
     @Autowired
-    public LobbyController(LobbyRepository lobbyRepository) {
+    public LobbyController(LobbyRepository lobbyRepository, LobbyService lobbyService) {
         this.lobbyRepository = lobbyRepository;
+        this.lobbyService = lobbyService;
     }
 
     @GetMapping("")
@@ -35,6 +36,15 @@ public class LobbyController extends BaseController {
         if (lobbys == null) {lobbys = new ArrayList<>();}
         logger.debug("returning all lobbies {}", lobbys.size());
         return ResponseEntity.ok(lobbys);
+    }
+
+    @PostMapping("")
+    public @ResponseBody
+    ResponseEntity createLobby(@RequestBody @NotNull String name) {
+        logger.debug("creating new lobby {} for user {}", name, getCurrentUser().getEmail());
+        PokerLobby lobby = lobbyService.createLobby(name, getCurrentUser());
+        logger.debug("successfully created lobby");
+        return ResponseEntity.ok(lobby);
     }
 
     @GetMapping("/{id}/join")
@@ -86,4 +96,5 @@ public class LobbyController extends BaseController {
         logger.debug("successfully removed user {}  from lobby: {}", getCurrentUser().getEmail(), target.getName());
         return ResponseEntity.ok(target);
     }
+
 }

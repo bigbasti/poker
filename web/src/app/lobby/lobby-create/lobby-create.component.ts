@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import {PokerState} from "../../state/app.state";
+import {PokerLobbyService} from "../shared/lobby.service";
+import {EMPTY, Subject} from "rxjs";
+import {catchError, mergeMap, takeUntil, tap} from "rxjs/operators";
 
 @Component({
   selector: 'poker-lobby-create',
@@ -35,15 +38,35 @@ import {PokerState} from "../../state/app.state";
   styles: [
   ]
 })
-export class PokerLobbyCreateComponent implements OnInit {
-
+export class PokerLobbyCreateComponent implements OnInit, OnDestroy {
   public createLobbyForm: FormGroup;
   public requestInProgress: boolean;
+
+  onDestroy$ = new Subject();
+  newLobbySubject = new Subject<string>();
+  newLobby$ = this.newLobbySubject.asObservable().pipe(
+      tap((name) => console.log("creating new lobby", name)),
+      tap(name => this.requestInProgress = true),
+      mergeMap(name => this.lobbyService.createLobby(name).pipe(
+          tap(res => console.log("successfully created lobby, redirecting...")),
+          tap(res => this.router.navigate(["lobby"])),
+          catchError(err => {
+            console.log("could not create lobby", err);
+            this.requestInProgress = false;
+            alert("Konnte Lobby nicht erstellen" + err.message);
+            return EMPTY;
+          })
+      )),
+      tap(() => this.requestInProgress = false),
+      takeUntil(this.onDestroy$)
+  ).subscribe();
+
 
   constructor(
       private route: ActivatedRoute,
       private router: Router,
       private fb: FormBuilder,
+      private lobbyService: PokerLobbyService,
       private store: Store<PokerState>
   ) { }
 
@@ -53,8 +76,12 @@ export class PokerLobbyCreateComponent implements OnInit {
     });
   }
 
-  createLobby(value: any) {
+  ngOnDestroy(): void {
+    this.onDestroy$.next(null);
+  }
 
+  createLobby(form: any) {
+    this.newLobbySubject.next(form.lobbyName);
   }
 
   cancelCreate() {
