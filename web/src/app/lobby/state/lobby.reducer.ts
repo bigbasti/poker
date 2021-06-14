@@ -62,5 +62,21 @@ export const lobbyReducer = createReducer<LobbyState>(
             ...state,
             currentLobby: null
         }
+    }),
+    on(LobbyActions.updateLobbyUsers, (state, action) => {
+        return {
+            ...state,
+            currentLobby: {
+                ...state.currentLobby,
+                player1: action.lobby.player1,
+                player2: action.lobby.player2,
+                player3: action.lobby.player3,
+                player4: action.lobby.player4,
+                player5: action.lobby.player5,
+                player6: action.lobby.player6,
+                player7: action.lobby.player7,
+                player8: action.lobby.player8
+            }
+        }
     })
 );

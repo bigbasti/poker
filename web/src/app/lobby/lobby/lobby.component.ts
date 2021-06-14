@@ -3,8 +3,8 @@ import {getCurrentLobby, PokerState} from "../state/lobby.reducer";
 import {PokerLobbyService} from "../shared/lobby.service";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute, Router} from "@angular/router";
-import {catchError, map, switchMap, takeUntil, tap} from "rxjs/operators";
-import {combineLatest, EMPTY, Subject} from "rxjs";
+import {catchError, first, map, switchMap, takeUntil, tap} from "rxjs/operators";
+import {combineLatest, EMPTY, interval, Subject} from "rxjs";
 import * as LobbyActions from "../state/lobby.actions"
 import {getUser} from "../../state/app.reducer";
 import {PokerLobby} from "../shared/lobby.model";
@@ -168,7 +168,7 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
   currentUser$ = this.store.select(getUser);
 
   isLobbyAdmin$ = combineLatest([this.currentLobby$, this.currentUser$]).pipe(
-    map(([lobby, user]) => lobby.creator.id === user.id)
+    map(([lobby, user]) => lobby && lobby.creator.id === user.id)
   );
 
 
@@ -197,22 +197,54 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
       intervalTime: new FormControl(10, [Validators.required, Validators.min(0), Validators.max(60)])
     });
 
-    combineLatest([this.lobbyForm.valueChanges, this.currentLobby$]).pipe(
-        map(([form, lobby]) => ({
-            ...form,
-            id: lobby ? lobby.id: null,
-            type: form.type.id
-          })),
-        tap(form => console.log("updated", form)),
-        switchMap(form => this.lobbyService.updateLobby(form).pipe(
-            tap(lobby => console.log("successfully updated lobby")),
-            catchError(err => {
-              console.error("failed to update lobby", err);
-              return null;
-            })
-        )),
+    this.isLobbyAdmin$.pipe(
         takeUntil(this.onDestroy$)
-    ).subscribe();
+    ).subscribe(isAdmin => {
+      if (isAdmin === null) { return; }
+      if (isAdmin) {
+        combineLatest([this.lobbyForm.valueChanges, this.currentLobby$.pipe(first())]).pipe(
+            map(([form, lobby]) => ({
+              ...form,
+              id: lobby ? lobby.id: null,
+              type: form.type.id
+            })),
+            tap(form => console.log("updated", form)),
+            switchMap(form => this.lobbyService.updateLobby(form).pipe(
+                tap(lobby => console.log("successfully updated lobby")),
+                catchError(err => {
+                  console.error("failed to update lobby", err);
+                  return null;
+                })
+            )),
+            takeUntil(this.onDestroy$)
+        ).subscribe();
+        // interval(5000).pipe(
+        //   tap( () => this.store.dispatch(LobbyActions.updateLobbyUsers()))
+        // ).subscribe();
+      } // else {
+      //   interval(1000).pipe(
+      //       tap(() => console.log("updating lobby")),
+      //       tap(() => this.store.dispatch(LobbyActions.loadCurrentLobby())),
+      //       takeUntil(this.onDestroy$)
+      //   ).subscribe();
+      // }
+    });
+
+    const updateUsers = () => {
+      setTimeout(() => {
+        console.log("updating users in lobby...");
+        this.lobbyService.getCurrentLobby.subscribe(
+            lobby => {
+              console.log("got updated lobby", lobby);
+              this.store.dispatch(LobbyActions.updateLobbyUsers({lobby}));
+
+            }
+        ).unsubscribe();
+        updateUsers();
+      }, 1000);
+    }
+
+    updateUsers();
   }
 
   leaveLobby() {

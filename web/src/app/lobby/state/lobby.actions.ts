@@ -7,6 +7,7 @@ export const loadAvailableLobbiesSuccess = createAction("[lobby] load available 
 export const loadAvailableLobbiesFailure = createAction("[lobby] load available lobbies failed", props<{error: any}>());
 
 export const loadCurrentLobby = createAction("[Lobby] load current lobby");
+export const updateLobbyUsers = createAction("[Lobby] update users", props<{lobby: PokerLobby}>());
 
 export const joinPokerLobby = createAction("[lobby] join lobby", props<{lobby: PokerLobby}>());
 export const joinPokerLobbySuccess = createAction("[lobby] join lobby success", props<{lobby: PokerLobby}>());
