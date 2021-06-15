@@ -204,35 +204,31 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
       intervalTime: new FormControl(10, [Validators.required, Validators.min(0), Validators.max(60)])
     });
 
-    this.isLobbyAdmin$.pipe(
+    combineLatest([this.isLobbyAdmin$, this.currentLobby$]).pipe(
         takeUntil(this.onDestroy$)
-    ).subscribe(isAdmin => {
+    ).subscribe(([isAdmin, lobby]) => {
       console.log("preparing refresh hooks");
       if (isAdmin) {
-        combineLatest([this.lobbyForm.valueChanges, this.currentLobby$]).pipe(
-            map(([form, lobby]) => ({
-              ...form,
-              id: lobby ? lobby.id: null,
-              type: form.type.id
-            })),
-            tap(form => console.log("updated", form)),
-            switchMap(form => this.lobbyService.updateLobby(form).pipe(
-                tap(lobby => console.log("successfully updated lobby")),
-                catchError(err => {
-                  console.error("failed to update lobby", err);
-                  return null;
-                })
-            )),
-            takeUntil(this.onDestroy$)
-        ).subscribe();
-        // interval(5000).pipe(
-        //   tap( () => this.store.dispatch(LobbyActions.updateLobbyUsers()))
-        // ).subscribe();
+        if (!this.updateLoopRunning) {
+          console.log("SETTING UP REFRESH INTERVAL ADMIN");
+          this.updateLoopRunning = true;
+          interval(10000).pipe(
+              map(() => this.lobbyForm.getRawValue()),
+              map (form => ({
+                ...form,
+                id: lobby ? lobby.id: null,
+                type: form.type.id
+              })),
+              tap(form => console.log("updating lobby with form", form)),
+              tap(form => this.store.dispatch(LobbyActions.updateLobbyConfig({form}))),
+              takeUntil(this.onDestroy$)
+          ).subscribe();
+        }
       } else {
         if (!this.updateLoopRunning) {
           console.log("SETTING UP REFRESH INTERVAL");
           this.updateLoopRunning = true;
-          interval(3000).pipe(
+          interval(5000).pipe(
               tap(() => console.log("updating lobby")),
               tap(() => this.store.dispatch(LobbyActions.loadCurrentLobby())),
               takeUntil(this.onDestroy$)
@@ -240,22 +236,6 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
         }
       }
     });
-
-    // const updateUsers = () => {
-    //   setTimeout(() => {
-    //     console.log("updating users in lobby...");
-    //     this.lobbyService.getCurrentLobby.subscribe(
-    //         lobby => {
-    //           console.log("got updated lobby", lobby);
-    //           this.store.dispatch(LobbyActions.updateLobbyUsers({lobby}));
-    //
-    //         }
-    //     ).unsubscribe();
-    //     updateUsers();
-    //   }, 1000);
-    // }
-    //
-    // updateUsers();
   }
 
   leaveLobby() {

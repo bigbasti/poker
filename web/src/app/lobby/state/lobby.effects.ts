@@ -6,6 +6,7 @@ import {catchError, map, mergeMap, tap} from "rxjs/operators";
 import {of} from "rxjs";
 import {PokerLobby} from "../shared/lobby.model";
 import {Router} from "@angular/router";
+import {updateLobbyConfig} from "./lobby.actions";
 
 @Injectable()
 export class LobbyEffects {
@@ -65,6 +66,17 @@ export class LobbyEffects {
             mergeMap((action) => this.lobbyService.leaveCurrentLobby.pipe(
                 map(lobby => LobbyActions.leavePokerLobbySuccess()),
                 catchError(error => of(LobbyActions.leavePokerLobbyFailure({error})))
+            ))
+        )
+    });
+
+    updateLobbyConfig$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(LobbyActions.updateLobbyConfig),
+            tap(action => console.log("updateLobbyCOnfig with action", action)),
+            mergeMap((action) => this.lobbyService.updateLobby(action.form).pipe(
+                map(lobby => LobbyActions.updateLobbyConfigSuccess({lobby})),
+                // catchError(error => of(LobbyActions.leavePokerLobbyFailure({error})))
             ))
         )
     });

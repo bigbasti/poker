@@ -67,6 +67,12 @@ export const lobbyReducer = createReducer<LobbyState>(
             currentLobby: null
         }
     }),
+    on(LobbyActions.updateLobbyConfigSuccess, (state, action) => {
+        return {
+            ...state,
+            currentLobby: action.lobby
+        }
+    }),
     on(LobbyActions.updateLobbyUsers, (state, action) => {
         return {
             ...state,
