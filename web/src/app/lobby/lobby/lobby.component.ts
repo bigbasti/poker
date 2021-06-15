@@ -9,6 +9,7 @@ import * as LobbyActions from "../state/lobby.actions"
 import {getUser} from "../../state/app.reducer";
 import {PokerLobby} from "../shared/lobby.model";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {PokerUser} from "../../shared/model/user.model";
 
 @Component({
   selector: "poker-lobby",
@@ -176,7 +177,7 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
   );
 
   vm$ = combineLatest([this.isLobbyAdmin$, this.currentUser$, this.currentLobby$]).pipe(
-      map(([isAdmin, user, lobby]) => ({isAdmin, user, lobby}))
+      map(([isAdmin, user, lobby]: [boolean, PokerUser, PokerLobby]) => ({isAdmin, user, lobby}))
   );
 
   constructor(
