@@ -3,8 +3,8 @@ import {getCurrentLobby, PokerState} from "../state/lobby.reducer";
 import {PokerLobbyService} from "../shared/lobby.service";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute, Router} from "@angular/router";
-import {catchError, first, map, switchMap, takeUntil, tap} from "rxjs/operators";
-import {combineLatest, EMPTY, interval, Subject} from "rxjs";
+import {catchError, first, map, shareReplay, skipWhile, switchMap, takeUntil, tap} from "rxjs/operators";
+import {combineLatest, EMPTY, interval, of, Subject} from "rxjs";
 import * as LobbyActions from "../state/lobby.actions"
 import {getUser} from "../../state/app.reducer";
 import {PokerLobby} from "../shared/lobby.model";
@@ -13,33 +13,33 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: "poker-lobby",
   template: `
-    <main role="main" class="container" *ngIf="currentLobby$ | async as lobby">
-      <h1>Lobby {{lobby.name}}</h1>
+    <main role="main" class="container" *ngIf="vm$ | async as vm">
+      <h1>Lobby {{vm.lobby.name}}</h1>
       <div class="row">
         <div class="col-md-3" >
           <h3>Spieler</h3>
           <ul style="list-style: none; font-size: x-large;">
-            <li *ngIf="lobby.player1"><span title="Lobbyadmin">👑</span> {{lobby.player1.name}}</li>
-            <li *ngIf="lobby.player2">👨 {{lobby.player2.name}}</li>
-            <li *ngIf="lobby.player3">👨 {{lobby.player3.name}}</li>
-            <li *ngIf="lobby.player4">👨 {{lobby.player4.name}}</li>
-            <li *ngIf="lobby.player5">👨 {{lobby.player5.name}}</li>
-            <li *ngIf="lobby.player6">👨 {{lobby.player6.name}}</li>
-            <li *ngIf="lobby.player7">👨 {{lobby.player7.name}}</li>
-            <li *ngIf="lobby.player8">👨 {{lobby.player8.name}}</li>
+            <li *ngIf="vm.lobby.player1"><span title="Lobbyadmin">👑</span> {{vm.lobby.player1.name}}</li>
+            <li *ngIf="vm.lobby.player2">👨 {{vm.lobby.player2.name}}</li>
+            <li *ngIf="vm.lobby.player3">👨 {{vm.lobby.player3.name}}</li>
+            <li *ngIf="vm.lobby.player4">👨 {{vm.lobby.player4.name}}</li>
+            <li *ngIf="vm.lobby.player5">👨 {{vm.lobby.player5.name}}</li>
+            <li *ngIf="vm.lobby.player6">👨 {{vm.lobby.player6.name}}</li>
+            <li *ngIf="vm.lobby.player7">👨 {{vm.lobby.player7.name}}</li>
+            <li *ngIf="vm.lobby.player8">👨 {{vm.lobby.player8.name}}</li>
           </ul>
         </div>
         <div class="col-md-9" *ngIf="!(isLobbyAdmin$ | async)">
           <h3>Konfiguration</h3>
           <div class="row" style="font-size: x-large;">
             <table cellpadding="5">
-              <tr><td>🃏 Spieltyp</td><td  style="width: 100px;">{{lobby.type}}</td><td>💰 Startgeld</td><td>{{lobby.money}}</td></tr>
-              <tr><td>💸 Blinds</td><td>{{lobby.smallBlind}} / {{lobby.bigBlind}}</td><td>😴 Max. Inaktivität</td><td>{{lobby.idleTime}}</td></tr>
-              <tr><td>🔂 Rundenerhöhung</td><td>{{lobby.intervalRounds}}</td><td>⏰ Zeiterhöhung</td><td>{{lobby.intervalTime}}</td></tr>
+              <tr><td>🃏 Spieltyp</td><td>{{vm.lobby.type.text}}</td><td>💰 Startgeld</td><td>{{vm.lobby.money}}</td></tr>
+              <tr><td>💸 Blinds</td><td>{{vm.lobby.smallBlind}} / {{vm.lobby.bigBlind}}</td><td>😴 Max. Inaktivität</td><td>{{vm.lobby.idleTime}}</td></tr>
+              <tr><td>🔂 Rundenerhöhung</td><td>{{vm.lobby.intervalRounds}}</td><td>⏰ Zeiterhöhung</td><td>{{vm.lobby.intervalTime}}</td></tr>
             </table>
           </div>
         </div>
-        <div class="col-md-9" *ngIf="(isLobbyAdmin$ | async)">
+        <div class="col-md-9" *ngIf="vm.isAdmin">
           <h3>Konfiguration</h3>
           <div class="row">
             <form [formGroup]="lobbyForm">
@@ -127,7 +127,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
             </form>
           </div>
         </div>
-        <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby{{(isLobbyAdmin$ | async) ? " löschen und " : " "}}verlassen</button>
+        <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby{{vm.isAdmin ? " löschen und " : " "}}verlassen</button>
       </div>
     </main>
   `,
@@ -142,6 +142,7 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
 
   public lobbyForm: FormGroup;
   public requestInProgress: boolean;
+  private updateLoopRunning = false;
 
   public types = [
     {id: "FULL", text: "Spiel mit Karten und Chips"},
@@ -151,6 +152,7 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject();
 
   currentLobby$ = this.store.select(getCurrentLobby).pipe(
+      skipWhile(lobby => lobby === null),
       tap((lobby) => console.log("loading current lobby from lobby detail", lobby)),
       tap(lobby => {
         // if (lobby === null) {this.router.navigate([""]);}
@@ -168,9 +170,14 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
   currentUser$ = this.store.select(getUser);
 
   isLobbyAdmin$ = combineLatest([this.currentLobby$, this.currentUser$]).pipe(
-    map(([lobby, user]) => lobby && lobby.creator.id === user.id)
+      tap(() => console.log("checking for admin of group")),
+      map(([lobby, user]) => lobby && lobby.creator.id === user.id),
+      shareReplay(1)
   );
 
+  vm$ = combineLatest([this.isLobbyAdmin$, this.currentUser$, this.currentLobby$]).pipe(
+      map(([isAdmin, user, lobby]) => ({isAdmin, user, lobby}))
+  );
 
   constructor(
       private fb: FormBuilder,
@@ -221,30 +228,34 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
         // interval(5000).pipe(
         //   tap( () => this.store.dispatch(LobbyActions.updateLobbyUsers()))
         // ).subscribe();
-      } // else {
-      //   interval(1000).pipe(
-      //       tap(() => console.log("updating lobby")),
-      //       tap(() => this.store.dispatch(LobbyActions.loadCurrentLobby())),
-      //       takeUntil(this.onDestroy$)
-      //   ).subscribe();
-      // }
+      } else {
+        if (!this.updateLoopRunning) {
+          console.log("SETTING UP REFRESH INTERVAL");
+          this.updateLoopRunning = true;
+          interval(3000).pipe(
+              tap(() => console.log("updating lobby")),
+              tap(() => this.store.dispatch(LobbyActions.loadCurrentLobby())),
+              takeUntil(this.onDestroy$)
+          ).subscribe();
+        }
+      }
     });
 
-    const updateUsers = () => {
-      setTimeout(() => {
-        console.log("updating users in lobby...");
-        this.lobbyService.getCurrentLobby.subscribe(
-            lobby => {
-              console.log("got updated lobby", lobby);
-              this.store.dispatch(LobbyActions.updateLobbyUsers({lobby}));
-
-            }
-        ).unsubscribe();
-        updateUsers();
-      }, 1000);
-    }
-
-    updateUsers();
+    // const updateUsers = () => {
+    //   setTimeout(() => {
+    //     console.log("updating users in lobby...");
+    //     this.lobbyService.getCurrentLobby.subscribe(
+    //         lobby => {
+    //           console.log("got updated lobby", lobby);
+    //           this.store.dispatch(LobbyActions.updateLobbyUsers({lobby}));
+    //
+    //         }
+    //     ).unsubscribe();
+    //     updateUsers();
+    //   }, 1000);
+    // }
+    //
+    // updateUsers();
   }
 
   leaveLobby() {

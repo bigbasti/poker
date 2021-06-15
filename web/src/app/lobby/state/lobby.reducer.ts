@@ -34,6 +34,10 @@ export const getCurrentLobby = createSelector(
     getLobbyState,
     state => state.currentLobby
 )
+export const getCurrentLobbyUsers = createSelector(
+    getLobbyState,
+    state => [state.currentLobby.player1, state.currentLobby.player2, state.currentLobby.player3, state.currentLobby.player4,state.currentLobby.player5 ,state.currentLobby.player6 ,state.currentLobby.player7, state.currentLobby.player8]
+)
 
 export const lobbyReducer = createReducer<LobbyState>(
     initialState,
