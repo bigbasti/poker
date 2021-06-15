@@ -3,7 +3,7 @@ import {getCurrentLobby, PokerState} from "../state/lobby.reducer";
 import {PokerLobbyService} from "../shared/lobby.service";
 import {Store} from "@ngrx/store";
 import {ActivatedRoute, Router} from "@angular/router";
-import {catchError, first, map, shareReplay, skipWhile, switchMap, takeUntil, tap} from "rxjs/operators";
+import {catchError, first, map, share, shareReplay, skipWhile, switchMap, takeUntil, tap} from "rxjs/operators";
 import {combineLatest, EMPTY, interval, of, Subject} from "rxjs";
 import * as LobbyActions from "../state/lobby.actions"
 import {getUser} from "../../state/app.reducer";
@@ -29,7 +29,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
             <li *ngIf="vm.lobby.player8">👨 {{vm.lobby.player8.name}}</li>
           </ul>
         </div>
-        <div class="col-md-9" *ngIf="!(isLobbyAdmin$ | async)">
+        <div class="col-md-9" *ngIf="!vm.isAdmin">
           <h3>Konfiguration</h3>
           <div class="row" style="font-size: x-large;">
             <table cellpadding="5">
@@ -165,14 +165,14 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
           }
         } return null;
       }),
-      tap(lobby => this.lobbyForm.patchValue(lobby))
+      tap(lobby => this.lobbyForm.patchValue(lobby)),
+      shareReplay(1)
   );
   currentUser$ = this.store.select(getUser);
 
   isLobbyAdmin$ = combineLatest([this.currentLobby$, this.currentUser$]).pipe(
       tap(() => console.log("checking for admin of group")),
-      map(([lobby, user]) => lobby && lobby.creator.id === user.id),
-      shareReplay(1)
+      map(([lobby, user]) => lobby && lobby.creator.id === user.id)
   );
 
   vm$ = combineLatest([this.isLobbyAdmin$, this.currentUser$, this.currentLobby$]).pipe(
@@ -207,9 +207,9 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
     this.isLobbyAdmin$.pipe(
         takeUntil(this.onDestroy$)
     ).subscribe(isAdmin => {
-      if (isAdmin === null) { return; }
+      console.log("preparing refresh hooks");
       if (isAdmin) {
-        combineLatest([this.lobbyForm.valueChanges, this.currentLobby$.pipe(first())]).pipe(
+        combineLatest([this.lobbyForm.valueChanges, this.currentLobby$]).pipe(
             map(([form, lobby]) => ({
               ...form,
               id: lobby ? lobby.id: null,
