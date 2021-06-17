@@ -12,6 +12,7 @@
             `ID` INT NOT NULL AUTO_INCREMENT,
             `EMAIL` VARCHAR(45) NOT NULL,
             `NAME` VARCHAR(45) NOT NULL,
+            `GENDER` VARCHAR(1) NOT NULL,
             `ADMIN` TINYINT NOT NULL DEFAULT 0,
             `PASS` VARCHAR(45) NOT NULL,
             PRIMARY KEY (`ID`),

@@ -5,13 +5,13 @@
     <changeSet author="zebra" id="0.0.1.1_create_admin_user" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">
         <comment>create admin user</comment>
         <sql>
-            INSERT INTO `poker`.`users` (`EMAIL`, `NAME`, `ADMIN`, `PASS`) VALUES ('bigbasti@outlook.com', 'Basti', '1', 'e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4');
+            INSERT INTO `poker`.`users` (`EMAIL`, `NAME`, `ADMIN`, `PASS`, `GENDER`) VALUES ('bigbasti@outlook.com', 'Basti', '1', 'e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4', 'm');
         </sql>
     </changeSet>
     <changeSet author="zebra" id="0.0.1.1_create_test1_user" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">
         <comment>create test user</comment>
         <sql>
-            INSERT INTO `poker`.`users` (`EMAIL`, `NAME`, `ADMIN`, `PASS`) VALUES ('test@test.com', 'Tester', '0', 'e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4');
+            INSERT INTO `poker`.`users` (`EMAIL`, `NAME`, `ADMIN`, `PASS`, `GENDER`) VALUES ('test@test.com', 'Tester', '0', 'e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4', 'f');
         </sql>
     </changeSet>
     <changeSet author="zebra" id="0.0.1.1_create_lobby_cards" logicalFilePath="schema/changelog/poker-dev-0.0.1.1.xml">

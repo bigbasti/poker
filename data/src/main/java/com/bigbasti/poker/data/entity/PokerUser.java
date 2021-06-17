@@ -29,6 +29,9 @@ public class PokerUser implements Serializable {
     @Basic(optional = false)
     @Column(name = "PASS")
     private String pass;
+    @Basic(optional = false)
+    @Column(name = "GENDER")
+    private String gender;
 
     public PokerUser() {
     }
@@ -37,12 +40,13 @@ public class PokerUser implements Serializable {
         this.id = id;
     }
 
-    public PokerUser(Integer id, String email, String name, boolean admin, String pass) {
+    public PokerUser(Integer id, String email, String name, boolean admin, String pass, String gender) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.admin = admin;
         this.pass = pass;
+        this.gender = gender;
     }
 
     public Integer getId() {
@@ -85,6 +89,14 @@ public class PokerUser implements Serializable {
         this.pass = pass;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -113,6 +125,7 @@ public class PokerUser implements Serializable {
                 ", name='" + name + '\'' +
                 ", admin=" + admin +
                 ", pass='" + pass + '\'' +
+                ", gender='" + gender + '\'' +
                 '}';
     }
 }
