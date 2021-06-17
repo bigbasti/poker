@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .headers().cacheControl().disable()
                 .and()               // when under HTTPS IE wont use downloaded fonts if caching is enabled
                 .authorizeRequests()
-                .antMatchers("/api/user/me", "/api/user/roles", "/api/user", "/api/authenticate").permitAll()
+                .antMatchers("/api/user/me", "/api/user/roles", "/api/user", "/api/user/register", "/api/authenticate").permitAll()
                 .antMatchers("/", "/home").permitAll()
                 .anyRequest().authenticated()
                 .and()

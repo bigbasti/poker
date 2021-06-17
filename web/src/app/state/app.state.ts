@@ -4,5 +4,7 @@ import {PokerLobby} from "../lobby/shared/lobby.model";
 export interface PokerState {
     user: PokerUser,
     loginError: any
-    loadUserError: any
+    loadUserError: any,
+    registrationSuccessful: boolean,
+    registrationFailure: any
 }

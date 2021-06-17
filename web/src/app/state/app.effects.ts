@@ -42,4 +42,14 @@ export class AppEffects {
             ))
         )
     });
+
+    registerUser$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(AppActions.registerUser),
+            mergeMap((action) => this.authService.registerUser$(action.model).pipe(
+                map(user => AppActions.registerUserSuccess({user})),
+                catchError(error => of(AppActions.registerUserFailure({error})))
+            ))
+        )
+    });
 }

@@ -5,7 +5,9 @@ import {PokerState} from "./app.state";
 const initialState: PokerState = {
     user: null,
     loginError: null,
-    loadUserError: null
+    loadUserError: null,
+    registrationSuccessful: null,
+    registrationFailure: null
 }
 
 const getAppState = createFeatureSelector<PokerState>("app");
@@ -22,6 +24,14 @@ export const getLoginError = createSelector(
 export const getUserDetailsError = createSelector(
     getAppState,
     state => state.loadUserError
+)
+export const getRegisterError = createSelector(
+    getAppState,
+    state => state.registrationFailure
+)
+export const getRegisterSuccess = createSelector(
+    getAppState,
+    state => state.registrationSuccessful
 )
 
 export const appReducer = createReducer<PokerState>(
@@ -48,6 +58,28 @@ export const appReducer = createReducer<PokerState>(
             user: null,
             loginError: null,
             loadUserError: action.error
+        }
+    }),
+    on(AppActions.loadUserDetailsFailure, (state, action) => {
+        return {
+            ...state,
+            user: null,
+            loginError: null,
+            loadUserError: action.error
+        }
+    }),
+    on(AppActions.registerUserSuccess, (state, action) => {
+        return {
+            ...state,
+            registrationSuccessful: true,
+            registrationFailure: null
+        }
+    }),
+    on(AppActions.registerUserFailure, (state, action) => {
+        return {
+            ...state,
+            registrationSuccessful: false,
+            registrationFailure: action.error
         }
     })
 );
