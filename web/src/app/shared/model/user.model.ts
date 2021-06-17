@@ -10,6 +10,14 @@ export interface Credentials {
     password: string;
 }
 
+export interface RegisterModel {
+    email: string;
+    name: string;
+    gender: string;
+    pass1: string;
+    pass2: string;
+}
+
 export interface PokerUser {
     id: number;
     email: string;

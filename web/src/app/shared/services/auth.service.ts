@@ -2,7 +2,7 @@
 import {catchError, map, tap} from "rxjs/operators";
 import {Injectable, Injector} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Credentials, Permission, PokerUser} from "../model/user.model";
+import {Credentials, Permission, PokerUser, RegisterModel} from "../model/user.model";
 import {Router} from "@angular/router";
 import {PokerEnvironmentService} from "./environmant.service";
 import {EMPTY, Observable, of} from "rxjs";
@@ -10,6 +10,8 @@ import {EMPTY, Observable, of} from "rxjs";
 @Injectable()
 export class PokerAuthService {
   public currentUser: PokerUser;
+
+  public registerUser$ = (model: RegisterModel) => this.http.post<PokerUser>(`${this.env.getApiEndpointRoot()}/user/register`, model);
 
   constructor(
     private http: HttpClient,

@@ -76,6 +76,11 @@ export class PokerLoginComponent implements OnInit {
     userDetailsError$ = this.store.select(getUserDetailsError);
     currentUser$ = this.store.select(getUser);
 
+    genders = [
+        {id: "m", text: "Männlein"},
+        {id: "f", text: "Weiblein"}
+    ];
+
     public loginForm: FormGroup;
     public registerForm: FormGroup;
     public requestInProgress: boolean;
@@ -97,9 +102,11 @@ export class PokerLoginComponent implements OnInit {
         });
         // create form model for register
         this.registerForm = this.fb.group({
-            displayname: new FormControl("", Validators.required),
+            name: new FormControl("", Validators.required),
             email: new FormControl("", Validators.required),
-            password: new FormControl("", Validators.required)
+            gender: new FormControl(this.genders[0], Validators.required),
+            pass1: new FormControl("", Validators.required),
+            pass2: new FormControl("", Validators.required)
         });
     }
 
