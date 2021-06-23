@@ -1,5 +1,6 @@
 import {createAction, props} from "@ngrx/store";
 import {PokerLobby} from "../shared/lobby.model";
+import {PokerGame} from "../../game/shared/game.model";
 
 
 export const loadAvailableLobbies = createAction("[Lobby] load available Lobbies");
@@ -20,3 +21,7 @@ export const createPokerLobby = createAction("[lobby] create lobby", props<{name
 export const leavePokerLobby = createAction("[lobby] leave lobby");
 export const leavePokerLobbySuccess = createAction("[lobby] leave lobby success");
 export const leavePokerLobbyFailure = createAction("[lobby] leave lobby success", props<{error: any}>());
+
+export const startGame = createAction("[lobby] start game", props<{lobby: PokerLobby}>());
+export const startGameSuccess = createAction("[lobby] start game success", props<{game: PokerGame}>());
+export const startGameFailure = createAction("[lobby] start game success", props<{error: any}>());
