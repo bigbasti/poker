@@ -32,12 +32,15 @@ import {PokerUser} from "../../shared/model/user.model";
         </div>
         <div class="col-md-9" *ngIf="!vm.isAdmin">
           <h3>Konfiguration</h3>
-          <div class="row" style="font-size: x-large;">
+          <div class="row" style="font-size: x-large;" *ngIf="vm.lobby.type.id === 'FULL'">
             <table cellpadding="5">
               <tr><td>🃏 Spieltyp</td><td>{{vm.lobby.type.text}}</td><td>💰 Startgeld</td><td>{{vm.lobby.money}}</td></tr>
               <tr><td>💸 Blinds</td><td>{{vm.lobby.smallBlind}} / {{vm.lobby.bigBlind}}</td><td>😴 Max. Inaktivität</td><td>{{vm.lobby.idleTime}}</td></tr>
               <tr><td>🔂 Rundenerhöhung</td><td>{{vm.lobby.intervalRounds}}</td><td>⏰ Zeiterhöhung</td><td>{{vm.lobby.intervalTime}}</td></tr>
             </table>
+          </div>
+          <div class="row" style="font-size: x-large;" *ngIf="vm.lobby.type.id === 'CARDS'">
+            🃏 Spieltyp {{vm.lobby.type.text}}
           </div>
         </div>
         <div class="col-md-9" *ngIf="vm.isAdmin">
