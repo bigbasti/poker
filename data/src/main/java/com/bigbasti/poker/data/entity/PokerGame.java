@@ -53,7 +53,7 @@ public class PokerGame implements Serializable {
     private Integer gameRounds;
     @JoinColumn(name = "CREATOR", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private PokerPlayer creator;
+    private PokerUser creator;
     @JoinColumn(name = "WINNER", referencedColumnName = "ID")
     @ManyToOne
     private PokerPlayer winner;
@@ -185,11 +185,11 @@ public class PokerGame implements Serializable {
         this.gameRounds = gameRounds;
     }
 
-    public PokerPlayer getCreator() {
+    public PokerUser getCreator() {
         return creator;
     }
 
-    public void setCreator(PokerPlayer creator) {
+    public void setCreator(PokerUser creator) {
         this.creator = creator;
     }
 
@@ -245,7 +245,7 @@ public class PokerGame implements Serializable {
                 ", idleTime=" + idleTime +
                 ", gameTime=" + gameTime +
                 ", gameRounds=" + gameRounds +
-                ", creator=" + creator.getUser() +
+                ", creator=" + creator +
                 ", winner=" + winner.getUser() +
                 ", players=" + players.size() +
                 '}';

@@ -18,9 +18,6 @@ public class PokerPlayer implements Serializable {
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "game")
-    private int game;
-    @Basic(optional = false)
     @Column(name = "money")
     private int money;
     @Column(name = "card1")
@@ -37,10 +34,14 @@ public class PokerPlayer implements Serializable {
         this.id = id;
     }
 
-    public PokerPlayer(Integer id, int game, int money) {
+    public PokerPlayer(Integer id, int money) {
         this.id = id;
-        this.game = game;
         this.money = money;
+    }
+
+    public PokerPlayer(PokerUser user, int money) {
+        this.money = money;
+        this.user = user.getId();
     }
 
     public Integer getId() {
@@ -49,14 +50,6 @@ public class PokerPlayer implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public int getGame() {
-        return game;
-    }
-
-    public void setGame(int game) {
-        this.game = game;
     }
 
     public int getMoney() {
@@ -115,7 +108,6 @@ public class PokerPlayer implements Serializable {
     public String toString() {
         return "PokerPlayer{" +
                 "id=" + id +
-                ", game=" + game +
                 ", money=" + money +
                 ", card1='" + card1 + '\'' +
                 ", card2='" + card2 + '\'' +
