@@ -27,7 +27,8 @@ import { PokerGameComponent } from './game/game.component';
       PokerGameService
   ],
   exports: [
-      PokerGameComponent
+      PokerGameComponent,
+      PokerGameService
   ]
 })
 export class GameModule { }

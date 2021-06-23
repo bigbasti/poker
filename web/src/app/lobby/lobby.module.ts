@@ -11,6 +11,7 @@ import {EffectsModule} from "@ngrx/effects";
 import {LobbyEffects} from "./state/lobby.effects";
 import { PokerLobbyComponent } from "./lobby/lobby.component";
 import { PokerLobbyCreateComponent } from './lobby-create/lobby-create.component';
+import {GameModule} from "../game/game.module";
 
 
 
@@ -22,6 +23,7 @@ import { PokerLobbyCreateComponent } from './lobby-create/lobby-create.component
   ],
   imports: [
     CommonModule,
+    GameModule,
     PokerSharedModule,
     StoreModule.forFeature("lobby", lobbyReducer),
     EffectsModule.forFeature([LobbyEffects]),
