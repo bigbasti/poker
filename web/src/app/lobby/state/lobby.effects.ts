@@ -89,7 +89,7 @@ export class LobbyEffects {
     startGame$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(LobbyActions.startGame),
-            mergeMap((action) => this.gameService.startGame$(action.lobby).pipe(
+            mergeMap((action) => this.gameService.startGame$.pipe(
                 map(game => LobbyActions.startGameSuccess({game})),
                 // catchError(error => of(LobbyActions.leavePokerLobbyFailure({error})))
             ))

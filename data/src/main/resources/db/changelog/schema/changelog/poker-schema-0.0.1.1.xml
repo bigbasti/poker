@@ -80,7 +80,6 @@
             PRIMARY KEY (`ID`),
             INDEX `index2` (`ID` ASC),
             INDEX `player_user_idx` (`user` ASC),
-            INDEX `player_game_idx` (`game` ASC),
             CONSTRAINT `player_user`
             FOREIGN KEY (`user`)
             REFERENCES `poker`.`users` (`ID`)

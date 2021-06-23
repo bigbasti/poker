@@ -22,6 +22,6 @@ export const leavePokerLobby = createAction("[lobby] leave lobby");
 export const leavePokerLobbySuccess = createAction("[lobby] leave lobby success");
 export const leavePokerLobbyFailure = createAction("[lobby] leave lobby success", props<{error: any}>());
 
-export const startGame = createAction("[lobby] start game", props<{lobby: PokerLobby}>());
+export const startGame = createAction("[lobby] start game");
 export const startGameSuccess = createAction("[lobby] start game success", props<{game: PokerGame}>());
 export const startGameFailure = createAction("[lobby] start game success", props<{error: any}>());

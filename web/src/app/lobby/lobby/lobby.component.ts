@@ -248,6 +248,8 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
   }
 
   startGame(lobby: PokerLobby) {
-    this.store.dispatch(LobbyActions.startGame({lobby}))
+    lobby.type = (lobby.type as any).id;
+    console.log(lobby);
+    this.store.dispatch(LobbyActions.startGame());
   }
 }
