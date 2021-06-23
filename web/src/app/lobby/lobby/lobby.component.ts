@@ -131,7 +131,8 @@ import {PokerUser} from "../../shared/model/user.model";
             </form>
           </div>
         </div>
-        <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby{{vm.isAdmin ? " löschen und " : " "}}verlassen</button>
+        <button class="btn btn-outline-dark btn-sm" (click)="leaveLobby()">🚪 Lobby{{vm.isAdmin ? " löschen und " : " "}}verlassen</button> 
+        <button class="btn btn-outline-dark btn-sm ml-2" (click)="startGame()" *ngIf="vm.isAdmin">🚀 Spiel starten</button>
       </div>
     </main>
   `,
@@ -244,5 +245,9 @@ export class PokerLobbyComponent implements OnInit, OnDestroy {
 
   leaveLobby() {
     this.store.dispatch(LobbyActions.leavePokerLobby());
+  }
+
+  startGame() {
+
   }
 }
