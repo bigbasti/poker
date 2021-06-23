@@ -8,11 +8,14 @@ import {gameRoutes} from "./game.routes";
 import {GameEffects} from "./state/game.effects";
 import {gameReducer} from "./state/game.reducer";
 import {PokerGameService} from "./shared/game.service";
+import { PokerGameComponent } from './game/game.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    PokerGameComponent
+  ],
   imports: [
     CommonModule,
     PokerSharedModule,
@@ -22,6 +25,9 @@ import {PokerGameService} from "./shared/game.service";
   ],
   providers: [
       PokerGameService
+  ],
+  exports: [
+      PokerGameComponent
   ]
 })
 export class GameModule { }

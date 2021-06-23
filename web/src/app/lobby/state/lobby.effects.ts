@@ -4,16 +4,16 @@ import {PokerLobbyService} from "../shared/lobby.service";
 import * as LobbyActions from "./lobby.actions"
 import {catchError, map, mergeMap, tap} from "rxjs/operators";
 import {of} from "rxjs";
-import {PokerLobby} from "../shared/lobby.model";
 import {Router} from "@angular/router";
-import {updateLobbyConfig} from "./lobby.actions";
+import {PokerGameService} from "../../game/shared/game.service";
 
 @Injectable()
 export class LobbyEffects {
     constructor(
         private actions$: Actions,
         private router: Router,
-        private lobbyService: PokerLobbyService
+        private lobbyService: PokerLobbyService,
+        private gameService: PokerGameService
     ) {
     }
 
@@ -73,7 +73,6 @@ export class LobbyEffects {
     updateLobbyConfig$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(LobbyActions.updateLobbyConfig),
-            tap(action => console.log("updateLobbyCOnfig with action", action)),
             mergeMap((action) => this.lobbyService.updateLobby(action.form).pipe(
                 map(lobby => LobbyActions.updateLobbyConfigSuccess({lobby})),
                 // catchError(error => of(LobbyActions.leavePokerLobbyFailure({error})))
@@ -85,5 +84,21 @@ export class LobbyEffects {
         this.actions$.pipe(
             ofType(LobbyActions.leavePokerLobbySuccess),
             tap(() => this.router.navigate([""]))
+        ), {dispatch: false});
+
+    startGame$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(LobbyActions.startGame),
+            mergeMap((action) => this.gameService.startGame$(action.lobby).pipe(
+                map(game => LobbyActions.startGameSuccess({game})),
+                // catchError(error => of(LobbyActions.leavePokerLobbyFailure({error})))
+            ))
+        )
+    });
+
+    startGameSuccess$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LobbyActions.startGameSuccess),
+            tap(() => this.router.navigate(["game"]))
         ), {dispatch: false});
 }

@@ -1,6 +1,6 @@
 import {Routes} from "@angular/router";
-import {PokerLobbyComponent} from "../lobby/lobby/lobby.component";
+import {PokerGameComponent} from "./game/game.component";
 
 export const gameRoutes: Routes = [
-    {path: "game", component: PokerLobbyComponent}
+    {path: "game", component: PokerGameComponent}
 ];
