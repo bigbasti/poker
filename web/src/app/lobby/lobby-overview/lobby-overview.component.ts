@@ -1,13 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PokerLobbyService} from "../shared/lobby.service";
 import {Store} from "@ngrx/store";
-import {map, takeUntil, tap} from "rxjs/operators";
+import {map, skipWhile, takeUntil, tap} from "rxjs/operators";
 import * as LobbyActions from "../state/lobby.actions"
+import * as GameActions from "../../game/state/game.actions"
 import {getAvailableLobbies, getAvailableLobbiesError, getCurrentLobby, PokerState} from "../state/lobby.reducer";
 import {PokerLobby} from "../shared/lobby.model";
 import {combineLatest, Subject} from "rxjs";
 import {Router} from "@angular/router";
 import {getUser} from "../../state/app.reducer";
+import {getCurrentGame} from "../../game/state/game.reducer";
 
 @Component({
   selector: 'poker-lobby-overview',
@@ -36,6 +38,9 @@ import {getUser} from "../../state/app.reducer";
       </tbody>
     </table>
     <button class="btn btn-outline-dark btn-sm" (click)="createLobby()">Lobby erstellen</button>
+    <div *ngIf="runningGame$ |async as runningGame">
+      <div class="alert alert-warning mt-3">Sie sind schon Teil von einem Spiel!</div>
+    </div>
   `,
   styles: [
   ]
@@ -46,6 +51,14 @@ export class PokerLobbyOverviewComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject();
 
   currentUser$ = this.store.select(getUser);
+  runningGame$ = combineLatest([this.store.select(getCurrentGame), this.currentUser$]).pipe(
+      skipWhile(([game, user]) => game === null),
+      tap(([game, user]) => {
+        console.log("found allready running game", game);
+        this.router.navigate(["game"]);
+      }),
+      map(([game, user]) => game)
+  );
   availableLobbies$ = combineLatest([this.store.select(getAvailableLobbies), this.currentUser$]).pipe(
       tap(() => console.log("loading all lobbies from overview")),
       tap(([lobbies, user]) => {
@@ -69,6 +82,7 @@ export class PokerLobbyOverviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(GameActions.loadCurrentGame());
     this.store.dispatch(LobbyActions.loadAvailableLobbies());
   }
 
