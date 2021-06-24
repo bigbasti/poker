@@ -51,13 +51,12 @@ export class PokerLobbyOverviewComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject();
 
   currentUser$ = this.store.select(getUser);
-  runningGame$ = combineLatest([this.store.select(getCurrentGame), this.currentUser$]).pipe(
-      skipWhile(([game, user]) => game === null),
-      tap(([game, user]) => {
-        console.log("found allready running game", game);
+  runningGame$ = this.store.select(getCurrentGame).pipe(
+      skipWhile(game => game === null),
+      tap(game => {
+        console.log("found already running game", game);
         this.router.navigate(["game"]);
       }),
-      map(([game, user]) => game)
   );
   availableLobbies$ = combineLatest([this.store.select(getAvailableLobbies), this.currentUser$]).pipe(
       tap(() => console.log("loading all lobbies from overview")),
