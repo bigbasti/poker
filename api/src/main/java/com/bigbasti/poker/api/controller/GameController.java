@@ -4,7 +4,10 @@ import com.bigbasti.poker.api.service.GameService;
 import com.bigbasti.poker.api.service.LobbyService;
 import com.bigbasti.poker.data.entity.PokerGame;
 import com.bigbasti.poker.data.entity.PokerLobby;
+import com.bigbasti.poker.data.entity.PokerPlayer;
+import com.bigbasti.poker.data.repository.GameRepository;
 import com.bigbasti.poker.data.repository.LobbyRepository;
+import com.bigbasti.poker.data.repository.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +28,29 @@ public class GameController extends BaseController {
     final LobbyRepository lobbyRepository;
     final LobbyService lobbyService;
     final GameService gameService;
+    final GameRepository gameRepository;
+    final PlayerRepository playerRepository;
 
     @Autowired
-    public GameController(LobbyRepository lobbyRepository, LobbyService lobbyService, GameService gameService) {
+    public GameController(LobbyRepository lobbyRepository, LobbyService lobbyService, GameService gameService, GameRepository gameRepository, PlayerRepository playerRepository) {
         this.lobbyRepository = lobbyRepository;
         this.lobbyService = lobbyService;
         this.gameService = gameService;
+        this.gameRepository = gameRepository;
+        this.playerRepository = playerRepository;
+    }
+
+    @GetMapping("")
+    public @ResponseBody
+    ResponseEntity getCurrentGame() {
+        logger.debug("loading game for {}", getCurrentUser().getEmail());
+        List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser().getId()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
+        PokerPlayer playerForUser = foundPlayers.get(0);
+
+        List<PokerGame> pokerGames = gameRepository.getCurrentPokerGames(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the player"));
+        PokerGame gameForPlayer = pokerGames.get(0);
+
+        return ResponseEntity.ok(gameForPlayer);
     }
 
     @GetMapping("/start")
