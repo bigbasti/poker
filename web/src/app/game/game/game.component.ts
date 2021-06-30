@@ -12,7 +12,7 @@ import {map} from "rxjs/operators";
 @Component({
   selector: 'poker-game',
   template: `
-    <main *ngIf="vm$ | async as vm">
+    <main *ngIf="vm$ | async as vm" class="container" role="main">
       <div *ngIf="vm.game.type === 'CARDS'">
         <div class="row">
           <div class="col"></div>
