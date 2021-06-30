@@ -26,7 +26,7 @@ import {map} from "rxjs/operators";
         <div class="row">
           <div class="col" *ngFor="let p of vm.game.players">
             <div class="row">
-              {{p.user}}<br />
+              {{p.user.name}}<br />
               {{p.money}}
             </div>
             <div class="row">

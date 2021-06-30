@@ -24,5 +24,5 @@ export interface PokerPlayer {
     money: number;
     card1: string;
     card2: string;
-    user: number;
+    user: PokerUser;
 }

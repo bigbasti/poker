@@ -24,8 +24,9 @@ public class PokerPlayer implements Serializable {
     private String card1;
     @Column(name = "card2")
     private String card2;
-    @Column(name = "user")
-    private Integer user;
+    @JoinColumn(name = "user", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private PokerUser user;
 
     public PokerPlayer() {
     }
@@ -41,7 +42,7 @@ public class PokerPlayer implements Serializable {
 
     public PokerPlayer(PokerUser user, int money) {
         this.money = money;
-        this.user = user.getId();
+        this.user = user;
     }
 
     public Integer getId() {
@@ -76,11 +77,11 @@ public class PokerPlayer implements Serializable {
         this.card2 = card2;
     }
 
-    public Integer getUser() {
+    public PokerUser getUser() {
         return user;
     }
 
-    public void setUser(Integer user) {
+    public void setUser(PokerUser user) {
         this.user = user;
     }
 
@@ -111,7 +112,7 @@ public class PokerPlayer implements Serializable {
                 ", money=" + money +
                 ", card1='" + card1 + '\'' +
                 ", card2='" + card2 + '\'' +
-                ", user=" + user +
+                ", user=" + user.getEmail() +
                 '}';
     }
 }

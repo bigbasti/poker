@@ -44,7 +44,7 @@ public class GameController extends BaseController {
     public @ResponseBody
     ResponseEntity getCurrentGame() {
         logger.debug("loading game for {}", getCurrentUser().getEmail());
-        List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser().getId()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
+        List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
         PokerPlayer playerForUser = foundPlayers.get(0);
 
         List<PokerGame> pokerGames = gameRepository.getCurrentPokerGames(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the player"));
