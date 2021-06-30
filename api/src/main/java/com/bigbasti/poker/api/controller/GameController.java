@@ -5,9 +5,11 @@ import com.bigbasti.poker.api.service.LobbyService;
 import com.bigbasti.poker.data.entity.PokerGame;
 import com.bigbasti.poker.data.entity.PokerLobby;
 import com.bigbasti.poker.data.entity.PokerPlayer;
+import com.bigbasti.poker.data.entity.PokerRound;
 import com.bigbasti.poker.data.repository.GameRepository;
 import com.bigbasti.poker.data.repository.LobbyRepository;
 import com.bigbasti.poker.data.repository.PlayerRepository;
+import com.bigbasti.poker.data.repository.RoundRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +32,16 @@ public class GameController extends BaseController {
     final GameService gameService;
     final GameRepository gameRepository;
     final PlayerRepository playerRepository;
+    final RoundRepository roundRepository;
 
     @Autowired
-    public GameController(LobbyRepository lobbyRepository, LobbyService lobbyService, GameService gameService, GameRepository gameRepository, PlayerRepository playerRepository) {
+    public GameController(LobbyRepository lobbyRepository, LobbyService lobbyService, GameService gameService, GameRepository gameRepository, PlayerRepository playerRepository, RoundRepository roundRepository) {
         this.lobbyRepository = lobbyRepository;
         this.lobbyService = lobbyService;
         this.gameService = gameService;
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
+        this.roundRepository = roundRepository;
     }
 
     @GetMapping("")
@@ -64,6 +68,20 @@ public class GameController extends BaseController {
         }
         PokerLobby target = pokerLobbies.get(0);
         PokerGame pokerGame = gameService.startGame(target);
+        return ResponseEntity.ok(pokerGame);
+    }
+
+    @GetMapping("/state")
+    public @ResponseBody
+    ResponseEntity getGameState() {
+        logger.debug("loading game state for user {}", getCurrentUser().getEmail());
+        List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
+        PokerPlayer playerForUser = foundPlayers.get(0);
+
+        List<PokerGame> pokerGames = gameRepository.getCurrentPokerGames(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the player"));
+        PokerGame gameForPlayer = pokerGames.get(0);
+
+        List<PokerRound> rounds = roundRepository.getRoundsForGame(gameForPlayer);
         return ResponseEntity.ok(pokerGame);
     }
 }

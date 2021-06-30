@@ -141,6 +141,7 @@
             `dealer` INT NOT NULL,
             `big_blind` INT NOT NULL,
             `small_blind` INT NOT NULL,
+            `finished` INT NOT NULL DEFAULT 0,
             PRIMARY KEY (`ID`),
             INDEX `round_game_idx` (`game` ASC),
             INDEX `dealer_player_idx` (`dealer` ASC),

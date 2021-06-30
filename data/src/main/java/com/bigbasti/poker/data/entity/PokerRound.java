@@ -65,6 +65,8 @@ public class PokerRound implements Serializable {
     private String p8Cards;
     @Column(name = "current_rurn")
     private Integer currentRurn;
+    @Column(name = "finished")
+    private Boolean finished;
     @Basic(optional = false)
     @Column(name = "big_blind")
     private int bigBlind;
@@ -245,6 +247,14 @@ public class PokerRound implements Serializable {
         this.dealer = dealer;
     }
 
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -284,6 +294,7 @@ public class PokerRound implements Serializable {
                 ", p8Cards='" + p8Cards + '\'' +
                 ", currentRurn=" + currentRurn +
                 ", bigBlind=" + bigBlind +
+                ", finished=" + finished +
                 ", smallBlind=" + smallBlind +
                 ", game=" + game +
                 ", dealer=" + dealer +

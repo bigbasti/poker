@@ -37,7 +37,7 @@ public class GameService {
         newGame.setIntervallTime(lobby.getIdleTime());
         newGame.setStartingMoney(lobby.getMoney());
         newGame.setGameRounds(0);
-        newGame.setGameRounds(0);
+        newGame.setGameTime(0);
 
         PokerPlayer c = new PokerPlayer(lobby.getPlayer1(), newGame.getStartingMoney());
         playerRepository.saveAndFlush(c);
