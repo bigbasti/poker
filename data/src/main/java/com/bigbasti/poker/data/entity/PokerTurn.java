@@ -56,9 +56,6 @@ public class PokerTurn implements Serializable {
     @JoinColumn(name = "player_turn", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private PokerPlayer playerTurn;
-    @JoinColumn(name = "round", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    private PokerRound round;
 
     public PokerTurn() {
     }
@@ -169,14 +166,6 @@ public class PokerTurn implements Serializable {
         this.playerTurn = playerTurn;
     }
 
-    public PokerRound getRound() {
-        return round;
-    }
-
-    public void setRound(PokerRound round) {
-        this.round = round;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -212,7 +201,6 @@ public class PokerTurn implements Serializable {
                 ", p7Bet='" + p7Bet + '\'' +
                 ", p8Bet='" + p8Bet + '\'' +
                 ", playerTurn=" + playerTurn +
-                ", round=" + round +
                 '}';
     }
 }

@@ -123,7 +123,6 @@
         <sql>
             CREATE TABLE `poker`.`rounds` (
             `ID` INT NOT NULL AUTO_INCREMENT,
-            `game` INT NOT NULL,
             `number` INT NOT NULL DEFAULT 1,
             `deck` VARCHAR(1024) NOT NULL,
             `open_cards` VARCHAR(45) NULL,
@@ -143,13 +142,7 @@
             `small_blind` INT NOT NULL,
             `finished` INT NOT NULL DEFAULT 0,
             PRIMARY KEY (`ID`),
-            INDEX `round_game_idx` (`game` ASC),
             INDEX `dealer_player_idx` (`dealer` ASC),
-            CONSTRAINT `round_game`
-            FOREIGN KEY (`game`)
-            REFERENCES `poker`.`games` (`ID`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION,
             CONSTRAINT `dealer_player`
             FOREIGN KEY (`dealer`)
             REFERENCES `poker`.`players` (`ID`)
@@ -163,7 +156,6 @@
         <sql>
             CREATE TABLE `poker`.`turns` (
             `ID` INT NOT NULL AUTO_INCREMENT,
-            `round` INT NOT NULL,
             `type` VARCHAR(45) NOT NULL,
             `player_turn` INT NOT NULL,
             `finished` TINYINT NOT NULL,
@@ -176,13 +168,7 @@
             `p7_bet` VARCHAR(45) NULL,
             `p8_bet` VARCHAR(45) NULL,
             PRIMARY KEY (`ID`),
-            INDEX `turn_round_idx` (`round` ASC),
             INDEX `pturn_player_idx` (`player_turn` ASC),
-            CONSTRAINT `turn_round`
-            FOREIGN KEY (`round`)
-            REFERENCES `poker`.`rounds` (`ID`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION,
             CONSTRAINT `pturn_player`
             FOREIGN KEY (`player_turn`)
             REFERENCES `poker`.`players` (`ID`)

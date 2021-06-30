@@ -17,6 +17,7 @@ export interface PokerGame {
     creator: PokerUser;
     winner: PokerPlayer;
     players: PokerPlayer[];
+    rounds: PokerRound[];
 }
 
 export interface PokerPlayer {
@@ -25,4 +26,42 @@ export interface PokerPlayer {
     card1: string;
     card2: string;
     user: PokerUser;
+}
+
+export interface PokerRound {
+    id: number;
+    number: number;
+    deck: string;
+    openCards: string;
+    pots: string;
+    removedCards: string;
+    p1Cards: string;
+    p2Cards: string;
+    p3Cards: string;
+    p4Cards: string;
+    p5Cards: string;
+    p6Cards: string;
+    p7Cards: string;
+    p8Cards: string;
+    currentRurn: number;
+    finished: boolean;
+    bigBlind: number;
+    smallBlind: number;
+    dealer: PokerPlayer;
+    turns: PokerTurn[];
+}
+
+export interface PokerTurn {
+    id: number;
+    type: string;
+    finished: boolean;
+    p1Bet: string;
+    p2Bet: string;
+    p3Bet: string;
+    p4Bet: string;
+    p5Bet: string;
+    p6Bet: string;
+    p7Bet: string;
+    p8Bet: string;
+    playerTurn: PokerPlayer;
 }

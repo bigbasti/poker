@@ -71,17 +71,4 @@ public class GameController extends BaseController {
         return ResponseEntity.ok(pokerGame);
     }
 
-    @GetMapping("/state")
-    public @ResponseBody
-    ResponseEntity getGameState() {
-        logger.debug("loading game state for user {}", getCurrentUser().getEmail());
-        List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
-        PokerPlayer playerForUser = foundPlayers.get(0);
-
-        List<PokerGame> pokerGames = gameRepository.getCurrentPokerGames(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the player"));
-        PokerGame gameForPlayer = pokerGames.get(0);
-
-        PokerRound activeRound = roundRepository.getActiveRoundForGame(gameForPlayer).orElse(null);
-        return ResponseEntity.ok(activeRound);
-    }
 }

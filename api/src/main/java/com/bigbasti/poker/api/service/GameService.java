@@ -31,7 +31,7 @@ public class GameService {
     }
 
     public PokerGame startGame(PokerLobby lobby) {
-        PokerGame newGame = new PokerGame(null, lobby.getName(), lobby.getType(), LocalDateTime.now(), lobby.getSmallBlind(), lobby.getBigBlind(), lobby.getIdleTime(), new ArrayList<>(), rounds);
+        PokerGame newGame = new PokerGame(null, lobby.getName(), lobby.getType(), LocalDateTime.now(), lobby.getSmallBlind(), lobby.getBigBlind(), lobby.getIdleTime(), new ArrayList<>(), new ArrayList<>());
         newGame.setCreator(lobby.getCreator());
         newGame.setIntervallRounds(lobby.getIntervalRounds());
         newGame.setIntervallTime(lobby.getIdleTime());

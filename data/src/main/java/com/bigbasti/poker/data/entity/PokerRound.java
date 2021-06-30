@@ -60,9 +60,6 @@ public class PokerRound implements Serializable {
     @Basic(optional = false)
     @Column(name = "small_blind")
     private int smallBlind;
-    @JoinColumn(name = "game", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    private PokerGame game;
     @JoinColumn(name = "dealer", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private PokerPlayer dealer;
@@ -224,14 +221,6 @@ public class PokerRound implements Serializable {
         this.smallBlind = smallBlind;
     }
 
-    public PokerGame getGame() {
-        return game;
-    }
-
-    public void setGame(PokerGame game) {
-        this.game = game;
-    }
-
     public PokerPlayer getDealer() {
         return dealer;
     }
@@ -297,7 +286,6 @@ public class PokerRound implements Serializable {
                 ", bigBlind=" + bigBlind +
                 ", finished=" + finished +
                 ", smallBlind=" + smallBlind +
-                ", game=" + game +
                 ", dealer=" + dealer +
                 ", turns=" + turns.size() +
                 '}';
