@@ -81,7 +81,7 @@ public class GameController extends BaseController {
         List<PokerGame> pokerGames = gameRepository.getCurrentPokerGames(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the player"));
         PokerGame gameForPlayer = pokerGames.get(0);
 
-        List<PokerRound> rounds = roundRepository.getRoundsForGame(gameForPlayer);
-        return ResponseEntity.ok(pokerGame);
+        PokerRound activeRound = roundRepository.getActiveRoundForGame(gameForPlayer).orElse(null);
+        return ResponseEntity.ok(activeRound);
     }
 }

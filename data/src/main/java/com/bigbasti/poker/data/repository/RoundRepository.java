@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface RoundRepository extends JpaRepository<PokerRound, Integer> {
     @Query("select r from PokerRound r where r.game = :game")
     Optional<List<PokerRound>> getRoundsForGame(@Param("game") PokerGame game);
+
+    @Query("select r from PokerRound r where r.game = :game and r.finished = 0")
+    Optional<PokerRound> getActiveRoundForGame(@Param("game") PokerGame game);
 }

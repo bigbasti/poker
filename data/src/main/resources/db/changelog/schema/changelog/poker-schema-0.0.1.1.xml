@@ -210,5 +210,45 @@
             ON UPDATE CASCADE);
         </sql>
     </changeSet>
+    <changeSet author="basti" id="0.0.1-games_rounds_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate games_rounds table</comment>
+        <sql>
+            CREATE TABLE `poker`.`games_rounds` (
+            `game` INT NOT NULL,
+            `round` INT NOT NULL,
+            PRIMARY KEY (`game`, `round`),
+            INDEX `player_player_idx1` (`game` ASC),
+            CONSTRAINT `game_game1`
+            FOREIGN KEY (`game`)
+            REFERENCES `poker`.`games` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `round_round`
+            FOREIGN KEY (`round`)
+            REFERENCES `poker`.`rounds` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE);
+        </sql>
+    </changeSet>
+    <changeSet author="basti" id="0.0.1-rounds_turns_table_create" logicalFilePath="schema/changelog/poker-schema-0.0.1.1.xml">
+        <comment>Crate rounds_turns table</comment>
+        <sql>
+            CREATE TABLE `poker`.`rounds_turns` (
+            `round` INT NOT NULL,
+            `turn` INT NOT NULL,
+            PRIMARY KEY (`round`, `turn`),
+            INDEX `round_round_idx1` (`round` ASC),
+            CONSTRAINT `round_round1`
+            FOREIGN KEY (`round`)
+            REFERENCES `poker`.`rounds` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+            CONSTRAINT `turn_turn`
+            FOREIGN KEY (`turn`)
+            REFERENCES `poker`.`turns` (`ID`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE);
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

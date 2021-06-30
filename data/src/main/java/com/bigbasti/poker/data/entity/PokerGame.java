@@ -62,6 +62,11 @@ public class PokerGame implements Serializable {
             @JoinColumn(name = "player", referencedColumnName = "ID")})
     @ManyToMany
     private Collection<PokerPlayer> players;
+    @JoinTable(name = "games_rounds", joinColumns = {
+            @JoinColumn(name = "game", referencedColumnName = "ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "round", referencedColumnName = "ID")})
+    @ManyToMany
+    private Collection<PokerRound> rounds;
 
     public PokerGame() {
     }
@@ -70,7 +75,7 @@ public class PokerGame implements Serializable {
         this.id = id;
     }
 
-    public PokerGame(Integer id, String name, GameType type, LocalDateTime created, int smallBlind, int bigBlind, int idleTime, Collection<PokerPlayer> players) {
+    public PokerGame(Integer id, String name, GameType type, LocalDateTime created, int smallBlind, int bigBlind, int idleTime, Collection<PokerPlayer> players, Collection<PokerRound> rounds) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -79,6 +84,7 @@ public class PokerGame implements Serializable {
         this.bigBlind = bigBlind;
         this.idleTime = idleTime;
         this.players = players;
+        this.rounds = rounds;
     }
 
     public Integer getId() {
@@ -209,6 +215,14 @@ public class PokerGame implements Serializable {
         this.players = players;
     }
 
+    public Collection<PokerRound> getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(Collection<PokerRound> rounds) {
+        this.rounds = rounds;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -248,6 +262,7 @@ public class PokerGame implements Serializable {
                 ", creator=" + creator +
                 ", winner=" + winner.getUser() +
                 ", players=" + players.size() +
+                ", rounds=" + rounds.size() +
                 '}';
     }
 }

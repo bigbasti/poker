@@ -2,21 +2,8 @@ package com.bigbasti.poker.data.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -79,6 +66,11 @@ public class PokerRound implements Serializable {
     @JoinColumn(name = "dealer", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private PokerPlayer dealer;
+    @JoinTable(name = "rounds_turns", joinColumns = {
+            @JoinColumn(name = "round", referencedColumnName = "ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "turn", referencedColumnName = "ID")})
+    @ManyToMany
+    private Collection<PokerTurn> turns;
 
     public PokerRound() {
     }
@@ -87,12 +79,13 @@ public class PokerRound implements Serializable {
         this.id = id;
     }
 
-    public PokerRound(Integer id, int number, String deck, int bigBlind, int smallBlind) {
+    public PokerRound(Integer id, int number, String deck, int bigBlind, int smallBlind, Collection<PokerTurn> turns) {
         this.id = id;
         this.number = number;
         this.deck = deck;
         this.bigBlind = bigBlind;
         this.smallBlind = smallBlind;
+        this.turns = turns;
     }
 
     public Integer getId() {
@@ -255,6 +248,14 @@ public class PokerRound implements Serializable {
         this.finished = finished;
     }
 
+    public Collection<PokerTurn> getTurns() {
+        return turns;
+    }
+
+    public void setTurns(Collection<PokerTurn> turns) {
+        this.turns = turns;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -298,6 +299,7 @@ public class PokerRound implements Serializable {
                 ", smallBlind=" + smallBlind +
                 ", game=" + game +
                 ", dealer=" + dealer +
+                ", turns=" + turns.size() +
                 '}';
     }
 }
