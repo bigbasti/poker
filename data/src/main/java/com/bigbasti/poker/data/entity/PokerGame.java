@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "games", catalog = "poker")
@@ -61,12 +62,12 @@ public class PokerGame implements Serializable {
             @JoinColumn(name = "game", referencedColumnName = "ID")}, inverseJoinColumns = {
             @JoinColumn(name = "player", referencedColumnName = "ID")})
     @ManyToMany
-    private Collection<PokerPlayer> players;
+    private List<PokerPlayer> players;
     @JoinTable(name = "games_rounds", joinColumns = {
             @JoinColumn(name = "game", referencedColumnName = "ID")}, inverseJoinColumns = {
             @JoinColumn(name = "round", referencedColumnName = "ID")})
     @ManyToMany
-    private Collection<PokerRound> rounds;
+    private List<PokerRound> rounds;
 
     public PokerGame() {
     }
@@ -75,7 +76,7 @@ public class PokerGame implements Serializable {
         this.id = id;
     }
 
-    public PokerGame(Integer id, String name, GameType type, LocalDateTime created, int smallBlind, int bigBlind, int idleTime, Collection<PokerPlayer> players, Collection<PokerRound> rounds) {
+    public PokerGame(Integer id, String name, GameType type, LocalDateTime created, int smallBlind, int bigBlind, int idleTime, List<PokerPlayer> players, List<PokerRound> rounds) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -207,19 +208,19 @@ public class PokerGame implements Serializable {
         this.winner = winner;
     }
 
-    public Collection<PokerPlayer> getPlayers() {
+    public List<PokerPlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(Collection<PokerPlayer> players) {
+    public void setPlayers(List<PokerPlayer> players) {
         this.players = players;
     }
 
-    public Collection<PokerRound> getRounds() {
+    public List<PokerRound> getRounds() {
         return rounds;
     }
 
-    public void setRounds(Collection<PokerRound> rounds) {
+    public void setRounds(List<PokerRound> rounds) {
         this.rounds = rounds;
     }
 

@@ -24,4 +24,14 @@ export class GameEffects {
             ))
         )
     });
+
+    startNextRound$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(GameActions.startNextRound),
+            mergeMap((action) => this.gameService.startNextRound$.pipe(
+                map(res => GameActions.startNextRoundSuccess()),
+                catchError(error => of(GameActions.startNextRoundFailure({error})))
+            ))
+        )
+    });
 }

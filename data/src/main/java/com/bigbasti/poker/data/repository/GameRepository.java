@@ -13,4 +13,7 @@ public interface GameRepository extends JpaRepository<PokerGame, Integer> {
 
     @Query("select g from PokerGame g where :player member of g.players")
     Optional<List<PokerGame>> getCurrentPokerGames(@Param("player") PokerPlayer player);
+
+    @Query("select g from PokerGame g where :player member of g.players")
+    Optional<PokerGame> getCurrentPokerGame(@Param("player") PokerPlayer player);
 }
