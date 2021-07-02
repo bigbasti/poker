@@ -136,7 +136,7 @@
             `p6_cards` VARCHAR(45) NULL,
             `p7_cards` VARCHAR(45) NULL,
             `p8_cards` VARCHAR(45) NULL,
-            `current_rurn` INT NULL,
+            `current_turn` INT NULL,
             `dealer` INT NOT NULL,
             `big_blind` INT NOT NULL,
             `small_blind` INT NOT NULL,

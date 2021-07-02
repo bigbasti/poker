@@ -50,8 +50,8 @@ public class PokerRound implements Serializable {
     private String p7Cards;
     @Column(name = "p8_cards")
     private String p8Cards;
-    @Column(name = "current_rurn")
-    private Integer currentRurn;
+    @Column(name = "current_turn")
+    private Integer currentTurn;
     @Column(name = "finished")
     private Boolean finished;
     @Basic(optional = false)
@@ -197,12 +197,12 @@ public class PokerRound implements Serializable {
         this.p8Cards = p8Cards;
     }
 
-    public Integer getCurrentRurn() {
-        return currentRurn;
+    public Integer getCurrentTurn() {
+        return currentTurn;
     }
 
-    public void setCurrentRurn(Integer currentRurn) {
-        this.currentRurn = currentRurn;
+    public void setCurrentTurn(Integer currentRurn) {
+        this.currentTurn = currentRurn;
     }
 
     public int getBigBlind() {
@@ -282,7 +282,7 @@ public class PokerRound implements Serializable {
                 ", p6Cards='" + p6Cards + '\'' +
                 ", p7Cards='" + p7Cards + '\'' +
                 ", p8Cards='" + p8Cards + '\'' +
-                ", currentRurn=" + currentRurn +
+                ", currentRurn=" + currentTurn +
                 ", bigBlind=" + bigBlind +
                 ", finished=" + finished +
                 ", smallBlind=" + smallBlind +
