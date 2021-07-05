@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/api/game")
@@ -52,9 +53,25 @@ public class GameController extends BaseController {
         PokerPlayer playerForUser = foundPlayers.get(0);
 
         List<PokerGame> pokerGames = gameRepository.getCurrentPokerGames(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the player"));
-        PokerGame gameForPlayer = pokerGames.get(0);
+        PokerGame game = pokerGames.get(0);
 
-        return ResponseEntity.ok(gameForPlayer);
+        // remove parts from model which the player is not supposed to know
+        Optional<PokerRound> roundOpt = game.getRounds().stream().filter(r -> !r.getFinished()).findFirst();
+        if (roundOpt.isPresent()) {
+            PokerRound round = roundOpt.get();
+            round.setDeck("#");
+            round.setRemovedCards("#");
+
+            int playerNum = 0;
+            for (int i = 0; i < game.getPlayers().size(); i++) {
+                if (game.getPlayers().get(i).getId().equals(playerForUser.getId())) {
+                    round.removeCardsExceptForPlayer(i+1);
+                    break;
+                }
+            }
+        }
+
+        return ResponseEntity.ok(game);
     }
 
     @GetMapping("/start")

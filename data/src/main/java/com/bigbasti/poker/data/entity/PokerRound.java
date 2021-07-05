@@ -245,6 +245,186 @@ public class PokerRound implements Serializable {
         this.turns = turns;
     }
 
+    public void removeCardsExceptForPlayer(int number) {
+        if (number == 1) {
+            if (p2Cards != null) {
+                p2Cards = "#";
+            }
+            if (p3Cards != null) {
+                p3Cards = "#";
+            }
+            if (p4Cards != null) {
+                p4Cards = "#";
+            }
+            if (p5Cards != null) {
+                p5Cards = "#";
+            }
+            if (p6Cards != null) {
+                p6Cards = "#";
+            }
+            if (p7Cards != null) {
+                p7Cards = "#";
+            }
+            if (p8Cards != null) {
+                p8Cards = "#";
+            }
+        } else if (number == 2) {
+            if (p1Cards != null) {
+                p1Cards = "#";
+            }
+            if (p3Cards != null) {
+                p3Cards = "#";
+            }
+            if (p4Cards != null) {
+                p4Cards = "#";
+            }
+            if (p5Cards != null) {
+                p5Cards = "#";
+            }
+            if (p6Cards != null) {
+                p6Cards = "#";
+            }
+            if (p7Cards != null) {
+                p7Cards = "#";
+            }
+            if (p8Cards != null) {
+                p8Cards = "#";
+            }
+        } else if (number == 3) {
+            if (p1Cards != null) {
+                p1Cards = "#";
+            }
+            if (p2Cards != null) {
+                p2Cards = "#";
+            }
+            if (p4Cards != null) {
+                p4Cards = "#";
+            }
+            if (p5Cards != null) {
+                p5Cards = "#";
+            }
+            if (p6Cards != null) {
+                p6Cards = "#";
+            }
+            if (p7Cards != null) {
+                p7Cards = "#";
+            }
+            if (p8Cards != null) {
+                p8Cards = "#";
+            }
+        } else if (number == 4) {
+            if (p1Cards != null) {
+                p1Cards = "#";
+            }
+            if (p2Cards != null) {
+                p2Cards = "#";
+            }
+            if (p3Cards != null) {
+                p3Cards = "#";
+            }
+            if (p5Cards != null) {
+                p5Cards = "#";
+            }
+            if (p6Cards != null) {
+                p6Cards = "#";
+            }
+            if (p7Cards != null) {
+                p7Cards = "#";
+            }
+            if (p8Cards != null) {
+                p8Cards = "#";
+            }
+        } else if (number == 5) {
+            if (p1Cards != null) {
+                p1Cards = "#";
+            }
+            if (p2Cards != null) {
+                p2Cards = "#";
+            }
+            if (p3Cards != null) {
+                p3Cards = "#";
+            }
+            if (p4Cards != null) {
+                p4Cards = "#";
+            }
+            if (p6Cards != null) {
+                p6Cards = "#";
+            }
+            if (p7Cards != null) {
+                p7Cards = "#";
+            }
+            if (p8Cards != null) {
+                p8Cards = "#";
+            }
+        } else if (number == 6) {
+            if (p1Cards != null) {
+                p1Cards = "#";
+            }
+            if (p2Cards != null) {
+                p2Cards = "#";
+            }
+            if (p3Cards != null) {
+                p3Cards = "#";
+            }
+            if (p4Cards != null) {
+                p4Cards = "#";
+            }
+            if (p5Cards != null) {
+                p5Cards = "#";
+            }
+            if (p7Cards != null) {
+                p7Cards = "#";
+            }
+            if (p8Cards != null) {
+                p8Cards = "#";
+            }
+        } else if (number == 7) {
+            if (p1Cards != null) {
+                p1Cards = "#";
+            }
+            if (p2Cards != null) {
+                p2Cards = "#";
+            }
+            if (p3Cards != null) {
+                p3Cards = "#";
+            }
+            if (p4Cards != null) {
+                p4Cards = "#";
+            }
+            if (p5Cards != null) {
+                p5Cards = "#";
+            }
+            if (p6Cards != null) {
+                p6Cards = "#";
+            }
+            if (p8Cards != null) {
+                p8Cards = "#";
+            }
+        } else if (number == 8) {
+            if (p1Cards != null) {
+                p1Cards = "#";
+            }
+            if (p2Cards != null) {
+                p2Cards = "#";
+            }
+            if (p3Cards != null) {
+                p3Cards = "#";
+            }
+            if (p4Cards != null) {
+                p4Cards = "#";
+            }
+            if (p5Cards != null) {
+                p5Cards = "#";
+            }
+            if (p6Cards != null) {
+                p6Cards = "#";
+            }
+            if (p7Cards != null) {
+                p7Cards = "#";
+            }
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
