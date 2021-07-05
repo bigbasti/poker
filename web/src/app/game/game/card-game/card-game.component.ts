@@ -13,8 +13,8 @@ import * as GameActions from "../../state/game.actions";
     selector: 'poker-card-game',
     template: `
         <ng-container *ngIf="vm$ | async as vm">
-            <div class="col"></div>
-            <div class="col"></div>
+            <div class="col p-card clubs-ca"></div>
+            <div class="col p-card clubs-c2"></div>
             <div class="col"></div>
             <div class="col"></div>
             <div class="col"></div>
