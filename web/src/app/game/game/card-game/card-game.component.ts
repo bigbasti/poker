@@ -13,19 +13,34 @@ import * as GameActions from "../../state/game.actions";
     selector: 'poker-card-game',
     template: `
         <ng-container *ngIf="vm$ | async as vm">
-            <div class="col p-card clubs-a"></div>
-            <div class="col p-card hearts-2"></div>
-            <div class="col p-card diamonds-k"></div>
-            <div class="col p-card spades-j"></div>
-            <div class="col p-card back"></div>
-            <div class="col"></div>
-            <div class="col"></div>
-            <div class="col">
-                <ng-container *ngIf="!vm.round">
-                    <button class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}}
-                        Starten
-                    </button>
-                </ng-container>
+            <div class="row">
+                <div class="col">
+                    <div class="p-card clubs-a"></div>
+                </div>
+                <div class="col">
+                    <div class="p-card hearts-2"></div>
+                </div>
+                <div class="col">
+                    <div class="p-card diamonds-k"></div>
+                </div>
+                <div class="col">
+                    <div class="p-card spades-j"></div>
+                </div>
+                <div class="col">
+                    <div class="p-card back"></div>
+                </div>
+                <div class="col">
+                    <div class="p-card back"></div>
+                </div>
+                <div class="col">
+                    <div class="p-card back"></div>
+                </div>
+                <div class="col">
+                    <ng-container>
+                        <button *ngIf="!vm.round && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
+                        <button *ngIf="vm.round && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
+                    </ng-container>
+                </div>
             </div>
             <div class="row">
                 <div class="col" *ngFor="let p of vm.game.players">
@@ -47,14 +62,17 @@ export class CardGameComponent implements OnInit, OnDestroy {
 
     currentUser$ = this.store.select(getUser);
     currentGame$ = this.store.select(getCurrentGame);
+    userIsHost$ = combineLatest([this.currentUser$, this.currentGame$]).pipe(
+        map(([user, game]) => game.creator.id === user.id)
+    );
 
     currentRound$ = this.currentGame$.pipe(
         takeWhile(game => game !== null),
         map(game => game.rounds.find(r => r.finished === false))
     );
 
-    vm$ = combineLatest([this.currentGame$, this.currentUser$, this.currentRound$]).pipe(
-        map(([game, user, round]) => ({game, user, round}))
+    vm$ = combineLatest([this.currentGame$, this.currentUser$, this.currentRound$, this.userIsHost$]).pipe(
+        map(([game, user, round, userIsHost]) => ({game, user, round, userIsHost}))
     );
 
     constructor(
