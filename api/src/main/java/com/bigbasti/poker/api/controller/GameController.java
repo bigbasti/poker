@@ -111,12 +111,16 @@ public class GameController extends BaseController {
             shuffledDeck.remove(c1);
             shuffledDeck.remove(c2);
             nextRound.setP1Cards(PokerDeck.deckToString(List.of(c1, c2)));
+            game.getPlayers().get(0).setCard1(PokerDeck.deckToString(List.of(c1)));
+            game.getPlayers().get(0).setCard2(PokerDeck.deckToString(List.of(c2)));
 
             c1 = shuffledDeck.get(0);
             c2 = shuffledDeck.get(1);
             shuffledDeck.remove(c1);
             shuffledDeck.remove(c2);
             nextRound.setP2Cards(PokerDeck.deckToString(List.of(c1, c2)));
+            game.getPlayers().get(1).setCard1(PokerDeck.deckToString(List.of(c1)));
+            game.getPlayers().get(1).setCard2(PokerDeck.deckToString(List.of(c2)));
             nextRound.setCurrentTurn(1);
         }
 

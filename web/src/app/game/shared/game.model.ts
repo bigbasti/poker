@@ -43,7 +43,7 @@ export interface PokerRound {
     p6Cards: string;
     p7Cards: string;
     p8Cards: string;
-    currentRurn: number;
+    currentTurn: number;
     finished: boolean;
     bigBlind: number;
     smallBlind: number;

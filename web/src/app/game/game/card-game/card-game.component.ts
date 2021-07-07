@@ -38,15 +38,16 @@ import * as GameActions from "../../state/game.actions";
                 <div class="col">
                     <ng-container>
                         <button *ngIf="!vm.round && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
-                        <button *ngIf="vm.round && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
+                        <button *ngIf="vm.round && vm.round.currentTurn <= 5 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
                     </ng-container>
                 </div>
             </div>
             <div class="row">
                 <div class="col" *ngFor="let p of vm.game.players">
-                    <div class="row">
+                    <div class="row" let>
                         {{p.user.name}}<br/>
-                        {{p.money}}
+                        <div *ngIf="p.card1 && parseCards(p.card1)[0] as card1" class="p-card {{card1.suite.toLowerCase()}}-{{card1.value}}"></div>
+                        <div *ngIf="p.card2 && parseCards(p.card2)[0] as card2" class="p-card {{card2.suite.toLowerCase()}}-{{card2.value}}"></div>
                     </div>
                     <div class="row">
 
@@ -72,6 +73,7 @@ export class CardGameComponent implements OnInit, OnDestroy {
     );
 
     openCards$ = this.currentRound$.pipe(
+        takeWhile(round => round !== null),
         map(round => this.parseCards(round.openCards)),
         map(cards => cards ?? [])
     );
