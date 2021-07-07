@@ -105,17 +105,17 @@ public class GameController extends BaseController {
 
         List<PokerCard> shuffledDeck = PokerDeck.shuffle();
         int players = game.getPlayers().size();
-        if (players == 2) {     // todo bug -> player draw overlapping cards
+        if (players == 2) {
             PokerCard c1 = shuffledDeck.get(0);
             PokerCard c2 = shuffledDeck.get(1);
-            shuffledDeck.remove(0);
-            shuffledDeck.remove(1);
+            shuffledDeck.remove(c1);
+            shuffledDeck.remove(c2);
             nextRound.setP1Cards(PokerDeck.deckToString(List.of(c1, c2)));
 
             c1 = shuffledDeck.get(0);
             c2 = shuffledDeck.get(1);
-            shuffledDeck.remove(0);
-            shuffledDeck.remove(1);
+            shuffledDeck.remove(c1);
+            shuffledDeck.remove(c2);
             nextRound.setP2Cards(PokerDeck.deckToString(List.of(c1, c2)));
             nextRound.setCurrentTurn(0);        // toto pruefen
         }
