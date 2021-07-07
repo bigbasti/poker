@@ -8,3 +8,7 @@ export const loadCurrentGameFailure = createAction("[Game] load current game fai
 export const startNextRound = createAction("[Game] start next round");
 export const startNextRoundSuccess = createAction("[Game] start next round success");
 export const startNextRoundFailure = createAction("[Game] start next round failed", props<{error: any}>());
+
+export const showNextCards = createAction("[Game cards] show next cards");
+export const showNextCardsSuccess = createAction("[Game cards] show next cards success");
+export const showNextCardsFailure = createAction("[Game cards] show next cards failed", props<{error: any}>());

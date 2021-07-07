@@ -3,11 +3,9 @@ package com.bigbasti.poker.api.tools;
 import com.bigbasti.poker.data.entity.PokerCard;
 import com.bigbasti.poker.data.types.CardSuite;
 import com.bigbasti.poker.data.types.CardType;
+import org.hibernate.internal.util.StringHelper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PokerDeck {
@@ -74,6 +72,16 @@ public class PokerDeck {
     }
 
     public static String deckToString(List<PokerCard> cards) {
-        return cards.stream().map(c -> c.getSuite() + "" + c.getValue()).collect(Collectors.joining(","));
+        return cards.stream().map(c -> c.getSuite() + "-" + c.getType() + "-" + c.getValue()).collect(Collectors.joining(","));
+    }
+
+    public static List<PokerCard> deckFromString(String deck) {
+        if (StringHelper.isEmpty(deck)) {
+            return new ArrayList<>();
+        }
+        return Arrays.stream(deck.split(",")).map(c -> {
+            String[] cardParts = c.split("-");
+            return new PokerCard(CardSuite.valueOf(cardParts[0]), CardType.valueOf(cardParts[1]), Integer.valueOf(cardParts[2]));
+        }).collect(Collectors.toList());
     }
 }

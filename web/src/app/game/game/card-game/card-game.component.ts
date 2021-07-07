@@ -15,19 +15,19 @@ import * as GameActions from "../../state/game.actions";
         <ng-container *ngIf="vm$ | async as vm">
             <div class="row">
                 <div class="col">
-                    <div class="p-card clubs-a"></div>
+                    <div *ngIf="vm.openCards.length > 0" class="p-card {{vm.openCards[0].suite.toLowerCase()}}-{{vm.openCards[0].value}}"></div>
                 </div>
                 <div class="col">
-                    <div class="p-card hearts-2"></div>
+                    <div *ngIf="vm.openCards.length > 1" class="p-card {{vm.openCards[1].suite.toLowerCase()}}-{{vm.openCards[1].value}}"></div>
                 </div>
                 <div class="col">
-                    <div class="p-card diamonds-k"></div>
+                    <div *ngIf="vm.openCards.length > 2" class="p-card {{vm.openCards[2].suite.toLowerCase()}}-{{vm.openCards[2].value}}"></div>
                 </div>
                 <div class="col">
-                    <div class="p-card spades-j"></div>
+                    <div *ngIf="vm.openCards.length > 3" class="p-card {{vm.openCards[3].suite.toLowerCase()}}-{{vm.openCards[3].value}}"></div>
                 </div>
                 <div class="col">
-                    <div class="p-card back"></div>
+                    <div *ngIf="vm.openCards.length > 4" class="p-card {{vm.openCards[4].suite.toLowerCase()}}-{{vm.openCards[4].value}}"></div>
                 </div>
                 <div class="col">
                     <div class="p-card back"></div>
@@ -38,7 +38,7 @@ import * as GameActions from "../../state/game.actions";
                 <div class="col">
                     <ng-container>
                         <button *ngIf="!vm.round && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
-                        <button *ngIf="vm.round && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
+                        <button *ngIf="vm.round && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
                     </ng-container>
                 </div>
             </div>
@@ -71,8 +71,13 @@ export class CardGameComponent implements OnInit, OnDestroy {
         map(game => game.rounds.find(r => r.finished === false))
     );
 
-    vm$ = combineLatest([this.currentGame$, this.currentUser$, this.currentRound$, this.userIsHost$]).pipe(
-        map(([game, user, round, userIsHost]) => ({game, user, round, userIsHost}))
+    openCards$ = this.currentRound$.pipe(
+        map(round => this.parseCards(round.openCards)),
+        map(cards => cards ?? [])
+    );
+
+    vm$ = combineLatest([this.currentGame$, this.currentUser$, this.currentRound$, this.userIsHost$, this.openCards$]).pipe(
+        map(([game, user, round, userIsHost, openCards]) => ({game, user, round, userIsHost, openCards}))
     );
 
     constructor(
@@ -99,4 +104,15 @@ export class CardGameComponent implements OnInit, OnDestroy {
         this.store.dispatch(GameActions.startNextRound());
     }
 
+    showNextCards() {
+        this.store.dispatch(GameActions.showNextCards());
+    }
+
+    parseCards(cards: string): {suite: string, value: number}[] {
+        if (!cards) { return [];}
+        return cards.split(",").map(card => {
+            let cParts = card.split("-");
+            return {suite: cParts[0], value: Number(cParts[2])}
+        });
+    }
 }

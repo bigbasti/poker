@@ -34,4 +34,14 @@ export class GameEffects {
             ))
         )
     });
+
+    showNextCards$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(GameActions.showNextCards),
+            mergeMap((action) => this.gameService.showNextCards$.pipe(
+                map(res => GameActions.showNextCardsSuccess()),
+                catchError(error => of(GameActions.showNextCardsFailure({error})))
+            ))
+        )
+    });
 }

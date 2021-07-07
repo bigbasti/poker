@@ -90,7 +90,7 @@ public class GameController extends BaseController {
 
     @PostMapping("/round/start")
     public @ResponseBody
-    ResponseEntity startNextRound() {
+    ResponseEntity startNewRound() {
         List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
         PokerPlayer playerForUser = foundPlayers.get(0);
         PokerGame game = gameRepository.getCurrentPokerGame(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the user"));
@@ -117,7 +117,7 @@ public class GameController extends BaseController {
             shuffledDeck.remove(c1);
             shuffledDeck.remove(c2);
             nextRound.setP2Cards(PokerDeck.deckToString(List.of(c1, c2)));
-            nextRound.setCurrentTurn(0);        // toto pruefen
+            nextRound.setCurrentTurn(1);
         }
 
         nextRound.setDeck(PokerDeck.deckToString(shuffledDeck));
@@ -130,6 +130,56 @@ public class GameController extends BaseController {
         roundRepository.saveAndFlush(nextRound);
         game.getRounds().add(nextRound);
         gameRepository.saveAndFlush(game);
+        return ResponseEntity.ok().build(); // do not return anything, client will reload state on its own
+    }
+
+    @PostMapping("/round/next")
+    public @ResponseBody
+    ResponseEntity startNextRound() {
+        List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
+        PokerPlayer playerForUser = foundPlayers.get(0);
+        PokerGame game = gameRepository.getCurrentPokerGame(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the user"));
+
+        PokerRound currentRound = game.getRounds().stream().filter(r -> !r.getFinished()).findFirst().orElse(null);
+        if (currentRound == null) {
+            // there is already an active round -> cancel
+            return ResponseEntity.badRequest().body("There is no active round please start one first!");
+        }
+
+        List<PokerCard> deck = PokerDeck.deckFromString(currentRound.getDeck());
+        if (currentRound.getCurrentTurn() == 1) {
+            // no cards revealed yet => show first 3
+            PokerCard d1 = deck.get(0);
+            PokerCard t1 = deck.get(1);
+            PokerCard d2 = deck.get(2);
+            PokerCard t2 = deck.get(3);
+            PokerCard d3 = deck.get(4);
+            PokerCard t3 = deck.get(5);
+
+            List<PokerCard> removedCards = PokerDeck.deckFromString(currentRound.getRemovedCards());
+            removedCards.add(d1);
+            removedCards.add(d2);
+            removedCards.add(d3);
+            currentRound.setRemovedCards(PokerDeck.deckToString(removedCards));
+
+            List<PokerCard> revealedCards = PokerDeck.deckFromString(currentRound.getOpenCards());
+            revealedCards.add(t1);
+            revealedCards.add(t2);
+            revealedCards.add(t3);
+            currentRound.setOpenCards(PokerDeck.deckToString(removedCards));
+
+            deck.remove(d1);
+            deck.remove(d2);
+            deck.remove(d3);
+            deck.remove(t1);
+            deck.remove(t1);
+            deck.remove(t1);
+            currentRound.setDeck(PokerDeck.deckToString(deck));
+            currentRound.setCurrentTurn(2);
+        }
+
+        logger.debug("starting next round for game {}", game.getName());
+        roundRepository.saveAndFlush(currentRound);
         return ResponseEntity.ok().build(); // do not return anything, client will reload state on its own
     }
 
