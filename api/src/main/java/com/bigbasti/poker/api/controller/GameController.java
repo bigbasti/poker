@@ -104,12 +104,15 @@ public class GameController extends BaseController {
         PokerRound nextRound = new PokerRound(null, game.getGameRounds() + 1, null, game.getBigBlind(), game.getSmallBlind(), new ArrayList<>());
 
         List<PokerCard> shuffledDeck = PokerDeck.shuffle();
+        logger.debug("# created new deck with: {}", PokerDeck.deckToString(shuffledDeck));
         int players = game.getPlayers().size();
         if (players == 2) {
             PokerCard c1 = shuffledDeck.get(0);
             PokerCard c2 = shuffledDeck.get(1);
             shuffledDeck.remove(c1);
             shuffledDeck.remove(c2);
+            logger.debug("# cards for p1 {}", PokerDeck.deckToString(List.of(c1, c2)));
+            logger.debug("# deck after cards removed for p1: {}", PokerDeck.deckToString(shuffledDeck));
             nextRound.setP1Cards(PokerDeck.deckToString(List.of(c1, c2)));
             game.getPlayers().get(0).setCard1(PokerDeck.deckToString(List.of(c1)));
             game.getPlayers().get(0).setCard2(PokerDeck.deckToString(List.of(c2)));
@@ -118,6 +121,8 @@ public class GameController extends BaseController {
             c2 = shuffledDeck.get(1);
             shuffledDeck.remove(c1);
             shuffledDeck.remove(c2);
+            logger.debug("# cards for p2 {}", PokerDeck.deckToString(List.of(c1, c2)));
+            logger.debug("# deck after cards removed for p2: {}", PokerDeck.deckToString(shuffledDeck));
             nextRound.setP2Cards(PokerDeck.deckToString(List.of(c1, c2)));
             game.getPlayers().get(1).setCard1(PokerDeck.deckToString(List.of(c1)));
             game.getPlayers().get(1).setCard2(PokerDeck.deckToString(List.of(c2)));
@@ -151,6 +156,7 @@ public class GameController extends BaseController {
         }
 
         List<PokerCard> deck = PokerDeck.deckFromString(currentRound.getDeck());
+        logger.debug("# loaded deck for round {}: {}", currentRound.getId(), PokerDeck.deckToString(deck));
         if (currentRound.getCurrentTurn() == 1) {
             // no cards revealed yet => show first 3
             PokerCard d1 = deck.get(0);
@@ -160,26 +166,76 @@ public class GameController extends BaseController {
             PokerCard d3 = deck.get(4);
             PokerCard t3 = deck.get(5);
 
+            logger.debug("# cards removed from deck for CT1 {}", PokerDeck.deckToString(List.of(d1, t1, d2, t2, d3, t3)));
             List<PokerCard> removedCards = PokerDeck.deckFromString(currentRound.getRemovedCards());
             removedCards.add(d1);
             removedCards.add(d2);
             removedCards.add(d3);
             currentRound.setRemovedCards(PokerDeck.deckToString(removedCards));
+            logger.debug("# removed cards after CT1 {}", PokerDeck.deckToString(removedCards));
 
             List<PokerCard> revealedCards = PokerDeck.deckFromString(currentRound.getOpenCards());
             revealedCards.add(t1);
             revealedCards.add(t2);
             revealedCards.add(t3);
-            currentRound.setOpenCards(PokerDeck.deckToString(removedCards));
+            currentRound.setOpenCards(PokerDeck.deckToString(revealedCards));
+            logger.debug("# revealed cards after CT1 {}", PokerDeck.deckToString(revealedCards));
 
             deck.remove(d1);
             deck.remove(d2);
             deck.remove(d3);
             deck.remove(t1);
-            deck.remove(t1);
-            deck.remove(t1);
+            deck.remove(t2);
+            deck.remove(t3);
+
+            logger.debug("# deck after card removal CT1 {}", PokerDeck.deckToString(deck));
             currentRound.setDeck(PokerDeck.deckToString(deck));
             currentRound.setCurrentTurn(2);
+        } else if (currentRound.getCurrentTurn() == 2) {
+            PokerCard d1 = deck.get(0);
+            PokerCard t1 = deck.get(1);
+
+            logger.debug("# cards removed from deck for CT2 {}", PokerDeck.deckToString(List.of(d1, t1)));
+
+            List<PokerCard> removedCards = PokerDeck.deckFromString(currentRound.getRemovedCards());
+            removedCards.add(d1);
+            currentRound.setRemovedCards(PokerDeck.deckToString(removedCards));
+            logger.debug("# removed cards after CT2 {}", PokerDeck.deckToString(removedCards));
+
+            List<PokerCard> revealedCards = PokerDeck.deckFromString(currentRound.getOpenCards());
+            revealedCards.add(t1);
+            currentRound.setOpenCards(PokerDeck.deckToString(revealedCards));
+            logger.debug("# revealed cards after CT2 {}", PokerDeck.deckToString(revealedCards));
+
+            deck.remove(d1);
+            deck.remove(t1);
+
+            logger.debug("# deck after card removal CT2 {}", PokerDeck.deckToString(deck));
+            currentRound.setDeck(PokerDeck.deckToString(deck));
+            currentRound.setCurrentTurn(3);
+        } else if (currentRound.getCurrentTurn() == 3) {
+            PokerCard d1 = deck.get(0);
+            PokerCard t1 = deck.get(1);
+            logger.debug("# cards removed from deck for CT3 {}", PokerDeck.deckToString(List.of(d1, t1)));
+
+            List<PokerCard> removedCards = PokerDeck.deckFromString(currentRound.getRemovedCards());
+            removedCards.add(d1);
+            currentRound.setRemovedCards(PokerDeck.deckToString(removedCards));
+            logger.debug("# removed cards after CT3 {}", PokerDeck.deckToString(removedCards));
+
+            List<PokerCard> revealedCards = PokerDeck.deckFromString(currentRound.getOpenCards());
+            revealedCards.add(t1);
+            currentRound.setOpenCards(PokerDeck.deckToString(revealedCards));
+            logger.debug("# revealed cards after CT3 {}", PokerDeck.deckToString(revealedCards));
+
+            deck.remove(d1);
+            deck.remove(t1);
+
+            logger.debug("# deck after card removal CT3 {}", PokerDeck.deckToString(deck));
+            currentRound.setDeck(PokerDeck.deckToString(deck));
+            currentRound.setCurrentTurn(4);
+        } else if (currentRound.getCurrentTurn() == 4) {
+            // show all player's cards
         }
 
         logger.debug("starting next round for game {}", game.getName());

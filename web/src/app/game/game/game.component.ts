@@ -13,10 +13,10 @@ import {map, takeUntil, takeWhile, tap} from "rxjs/operators";
   selector: 'poker-game',
   template: `
     <main *ngIf="vm$ | async as vm" class="container" role="main">
-      <div *ngIf="vm.game.type === 'CARDS'">
+      <div *ngIf="vm.game && vm.game.type === 'CARDS'">
         <poker-card-game></poker-card-game>
       </div>
-      <div *ngIf="vm.game.type === 'FULL'">
+      <div *ngIf="vm.game && vm.game.type === 'FULL'">
         <div class="alert alert-warning">Modus noch nicht verfügbar</div>
       </div>
     </main>

@@ -125,7 +125,7 @@
             `ID` INT NOT NULL AUTO_INCREMENT,
             `number` INT NOT NULL DEFAULT 1,
             `deck` VARCHAR(1024) NOT NULL,
-            `open_cards` VARCHAR(45) NULL,
+            `open_cards` VARCHAR(1024) NULL,
             `pots` VARCHAR(1024) NULL,
             `removed_cards` VARCHAR(1024) NULL,
             `p1_cards` VARCHAR(45) NULL,

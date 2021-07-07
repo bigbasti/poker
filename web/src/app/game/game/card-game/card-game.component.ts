@@ -38,7 +38,8 @@ import * as GameActions from "../../state/game.actions";
                 <div class="col">
                     <ng-container>
                         <button *ngIf="!vm.round && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
-                        <button *ngIf="vm.round && vm.round.currentTurn <= 5 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
+                        <button *ngIf="vm.round && vm.round.currentTurn <= 4 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
+                        <button *ngIf="vm.round && vm.round.currentTurn === 5 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Aufdecken und Gewinner bestimmen</button>
                     </ng-container>
                 </div>
             </div>
@@ -73,9 +74,7 @@ export class CardGameComponent implements OnInit, OnDestroy {
     );
 
     openCards$ = this.currentRound$.pipe(
-        takeWhile(round => round !== null),
-        map(round => this.parseCards(round.openCards)),
-        map(cards => cards ?? [])
+        map(round => round ? this.parseCards(round.openCards) : [])
     );
 
     vm$ = combineLatest([this.currentGame$, this.currentUser$, this.currentRound$, this.userIsHost$, this.openCards$]).pipe(
