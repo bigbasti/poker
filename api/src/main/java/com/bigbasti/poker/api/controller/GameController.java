@@ -22,6 +22,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path = "/api/game")
@@ -59,15 +60,24 @@ public class GameController extends BaseController {
         Optional<PokerRound> roundOpt = game.getRounds().stream().filter(r -> !r.getFinished()).findFirst();
         if (roundOpt.isPresent()) {
             PokerRound round = roundOpt.get();
-            round.setDeck("#");
-            round.setRemovedCards("#");
+            if (game.getRounds().stream().filter(r -> !r.getFinished()).findFirst().get().getCurrentTurn() < 5) {
+                round.setDeck("#");
+                round.setRemovedCards("#");
 
-            int playerNum = 0;
-            for (int i = 0; i < game.getPlayers().size(); i++) {
-                if (game.getPlayers().get(i).getId().equals(playerForUser.getId())) {
-                    round.removeCardsExceptForPlayer(i+1);
-                    break;
+                int playerNum = 0;
+                for (int i = 0; i < game.getPlayers().size(); i++) {
+                    if (game.getPlayers().get(i).getId().equals(playerForUser.getId())) {
+                        round.removeCardsExceptForPlayer(i+1);
+                        break;
+                    }
                 }
+                game.setPlayers(game.getPlayers().stream().map(p -> {
+                    if (!playerForUser.getId().equals(p.getId())) {
+                        p.setCard1(null);
+                        p.setCard2(null);
+                    }
+                    return p;
+                }).collect(Collectors.toList()));
             }
         }
 
@@ -236,10 +246,14 @@ public class GameController extends BaseController {
             currentRound.setCurrentTurn(4);
         } else if (currentRound.getCurrentTurn() == 4) {
             // show all player's cards
+            game.setGameRounds(game.getGameRounds() + 1);
+            currentRound.setCurrentTurn(5);
+            currentRound.setFinished(true);
         }
 
         logger.debug("starting next round for game {}", game.getName());
         roundRepository.saveAndFlush(currentRound);
+        gameRepository.saveAndFlush(game);
         return ResponseEntity.ok().build(); // do not return anything, client will reload state on its own
     }
 

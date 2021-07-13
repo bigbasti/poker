@@ -37,9 +37,9 @@ import * as GameActions from "../../state/game.actions";
                 </div>
                 <div class="col">
                     <ng-container>
-                        <button *ngIf="!vm.round && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
-                        <button *ngIf="vm.round && vm.round.currentTurn <= 4 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
-                        <button *ngIf="vm.round && vm.round.currentTurn === 5 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Aufdecken und Gewinner bestimmen</button>
+                        <button *ngIf="(!vm.round || vm.round.finished) && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
+                        <button *ngIf="vm.round && vm.round.currentTurn < 4 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
+                        <button *ngIf="vm.round && vm.round.currentTurn === 4 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Aufdecken und Gewinner bestimmen</button>
                     </ng-container>
                 </div>
             </div>
@@ -49,6 +49,8 @@ import * as GameActions from "../../state/game.actions";
                         {{p.user.name}}<br/>
                         <div *ngIf="p.card1 && parseCards(p.card1)[0] as card1" class="p-card {{card1.suite.toLowerCase()}}-{{card1.value}}"></div>
                         <div *ngIf="p.card2 && parseCards(p.card2)[0] as card2" class="p-card {{card2.suite.toLowerCase()}}-{{card2.value}}"></div>
+                        <div *ngIf="!p.card1" class="p-card back"></div>
+                        <div *ngIf="!p.card2" class="p-card back"></div>
                     </div>
                     <div class="row">
 
@@ -70,7 +72,16 @@ export class CardGameComponent implements OnInit, OnDestroy {
 
     currentRound$ = this.currentGame$.pipe(
         takeWhile(game => game !== null),
-        map(game => game.rounds.find(r => r.finished === false))
+        map(game => {
+            const openRound = game.rounds.find(r => r.finished === false);
+            if (!openRound) {
+                if (game.rounds) {
+                    return game.rounds.sort((a, b) => b.number - a.number)[0];
+                }
+            }
+            return openRound;
+        }),
+        tap(round => console.log("current round", round))
     );
 
     openCards$ = this.currentRound$.pipe(
