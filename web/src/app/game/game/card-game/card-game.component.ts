@@ -33,7 +33,7 @@ import * as GameActions from "../../state/game.actions";
                     <div class="p-card back"></div>
                 </div>
                 <div class="col">
-                    <div class="p-card back"></div>
+                    <div *ngIf="vm.round.removedCards" class="p-card back"></div>
                 </div>
                 <div class="col">
                     <ng-container>
