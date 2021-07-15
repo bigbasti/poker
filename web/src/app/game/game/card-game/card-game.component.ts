@@ -37,17 +37,18 @@ import * as GameActions from "../../state/game.actions";
                     </ng-container>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col" *ngFor="let p of vm.game.players">
-                    <div class="row" let>
-                        {{p.user.name}}<br/>
+                    <div class="row justify-content-center">
                         <div *ngIf="p.card1 && parseCards(p.card1)[0] as card1" class="p-card {{card1.suite.toLowerCase()}}-{{card1.value}}"></div>
                         <div *ngIf="p.card2 && parseCards(p.card2)[0] as card2" class="p-card {{card2.suite.toLowerCase()}}-{{card2.value}}"></div>
                         <div *ngIf="!p.card1" class="p-card back"></div>
                         <div *ngIf="!p.card2" class="p-card back"></div>
                     </div>
                     <div class="row">
-
+                        <div class="col text-center">
+                            <strong>{{p.user.name}}</strong>
+                        </div>
                     </div>
                 </div>
             </div>
