@@ -30,12 +30,6 @@ import * as GameActions from "../../state/game.actions";
                     <div *ngIf="vm.openCards.length > 4" class="p-card {{vm.openCards[4].suite.toLowerCase()}}-{{vm.openCards[4].value}}"></div>
                 </div>
                 <div class="col">
-                    <div class="p-card back"></div>
-                </div>
-                <div class="col">
-                    <div *ngIf="vm.round.removedCards" class="p-card back"></div>
-                </div>
-                <div class="col">
                     <ng-container>
                         <button *ngIf="(!vm.round || vm.round.finished) && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
                         <button *ngIf="vm.round && vm.round.currentTurn < 4 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
@@ -76,7 +70,7 @@ export class CardGameComponent implements OnInit, OnDestroy {
             const openRound = game.rounds.find(r => r.finished === false);
             if (!openRound) {
                 if (game.rounds) {
-                    return game.rounds.sort((a, b) => b.number - a.number)[0];
+                    return [...game.rounds].sort((a, b) => b.number - a.number)[0];
                 }
             }
             return openRound;
