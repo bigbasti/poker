@@ -12,17 +12,21 @@ import {map, takeUntil, takeWhile, tap} from "rxjs/operators";
 @Component({
   selector: 'poker-game',
   template: `
-    <main *ngIf="vm$ | async as vm" class="container" role="main">
-      <div *ngIf="vm.game && vm.game.type === 'CARDS'">
+    <main *ngIf="vm$ | async as vm" class="container poker-matt rounded mt-5" role="main">
+      <div *ngIf="vm.game && vm.game.type === 'CARDS'" class="pt-3 pb-3">
         <poker-card-game></poker-card-game>
       </div>
-      <div *ngIf="vm.game && vm.game.type === 'FULL'">
+      <div *ngIf="vm.game && vm.game.type === 'FULL'" class="pt-3 pb-3">
         <div class="alert alert-warning">Modus noch nicht verfügbar</div>
       </div>
     </main>
   `,
-  styles: [
-  ]
+  styles: [`
+        .poker-matt {
+          background-image: url("../../../assets/images/matt_bg.jpg");
+          background-repeat: repeat;
+        }
+    `]
 })
 export class PokerGameComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject();

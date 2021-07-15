@@ -14,22 +14,22 @@ import * as GameActions from "../../state/game.actions";
     template: `
         <ng-container *ngIf="vm$ | async as vm">
             <div class="row">
-                <div class="col">
-                    <div *ngIf="vm.openCards.length > 0" class="p-card {{vm.openCards[0].suite.toLowerCase()}}-{{vm.openCards[0].value}}"></div>
+                <div class="col card-container justify-content-center">
+                    <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 0" class="p-card {{vm.openCards[0].suite.toLowerCase()}}-{{vm.openCards[0].value}}"></div>
                 </div>
-                <div class="col">
-                    <div *ngIf="vm.openCards.length > 1" class="p-card {{vm.openCards[1].suite.toLowerCase()}}-{{vm.openCards[1].value}}"></div>
+                <div class="col card-container justify-content-center">
+                    <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 1" class="p-card {{vm.openCards[1].suite.toLowerCase()}}-{{vm.openCards[1].value}}"></div>
                 </div>
-                <div class="col">
-                    <div *ngIf="vm.openCards.length > 2" class="p-card {{vm.openCards[2].suite.toLowerCase()}}-{{vm.openCards[2].value}}"></div>
+                <div class="col card-container justify-content-center">
+                    <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 2" class="p-card {{vm.openCards[2].suite.toLowerCase()}}-{{vm.openCards[2].value}}"></div>
                 </div>
-                <div class="col">
-                    <div *ngIf="vm.openCards.length > 3" class="p-card {{vm.openCards[3].suite.toLowerCase()}}-{{vm.openCards[3].value}}"></div>
+                <div class="col card-container justify-content-center">
+                    <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 3" class="p-card {{vm.openCards[3].suite.toLowerCase()}}-{{vm.openCards[3].value}}"></div>
                 </div>
-                <div class="col">
-                    <div *ngIf="vm.openCards.length > 4" class="p-card {{vm.openCards[4].suite.toLowerCase()}}-{{vm.openCards[4].value}}"></div>
+                <div class="col card-container justify-content-center">
+                    <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 4" class="p-card {{vm.openCards[4].suite.toLowerCase()}}-{{vm.openCards[4].value}}"></div>
                 </div>
-                <div class="col">
+                <div class="col card-container justify-content-center">
                     <ng-container>
                         <button *ngIf="(!vm.round || vm.round.finished) && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
                         <button *ngIf="vm.round && vm.round.currentTurn < 4 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
@@ -46,7 +46,7 @@ import * as GameActions from "../../state/game.actions";
                         <div *ngIf="!p.card2" class="p-card back"></div>
                     </div>
                     <div class="row">
-                        <div class="col text-center">
+                        <div class="col text-center" style="color: white;">
                             <strong>{{p.user.name}}</strong>
                         </div>
                     </div>
@@ -54,7 +54,14 @@ import * as GameActions from "../../state/game.actions";
             </div>
         </ng-container>
     `,
-    styles: []
+    styles: [`
+        .card-container {
+            border: 10px solid white;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+    `]
 })
 export class CardGameComponent implements OnInit, OnDestroy {
     onDestroy$ = new Subject();
