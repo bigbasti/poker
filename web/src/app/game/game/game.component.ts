@@ -44,7 +44,7 @@ export class PokerGameComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-
+    this.store.dispatch(GameActions.loadCurrentGame());
   }
 
   ngOnDestroy(): void {
