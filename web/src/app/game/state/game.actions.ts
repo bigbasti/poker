@@ -12,3 +12,7 @@ export const startNextRoundFailure = createAction("[Game] start next round faile
 export const showNextCards = createAction("[Game cards] show next cards");
 export const showNextCardsSuccess = createAction("[Game cards] show next cards success");
 export const showNextCardsFailure = createAction("[Game cards] show next cards failed", props<{error: any}>());
+
+export const leaveGame = createAction("[Game] leave game");
+export const leaveGameSuccess = createAction("[Game] leave game success", props<{game: PokerGame}>());
+export const leaveGameFailure = createAction("[Game] leave game failed", props<{error: any}>());

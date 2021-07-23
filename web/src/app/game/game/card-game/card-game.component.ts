@@ -52,6 +52,11 @@ import * as GameActions from "../../state/game.actions";
                     </div>
                 </div>
             </div>
+            <div class="row mt-5 pt-2 pb-2 ml-1 mr-1 rounded" style="background-color: white;">
+                <div class="col">
+                    <button id="leave-game" class="btn btn-outline-danger" (click)="leaveGame()">Spiel verlassen</button>
+                </div>
+            </div>
         </ng-container>
     `,
     styles: [`
@@ -128,5 +133,9 @@ export class CardGameComponent implements OnInit, OnDestroy {
             let cParts = card.split("-");
             return {suite: cParts[0], value: Number(cParts[2])}
         });
+    }
+
+    leaveGame() {
+        this.store.dispatch(GameActions.leaveGame());
     }
 }

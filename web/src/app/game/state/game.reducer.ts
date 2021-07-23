@@ -29,5 +29,11 @@ export const gameReducer = createReducer<GameState>(
             ...state,
             game: action.game,
         }
+    }),
+    on(GameActions.leaveGameSuccess, (state, action) => {
+        return {
+            ...state,
+            game: action.game,
+        }
     })
 );

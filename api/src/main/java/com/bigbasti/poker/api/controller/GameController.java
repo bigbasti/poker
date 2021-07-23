@@ -98,6 +98,28 @@ public class GameController extends BaseController {
         return ResponseEntity.ok(pokerGame);
     }
 
+
+    /**
+     * TODO behandlung von spielern ändern
+     * @return
+     */
+    @GetMapping("/leave")
+    public @ResponseBody
+    ResponseEntity leaveGame() {
+        logger.debug("user is leaving game {}", getCurrentUser().getEmail());
+        List<PokerPlayer> foundPlayers = playerRepository.getPlayerByUserId(getCurrentUser()).orElseThrow(() -> new InvalidParameterException("could not find a player for the user"));
+        PokerPlayer playerForUser = foundPlayers.get(0);
+        PokerGame game = gameRepository.getCurrentPokerGame(playerForUser).orElseThrow(() -> new InvalidParameterException("could not find a game for the user"));
+        PokerRound currentRound = game.getRounds().stream().filter(r -> !r.getFinished()).findFirst().orElse(null);
+
+        game.getPlayers().remove(playerForUser);
+        playerRepository.delete(playerForUser);
+        gameRepository.saveAndFlush(game);
+        playerRepository.flush();
+
+        return ResponseEntity.ok(game);
+    }
+
     @PostMapping("/round/start")
     public @ResponseBody
     ResponseEntity startNewRound() {

@@ -16,4 +16,5 @@ export class PokerGameService {
     getCurrentGame$ = this.http.get<PokerGame>(`${this.env.getApiEndpointRoot()}/game`, {withCredentials: true});
     startNextRound$ = this.http.post<string>(`${this.env.getApiEndpointRoot()}/game/round/start`, null,{withCredentials: true});
     showNextCards$ = this.http.post<string>(`${this.env.getApiEndpointRoot()}/game/round/next`, null,{withCredentials: true});
+    leaveGame$ = this.http.get<PokerGame>(`${this.env.getApiEndpointRoot()}/game/leave`, {withCredentials: true});
 }
