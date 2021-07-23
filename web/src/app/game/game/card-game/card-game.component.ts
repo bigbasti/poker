@@ -14,22 +14,22 @@ import * as GameActions from "../../state/game.actions";
     template: `
         <ng-container *ngIf="vm$ | async as vm">
             <div class="row">
-                <div class="col card-container justify-content-center">
+                <div class="col justify-content-center" [class.card-container]="vm.openCards.length > 1">
                     <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 0" class="p-card {{vm.openCards[0].suite.toLowerCase()}}-{{vm.openCards[0].value}}"></div>
                 </div>
-                <div class="col card-container justify-content-center">
+                <div class="col justify-content-center" [class.card-container]="vm.openCards.length > 1">
                     <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 1" class="p-card {{vm.openCards[1].suite.toLowerCase()}}-{{vm.openCards[1].value}}"></div>
                 </div>
-                <div class="col card-container justify-content-center">
+                <div class="col justify-content-center" [class.card-container]="vm.openCards.length > 1">
                     <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 2" class="p-card {{vm.openCards[2].suite.toLowerCase()}}-{{vm.openCards[2].value}}"></div>
                 </div>
-                <div class="col card-container justify-content-center">
+                <div class="col justify-content-center" [class.card-container]="vm.openCards.length > 1">
                     <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 3" class="p-card {{vm.openCards[3].suite.toLowerCase()}}-{{vm.openCards[3].value}}"></div>
                 </div>
-                <div class="col card-container justify-content-center">
+                <div class="col justify-content-center" [class.card-container]="vm.openCards.length > 1">
                     <div style="margin-left: 25%;" *ngIf="vm.openCards.length > 4" class="p-card {{vm.openCards[4].suite.toLowerCase()}}-{{vm.openCards[4].value}}"></div>
                 </div>
-                <div class="col card-container justify-content-center">
+                <div class="col justify-content-center">
                     <ng-container>
                         <button *ngIf="(!vm.round || vm.round.finished) && vm.userIsHost" class="btn btn-primary" (click)="startNextRound()">Runde {{vm.game.gameRounds + 1}} Starten</button>
                         <button *ngIf="vm.round && vm.round.currentTurn < 4 && vm.userIsHost" class="btn btn-primary" (click)="showNextCards()">Nächste Karten aufdecken</button>
